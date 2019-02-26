@@ -2,6 +2,7 @@ const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
 const packageJSON = require('./package.json');
+const webpack = require('webpack');
 
 module.exports = {
   entry: './src/index.js',
@@ -12,6 +13,7 @@ module.exports = {
   devtool: 'source-map',
   devServer:{
   	contentBase: path.join(__dirname, 'dist'),
+    hot:true
   },
   resolve:{
     modules: ['node_modules', 'src/kiwi', 'src/kiwi/static']
@@ -68,10 +70,15 @@ module.exports = {
     ]
   },
   plugins:[
+    
     new CleanWebpackPlugin(['dist','build'],{}),
-  	new HtmlWebpackPlugin({
+  	
+    new HtmlWebpackPlugin({
      favicon:'./src/assets/img/favicon.png',
      template:'./src/index.html'
-    })
+    }),
+
+     new webpack.HotModuleReplacementPlugin()
+
   ]
 };

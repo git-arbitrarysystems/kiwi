@@ -25,7 +25,7 @@ export class App extends PIXI.Application{
 			this.background.height = dimensions.height;
 
 			this.grid.x = dimensions.width * 0.5;
-			this.grid.y = dimensions.height * 0.5;
+			this.grid.y = dimensions.height * 0.51;
 
 		});
 
