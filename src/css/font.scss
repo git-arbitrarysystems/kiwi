@@ -1,0 +1,12 @@
+@font-face {
+  font-family: 'flashlight';
+  src:  url('../font/flashlight.otf') format('opentype'),
+        url('../font/flashlight.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+.flashlight{
+	font-family: 'flashlight';
+	font-size: 3em;
+}
