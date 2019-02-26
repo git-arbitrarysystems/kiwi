@@ -9,8 +9,12 @@ module.exports = {
     filename: 'index.js',
     path: path.resolve(__dirname, 'dist')
   },
+  devtool: 'source-map',
   devServer:{
   	contentBase: path.join(__dirname, 'dist'),
+  },
+  resolve:{
+    modules: ['node_modules', 'src/kiwi', 'src/kiwi/static']
   },
   module: {
     rules: [
@@ -66,8 +70,8 @@ module.exports = {
   plugins:[
     new CleanWebpackPlugin(['dist','build'],{}),
   	new HtmlWebpackPlugin({
-      title:packageJSON.name,
-      favicon:'./src/img/favicon.png'
+     favicon:'./src/assets/img/favicon.png',
+     template:'./src/index.html'
     })
   ]
 };

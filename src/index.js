@@ -1,9 +1,8 @@
 import './css/style.scss';
-import {App} from './App.js';
+import {App} from 'App';
 
 
-new App();
+new App({
+	resizeTo:window
+});
 
-
-import snippet from './html.snippet.html';
-document.write(snippet);
