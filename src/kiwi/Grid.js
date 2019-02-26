@@ -1,4 +1,6 @@
 import * as PIXI from 'pixi.js';
+import * as PF from 'pathfinding';
+
 
 import {ResizeHandler} from 'ResizeHandler';
 import {Tile} from 'Tile';
@@ -64,6 +66,9 @@ export class Grid extends PIXI.Container{
 	constructor(){
 		super();
 
+
+		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
+
 		this.tiles = {};
 
 
@@ -75,16 +80,32 @@ export class Grid extends PIXI.Container{
 			}
 		}
 
+		// PATHFINDER INSTANCE
+		this.finder = new PF.AStarFinder({
+			 allowDiagonal: false
+		});
+
 
 		// INTERACTION
 		this.interactive = true;
+		this.mode = 'path'
 		
 		this.on('pointerdown', (e)=>{
-			this._dragging = {x:e.data.global.x, y:e.data.global.y};
+			if( this.mode === 'drag' ){
+				this._dragging = {x:e.data.global.x, y:e.data.global.y};
+			}else if( this.mode === 'path' ){
+				this._pathStartTile = this.getTileFromEvent(e);
+			}
+			
 		});
 
 		this.on('pointerup', (e)=>{
-			this._dragging = false;
+			if( this.mode === 'drag'){
+				this._dragging = false;
+			}else if( this.mode === 'path' ){
+				this._pathStartTile = false;
+			}
+			
 		});
 
 		this.on('pointermove', (e) => {
@@ -94,20 +115,27 @@ export class Grid extends PIXI.Container{
 				this._dragging = {x:e.data.global.x, y:e.data.global.y};
 			}
 			let tile = this.getTileFromEvent(e);
-			if( this.previousHoverTile ) this.previousHoverTile.hover = false;
-			if( tile ){
-				this.previousHoverTile = tile;
-				tile.hover = true;
+			if( tile !== this.previousHoverTile ){
+
+				if( this.previousHoverTile ) this.previousHoverTile.hover = false;
+				if( tile ){
+					this.previousHoverTile = tile;
+					tile.hover = true;
+				}
+
+				if( this.mode === 'path' && this._pathStartTile ){
+					this.path(this._pathStartTile, tile);
+				}
 			}
+			
+
 		});
 
 		this.on('pointertap', (e) => {
-			let tile = this.getTileFromEvent(e);
-			if( this.previousSelectTile ) this.previousSelectTile.selected = false;
-			if( tile ){
-				this.previousSelectTile = tile;
-				tile.selected = true;
+			if( this.mode !== 'path' ){
+				this.selected = this.getTileFromEvent(e);
 			}
+			
 		});
 
 
@@ -121,9 +149,29 @@ export class Grid extends PIXI.Container{
 		})
 		
 	}
+	set selected(array){
+		if( this._selected ){
+			for(var i=0;i<this._selected.length;i++) this._selected[i].selected = false;
+		}
+
+		if( !array ) return;
+		if( !Array.isArray(array) ) array = [array];
+
+		this._selected = array;
+		if( this._selected ){
+			for(var i=0;i<this._selected.length;i++) this._selected[i].selected = true;
+		}
+	}
 	add(x,y){
 		if( !this.tiles[x] ) this.tiles[x] = {};
 		if( !this.tiles[x][y] ) this.tiles[x][y] = this.addChild( new Tile(x,y) );
+
+		this.size.minx = Math.min(x, this.size.minx );
+		this.size.miny = Math.min(y, this.size.miny );
+		this.size.maxx = Math.max(x, this.size.maxx );
+		this.size.maxy = Math.max(y, this.size.maxy );
+		this.size.width = this.size.maxx - this.size.minx;
+		this.size.height = this.size.maxy - this.size.miny;
 
 		tools.position( tools.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
@@ -131,6 +179,30 @@ export class Grid extends PIXI.Container{
 	get(x,y){
 		if( !this.tiles[x] ) return undefined;
 		return this.tiles[x][y];
+	}
+	path(from, to){
+		// GET A PATHFINDER GRID
+		let m = new PF.Grid(this.size.width+1, this.size.height+1);
+		var x,y;
+		
+
+		for(x in this.tiles ){
+			for(y in this.tiles ){
+				m.setWalkableAt(x-this.size.miny, y-this.size.miny, true);
+			}
+		}
+
+		var result = this.finder.findPath(from.cx-this.size.minx, from.cy-this.size.miny, to.cx-this.size.minx, to.cy-this.size.miny, m );
+		var i,n=result.length;
+		for(i=0;i<n;i++){
+			result[i] = this.get(result[i][0]+this.size.minx, result[i][1]+this.size.miny);
+		}
+
+		this.selected = result;
+		
+
+
+
 	}
 	getTileFromEvent(e){
 		let p = {x:e.data.global.x - this.x, y:e.data.global.y - this.y},
