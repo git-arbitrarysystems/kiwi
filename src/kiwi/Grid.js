@@ -6,6 +6,8 @@ import {ResizeHandler} from 'ResizeHandler';
 import {Tile} from 'Tile';
 
 
+
+
 const options = (function(){
 	const options = {};
 	options.tileWidth = 64;

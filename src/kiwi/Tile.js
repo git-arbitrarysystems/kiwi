@@ -1,6 +1,5 @@
 import * as PIXI from 'pixi.js';
 
-
 export class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);

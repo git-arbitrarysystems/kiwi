@@ -1,3 +1,3 @@
 export function hot(){
-	if( window.console ) console.log('very hotssss');
+	if( window.console ) console.log('extra very super hotssssss');
 }

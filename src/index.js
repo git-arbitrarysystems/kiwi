@@ -9,10 +9,6 @@ new App({
 
 
 if (module.hot) {
-   module.hot.accept('./kiwi/hot.js', function() {
-     console.log('Accepting the updated Tile module!');
-     if( window.console ) console.log(hot());
-    
-   })
+   module.hot.accept()
 }
 
