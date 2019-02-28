@@ -1,3 +1,4 @@
+
 function replacePrototypeFunctions(src, target) {
 
     var keys = Object.getOwnPropertyNames(src.prototype),
@@ -6,18 +7,24 @@ function replacePrototypeFunctions(src, target) {
     	key = keys[index];
     	
     	if( key !== 'constructor' ){
-
-    		if( window.console ) console.log('replacePrototypeFunction:', key);
     		
-    		var srcValue = Object.assign({}, Object.getOwnPropertyDescriptor(src.prototype,key) );
-    		//if( src.prototype[key] !== target.prototype[key] ){
-	    		Object.defineProperty(target.prototype,key,srcValue);
-	    	//}
+    		switch( typeof src.prototype[key] ){
+    			case 'undefined':
+    				
+    				if( window.console ) console.log('replacePrototypeFunction(GET/SET):', key);
+    				var srcValue = Object.assign({}, Object.getOwnPropertyDescriptor(src.prototype,key) );
+    				Object.defineProperty(target.prototype,key,srcValue);
+    			break;
+    			default:
+    				
+    				if( target.prototype[key].toString() !== src.prototype[key].toString() ){
+    					if( window.console ) console.log('replacePrototypeFunction('+( typeof src.prototype[key] ).toUpperCase() +'):', key);
+    					target.prototype[key] = src.prototype[key];
+    				}    				
+    			break;
+    		}
     	}	
     }
-
-
-
 }
 
 function HotModule(module, cls){

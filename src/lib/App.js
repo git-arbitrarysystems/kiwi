@@ -1,7 +1,8 @@
 import {debounce} from 'lodash';
 import * as PIXI from 'pixi.js';
-import {ResizeHandler} from 'ResizeHandler';
+import {ResizeHandler} from 'static/ResizeHandler';
 import {Grid} from 'Grid';
+import {Interface} from 'interface/Interface';
 
 export class App extends PIXI.Application{
 	constructor(settings){
@@ -16,6 +17,9 @@ export class App extends PIXI.Application{
 
 		// MAIN GRID
 		this.grid = this.stage.addChild( new Grid() );
+
+		// INTERFACE
+		this.interface = new Interface();
 
 		// SETUP RESIZE-HANDLER
 		ResizeHandler.source = this.screen;

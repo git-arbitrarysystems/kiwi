@@ -1,0 +1,70 @@
+.interface{
+
+	position: absolute;
+	background-color: rgba(255,0,255,0.5);
+	right: 0;
+	bottom:0;
+
+	box-sizing:border-box;
+	
+	height: 200px;
+	width: 100%;
+
+	overflow: auto;
+
+	.group{
+
+		background-color:orange;
+		display: inline-block;
+		margin: 1em;
+
+		h2{
+			margin: 0;
+		}
+
+
+		.button{
+
+			width: 4em;
+			float: left;
+			padding: 0.25em;
+			box-sizing: border-box;
+			cursor: pointer;
+			background-color:green;
+
+			img{
+				width: 100%;
+				display: block;
+				background-color:white;
+
+
+			}
+
+			&:hover{
+				padding:0;
+			}
+
+			&:last-child{
+
+
+				
+			}
+
+			
+
+		}
+
+
+		&:after {
+	    content: "";
+	    display: table;
+	    clear: both;
+	  }
+
+	}
+
+	
+
+}
+
+

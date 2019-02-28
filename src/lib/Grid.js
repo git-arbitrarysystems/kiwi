@@ -82,56 +82,17 @@ export class Grid extends PIXI.Container{
 
 		// INTERACTION
 		this.interactive = true;
+		this.on('pointerdown', (e)=>{ this.pointer(e) } );
+		this.on('pointermove', (e)=>{ this.pointer(e) } );
+		this.on('pointerup',   (e)=>{ this.pointer(e) } );
+		this.on('pointertap',  (e)=>{ this.pointer(e) } );
+
+
 		
 		
-		this.on('pointerdown', (e)=>{
-			if( this.mode === 'drag' ){
-				this._dragging = {x:e.data.global.x, y:e.data.global.y};
-			}else if( this.mode === 'path' ){
-				this._pathStartTile = this.getTileFromEvent(e);
-			}
-			
-		});
 
-		this.on('pointerup', (e)=>{
-			if( this.mode === 'drag'){
-				this._dragging = false;
-			}else if( this.mode === 'path' ){
-				this._pathStartTile = false;
-			}
-			
-		});
 
-		this.on('pointermove', (e) => {
-			if( this._dragging ){
-				this.x -= this._dragging.x - e.data.global.x;
-				this.y -= this._dragging.y - e.data.global.y;
-				this._dragging = {x:e.data.global.x, y:e.data.global.y};
-			}
-			let tile = this.getTileFromEvent(e);
-			if( tile !== this.previousHoverTile ){
-
-				if( this.previousHoverTile ) this.previousHoverTile.hover = false;
-				if( tile ){
-					this.previousHoverTile = tile;
-					tile.hover = true;
-				}
-
-				if( this.mode === 'path' && this._pathStartTile ){
-					this.path(this._pathStartTile, tile);
-				}
-			}
-			
-
-		});
-
-		this.on('pointertap', (e) => {
-			if( this.mode !== 'path' ){
-				this.selected = this.getTileFromEvent(e);
-			}
-			
-		});
-
+		
 
 		
 
@@ -146,6 +107,51 @@ export class Grid extends PIXI.Container{
 	get mode(){
 		// MODES: ['path', 'drag']
 		return 'path';
+	}
+	pointer( e){
+
+		if( e.type === 'pointerdown'){
+			
+			if( this.mode === 'drag' ){
+				this._dragStart = {x:e.data.global.x, y:e.data.global.y};
+			}else if( this.mode === 'path' ){
+				this._pathStart = this.getTileFromEvent(e);
+			}
+
+		}else if( e.type === 'pointermove'){
+
+			if( this._dragStart ){
+				this.x -= this._dragStart.x - e.data.global.x;
+				this.y -= this._dragStart.y - e.data.global.y;
+				this._dragStart = {x:e.data.global.x, y:e.data.global.y};
+			}
+
+			let tile = this.getTileFromEvent(e);
+			if( tile !== this._previousHoverTile ){
+
+				if( this._previousHoverTile ) this._previousHoverTile.hover = false;
+				if( tile ){
+					this._previousHoverTile = tile;
+					tile.hover = true;
+				}
+
+				if( this.mode === 'path' && this._pathStart ){
+					this.path(this._pathStart, tile);
+				}
+			}
+
+		}else if( e.type ===  'pointerup'){
+			
+			this._dragStart = false;
+			this._pathStart = false;
+		
+		}else if( e.type ===  'pointertap'){
+			
+			if( this.mode === 'drag' ){
+				this.selected = this.getTileFromEvent(e);
+			}
+
+		}
 	}
 	set selected(array){
 

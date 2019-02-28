@@ -1,44 +1,62 @@
 const fs = require('fs');
 const PSD = require('./node_modules/psd.js/');
+var watch = require('node-watch');
 
 
 const srcDir = './src/assets/psd/';
 const targetDir = './src/assets/img/textures/';
 const groups = ['surface', 'road', 'build'];
 
-var json = {};
+watch('./src/assets/psd', { recursive: true }, function(evt, name) {
 
-for(var i=0;i<groups.length;i++){
-	
-	var psd = PSD.fromFile(srcDir + groups[i] + '.psd')
-	psd.parse();
+	console.log('%s changed.', name);
 
-	// CREATE JSON NODE
-	json[ groups[i] ] = {};
+	var json = {};
+	var m_import = '';
 
-	// EXPORT LAYERS
-	var j, layer;
-	for(j in psd.layers){
-		layer = psd.layers[j];
-		if( layer.name.indexOf('_') === 0 ){
-			// EXPORT
-			var name = groups[i] + layer.name + '.png';
-			var callback = ( function(n){ return ()=>{ console.log(n) } })(targetDir + name + '... ready')
-			layer.image.saveAsPng( targetDir + name ).then( callback );
+	for(var i=0;i<groups.length;i++){
+		
+		var psd = PSD.fromFile(srcDir + groups[i] + '.psd')
+		psd.parse();
 
-			// INSERT URL
-			json[ groups[i] ][layer.name] = targetDir + name;
 
-		}	
+		// CREATE JSON NODE
+		json[ groups[i] ] = {};
+		
+
+		// EXPORT LAYERS
+		var j, layer;
+		for(j in psd.layers){
+			layer = psd.layers[j];
+
+			if( groups[i] === 'road' && layer.name === '_stone' ){
+				console.log('\n\n\n\n' , layer, '\n\n\n\n');
+			}
+			
+
+			if( layer.name.indexOf('_') === 0 ){
+				// EXPORT
+				var name = groups[i] + layer.name + '.png',
+					id = layer.name.substr(1),
+					callback = ( function(n){ return ()=>{ console.log(n) } })(targetDir + name + '... ready');
+
+				layer.image.saveAsPng( targetDir + name ).then( callback );
+
+				// STORE FOR EXPORT
+				json[ groups[i] ][id] = id;
+				m_import += 'import ' + id + ' from \'./' + name + '\'\n';
+
+
+			}
+		}
+
+
 	}
 
+	// WRITE JSON DATA
+	m_import += '\n\nconst Textures = ' + JSON.stringify(json).replace(/\"/g, '') + ';\n\nexport {Textures}';
+	fs.writeFile(targetDir + 'Textures.js', m_import, 'utf8', function(){
+		console.log(m_import);
+	});
 
-}
-
-// WRITE JSON DATA
-json = JSON.stringify(json, null, 4);
-fs.writeFile( targetDir + 'index.json' , json, 'utf8', function(){
-	if( window.console ) console.log(json);
-});
-
-
+})

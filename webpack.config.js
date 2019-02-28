@@ -23,16 +23,16 @@ module.exports = {
   },
 
   mode:'development',
-  devtool:'eval-source-map',
+  devtool:'eval',
 
   resolve:{
-    modules: ['node_modules', 'src/kiwi', 'src/kiwi/static']
+    modules: ['node_modules', 'src/lib/', 'src/lib/static']
   },
   
   devServer: {
     contentBase: path.join(__dirname, 'build'),
     port: 8080,
-    hot:true
+    hotOnly:true
   },
   
 
@@ -97,6 +97,7 @@ module.exports = {
     new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
-    })
+    }),
+    new webpack.HotModuleReplacementPlugin()
   ]
 };
