@@ -5,8 +5,7 @@
   "main": "index.js",
   "scripts": {
     "build": "webpack",
-    "serve": "webpack-dev-server",
-    "update-textures": "node update-textures.js"
+    "serve": "webpack-dev-server"
   },
   "repository": {
     "type": "git",
