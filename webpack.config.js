@@ -32,7 +32,7 @@ module.exports = {
   devServer: {
     contentBase: path.join(__dirname, 'build'),
     port: 8080,
-    hotOnly:true
+    hot:true
   },
   
 
@@ -89,7 +89,7 @@ module.exports = {
     ]
   },
   plugins:[
-    //new CleanWebpackPlugin(['build'],{}),
+    new CleanWebpackPlugin(['build'],{}),
     new HtmlWebpackPlugin({
       template:'./src/index.html',
       favicon:'./src/assets/img/favicon.png'
@@ -97,9 +97,6 @@ module.exports = {
     new MiniCssExtractPlugin({
         filename: "[name].css",
         chunkFilename: "[id].css"
-    }),
-
-    new webpack.HotModuleReplacementPlugin()
-
+    })
   ]
 };

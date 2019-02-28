@@ -63,11 +63,8 @@ export class Grid extends PIXI.Container{
 	constructor(){
 		super();
 
-
 		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
-
 		this.tiles = {};
-
 
 		// TEMP
 		var x,y, d=15, tile;
@@ -85,7 +82,7 @@ export class Grid extends PIXI.Container{
 
 		// INTERACTION
 		this.interactive = true;
-		this.mode = 'path'
+		
 		
 		this.on('pointerdown', (e)=>{
 			if( this.mode === 'drag' ){
@@ -146,11 +143,18 @@ export class Grid extends PIXI.Container{
 		})
 		
 	}
+	get mode(){
+		// MODES: ['path', 'drag']
+		return 'path';
+	}
 	set selected(array){
+
+		// DESELECT ALL
 		if( this._selected ){
 			for(var i=0;i<this._selected.length;i++) this._selected[i].selected = false;
 		}
 
+		//
 		if( !array ) return;
 		if( !Array.isArray(array) ) array = [array];
 
@@ -178,27 +182,29 @@ export class Grid extends PIXI.Container{
 		return this.tiles[x][y];
 	}
 	path(from, to){
-		// GET A PATHFINDER GRID
-		let m = new PF.Grid(this.size.width+1, this.size.height+1);
-		var x,y;
 		
-
+		// CREATE A PATHFINDER GRID
+		let m = new PF.Grid(this.size.width+1, this.size.height+1);
+		
+		// ANALYSE SURFACE
+		var x,y;
 		for(x in this.tiles ){
 			for(y in this.tiles ){
 				m.setWalkableAt(x-this.size.miny, y-this.size.miny, true);
 			}
 		}
 
-		var result = this.finder.findPath(from.cx-this.size.minx, from.cy-this.size.miny, to.cx-this.size.minx, to.cy-this.size.miny, m );
-		var i,n=result.length;
+		// GET RESULTS
+		let result = this.finder.findPath(from.cx-this.size.minx, from.cy-this.size.miny, to.cx-this.size.minx, to.cy-this.size.miny, m );
+
+		// CONVERT RESULTS TO TILE-ARRAY
+		let i, n=result.length;
 		for(i=0;i<n;i++){
 			result[i] = this.get(result[i][0]+this.size.minx, result[i][1]+this.size.miny);
 		}
 
+		// SET SELECTION
 		this.selected = result;
-		
-
-
 
 	}
 	getTileFromEvent(e){
@@ -209,3 +215,5 @@ export class Grid extends PIXI.Container{
 }
 
 
+import {HotModule} from '../../HotModule.js'
+HotModule(module, Grid);
