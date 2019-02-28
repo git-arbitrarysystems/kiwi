@@ -1,3 +1,4 @@
+const fs = require('fs');
 const PSD = require('./node_modules/psd.js/');
 
 
@@ -5,7 +6,7 @@ const srcDir = './src/assets/psd/';
 const targetDir = './src/assets/img/textures/';
 const groups = ['surface', 'road', 'build'];
 
-let json = {};
+var json = {};
 
 for(var i=0;i<groups.length;i++){
 	
@@ -35,9 +36,9 @@ for(var i=0;i<groups.length;i++){
 }
 
 // WRITE JSON DATA
-var fs = require('fs');
-fs.writeFile( targetDir + 'index.json' , JSON.stringify(json), 'utf8', function(){
-	//console.log('Written JSON:', json)
+json = JSON.stringify(json, null, 4);
+fs.writeFile( targetDir + 'index.json' , json, 'utf8', function(){
+	if( window.console ) console.log(json);
 });
 
 
