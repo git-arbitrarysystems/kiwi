@@ -1,12 +1,7 @@
 import * as PIXI from 'pixi.js';
 import * as PF from 'pathfinding';
-
-
 import {ResizeHandler} from 'ResizeHandler';
 import {Tile} from 'Tile';
-
-
-
 
 const options = (function(){
 	const options = {};
@@ -212,3 +207,5 @@ export class Grid extends PIXI.Container{
 		return this.get(c.x, c.y);
 	}
 }
+
+

@@ -1,12 +1,7 @@
 import {debounce} from 'lodash';
 import * as PIXI from 'pixi.js';
-
 import {ResizeHandler} from 'ResizeHandler';
 import {Grid} from 'Grid';
-
-if( module.hot ){
-	module.hot.accept(); ;
-}
 
 export class App extends PIXI.Application{
 	constructor(settings){
@@ -40,3 +35,4 @@ export class App extends PIXI.Application{
 	}
 	
 };
+

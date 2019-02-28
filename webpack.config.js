@@ -1,29 +1,47 @@
+
+
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const packageJSON = require('./package.json');
 const webpack = require('webpack');
 
 module.exports = {
-  entry: './src/index.js',
+  entry: {
+    index:'./src/index.js'
+  },
   output: {
-    filename: 'index.js',
-    path: path.resolve(__dirname, 'dist')
+    filename: '[name].js',
+    path: path.resolve(__dirname, 'build')
   },
-  devtool: 'inline-source-map',
-  devServer:{
-  	contentBase: path.join(__dirname, 'dist'),
-    hot:true
+
+  optimization: {
+    splitChunks: {
+      chunks: 'all',
+    }
   },
+
+  mode:'development',
+  devtool:'eval-source-map',
+
   resolve:{
     modules: ['node_modules', 'src/kiwi', 'src/kiwi/static']
   },
+  
+  devServer: {
+    contentBase: path.join(__dirname, 'build'),
+    port: 8080,
+    hotOnly:true
+  },
+  
+
   module: {
     rules: [
       
       {
         test: /\.m?js$/,
-        exclude: /(node_modules)/,
+        include: path.resolve(__dirname, 'src'),
         use: {
           loader: 'babel-loader',
           options: {
@@ -32,12 +50,13 @@ module.exports = {
         }
       },
 
+
       {      
         test: /\.scss$/,
         use: [
-            "style-loader", // creates style nodes from JS strings
-            "css-loader", // translates CSS into CommonJS
-            "sass-loader" // compiles Sass to CSS, using Node Sass by default
+          'style-loader',//MiniCssExtractPlugin.loader,
+          {loader:"css-loader", options:{ sourceMap:true } },
+          {loader:"sass-loader", options:{ sourceMap:true } },
         ]
       },
 
@@ -70,15 +89,17 @@ module.exports = {
     ]
   },
   plugins:[
-    
-    new CleanWebpackPlugin(['dist','build'],{}),
-  	
+    //new CleanWebpackPlugin(['build'],{}),
     new HtmlWebpackPlugin({
-     favicon:'./src/assets/img/favicon.png',
-     template:'./src/index.html'
+      template:'./src/index.html',
+      favicon:'./src/assets/img/favicon.png'
+    }),
+    new MiniCssExtractPlugin({
+        filename: "[name].css",
+        chunkFilename: "[id].css"
     }),
 
-     new webpack.HotModuleReplacementPlugin()
+    new webpack.HotModuleReplacementPlugin()
 
   ]
 };
