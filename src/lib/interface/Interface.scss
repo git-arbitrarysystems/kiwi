@@ -1,7 +1,7 @@
 .interface{
 
 	position: absolute;
-	background-color: rgba(255,0,255,0.5);
+	background-color: rgba(255,100,255,0.5);
 	right: 0;
 	bottom:0;
 
@@ -32,6 +32,11 @@
 			cursor: pointer;
 			background-color:green;
 
+			&.selected{
+				border:0.25em solid red;
+				padding:0;
+			}
+
 			img{
 				width: 100%;
 				display: block;
@@ -43,23 +48,16 @@
 			&:hover{
 				padding:0;
 			}
-
-			&:last-child{
-
-
-				
-			}
-
 			
 
 		}
 
 
 		&:after {
-	    content: "";
-	    display: table;
-	    clear: both;
-	  }
+		    content: "";
+		    display: table;
+		    clear: both;
+		}
 
 	}
 

@@ -1,5 +1,3 @@
-
-
 const path = require('path');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
 const CleanWebpackPlugin = require('clean-webpack-plugin');
@@ -26,7 +24,7 @@ module.exports = {
   devtool:'eval',
 
   resolve:{
-    modules: ['node_modules', 'src/lib/', 'src/lib/static']
+    modules: ['node_modules', '.', 'src', 'src/lib/', 'src/lib/static']
   },
   
   devServer: {

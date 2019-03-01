@@ -18,5 +18,5 @@ export class Tile extends PIXI.Sprite{
 }
 
 
-import {HotModule} from '../../HotModule.js'
+import {HotModule} from 'HotModule.js'
 HotModule(module, Tile);

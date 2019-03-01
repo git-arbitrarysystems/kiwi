@@ -1,10 +1,12 @@
 import * as PIXI from 'pixi.js';
 import * as PF from 'pathfinding';
 import {ResizeHandler} from 'ResizeHandler';
-import {Tile} from 'Tile';
+import {Tile} from 'grid/Tile';
+import {App} from 'App';
 
 const options = (function(){
 	const options = {};
+	
 	options.tileWidth = 64;
 	options.tileRatio = 0.666667;
 	options.tileHeight = options.tileWidth * options.tileRatio;
@@ -13,6 +15,9 @@ const options = (function(){
 	options.halfTileHeight = options.tileHeight * 0.5;
 	options.tileSkewX = Math.atan2( options.tileWidth, options.tileHeight);
 	options.tileSkewY = Math.atan2( -options.tileHeight, options.tileWidth);
+	
+	options.surfaceSpan = 3;
+
 	return options;
 })();
 
@@ -63,6 +68,8 @@ export class Grid extends PIXI.Container{
 	constructor(){
 		super();
 
+		App.register(this);
+
 		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
 		this.tiles = {};
 
@@ -86,27 +93,10 @@ export class Grid extends PIXI.Container{
 		this.on('pointermove', (e)=>{ this.pointer(e) } );
 		this.on('pointerup',   (e)=>{ this.pointer(e) } );
 		this.on('pointertap',  (e)=>{ this.pointer(e) } );
-
-
-		
-		
-
-
-		
-
-		
-
-
-
-
-		ResizeHandler.add( (dimensions) => {
-
-		})
 		
 	}
 	get mode(){
-		// MODES: ['path', 'drag']
-		return 'path';
+		return App.Interface.mode();
 	}
 	pointer( e){
 
@@ -114,7 +104,7 @@ export class Grid extends PIXI.Container{
 			
 			if( this.mode === 'drag' ){
 				this._dragStart = {x:e.data.global.x, y:e.data.global.y};
-			}else if( this.mode === 'path' ){
+			}else if( this.mode === 'road' ){
 				this._pathStart = this.getTileFromEvent(e);
 			}
 
@@ -135,7 +125,7 @@ export class Grid extends PIXI.Container{
 					tile.hover = true;
 				}
 
-				if( this.mode === 'path' && this._pathStart ){
+				if( this.mode === 'road' && this._pathStart ){
 					this.path(this._pathStart, tile);
 				}
 			}
@@ -221,5 +211,5 @@ export class Grid extends PIXI.Container{
 }
 
 
-import {HotModule} from '../../HotModule.js'
+import {HotModule} from 'HotModule'
 HotModule(module, Grid);
