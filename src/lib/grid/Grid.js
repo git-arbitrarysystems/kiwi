@@ -57,9 +57,26 @@ const tools = (function(){
 
 	return tools;
 
+})();
 
 
-})()
+class Stamp extends PIXI.Sprite{
+	constructor(){
+		super();
+	}
+	update(interfaceSelection){
+		this.texture = PIXI.Texture.from(interfaceSelection.url);
+		if( this.texture.width === 1 ){ // TEXTURE IS NOT LOADED YET
+			this.texture.on('update', (e)=>{ this.gridTransform(interfaceSelection); })
+		}else{
+			this.gridTransform(interfaceSelection)
+		}
+	}
+	gridTransform(interfaceSelection){
+		console.log('Stamp.updateTransform', interfaceSelection);
+		tools.transform(this, interfaceSelection.size[0]);
+	}
+}
 
 
 export class Grid extends PIXI.Container{
@@ -84,12 +101,15 @@ export class Grid extends PIXI.Container{
 			 allowDiagonal: false
 		});
 
+		this.stamp = this.addChild( new Stamp() )
+
 
 		// INTERACTION
 		this.interactive = true;
 		this.on('pointerdown', (e)=>{ this.pointer(e) } );
 		this.on('pointermove', (e)=>{ this.pointer(e) } );
-		this.on('pointerup',   (e)=>{ this.pointer(e) } );
+		document.addEventListener('mouseup',   (e)=>{ this.pointer(e) } );
+		document.addEventListener('touchend',   (e)=>{ this.pointer(e) } );
 		this.on('pointertap',  (e)=>{ this.pointer(e) } );
 	}
 
@@ -117,16 +137,41 @@ export class Grid extends PIXI.Container{
 	}
 
 	// GET TILE ARRAY
-	getTileArray(tile, width = 1, height = width){
+	getTileArray(tile, width = 1, height = width, modulo = false){
 		
 		if( !tile ) return [];
 		
-		let cx = Math.min( Math.max( tile.cx - Math.ceil(width*0.5)  + 1, this.size.minx ), this.size.maxx - width  + 1),
-			cy = Math.min( Math.max( tile.cy - Math.ceil(height*0.5) + 1, this.size.miny ), this.size.maxy - height + 1),
+		let cx = tile.cx,
+			cy = tile.cy,
 			a = [],x,y;
-		for(x=cx;x<cx+width;x++){
-			for(y=cy;y<cy+height;y++){
-				a.push( this.getTile({x:x,y:y}, true) );
+
+		if( modulo ){
+			cx = Math.round(cx / width) * width;
+			cy = Math.round(cy / height) * height;
+		}
+
+		var left = cx - Math.ceil(width*0.5)  + 1,
+			top  = cy - Math.ceil(height*0.5) + 1;
+		
+		if( left < this.size.minx ||
+			left + width >= this.size.maxx ||
+			top < this.size.miny ||
+			top + height >= this.size.maxy ){
+			
+			if(modulo){
+				// iNVALID
+				return [];
+			}else{
+				// LIMIT
+				left = Math.min( Math.max( left, this.size.minx ), this.size.maxx - width  + 1),
+				top  = Math.min( Math.max( top , this.size.miny ), this.size.maxy - height + 1);
+			}
+		}
+
+
+		for(x=left;x<left+width;x++){
+			for(y=top;y<top+height;y++){
+				if( tile ) a.push( this.getTile({x:x,y:y}, true) );
 			}
 		}
 		return a;
@@ -137,42 +182,46 @@ export class Grid extends PIXI.Container{
 		return App.Interface.mode();
 	}
 
+	
+
+
 	pointer( e){
 
-		if( e.type === 'pointerdown'){
-			this.__pd = true;
-			this.__ps = {x:e.data.global.x, y:e.data.global.y};
-			this.__pp = {x:e.data.global.x, y:e.data.global.y};
-		}else if( e.type === 'pointermove'){
-			
-			this.__pc = {x:e.data.global.x, y:e.data.global.y};
-			
+		switch(e.type){
 
-			if( this.mode === 'drag' && this.__pd ){
-				this.drag(this.__pc.x - this.__pp.x, this.__pc.y - this.__pp.y);
-			}else if( this.mode === 'road' && this.__pd ){
-				this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
-			}else{
-				this.hover();
-			}
+			case  'pointerdown':
+				this.__pd = true;
+				this.__ps = {x:e.data.global.x, y:e.data.global.y};
+				this.__pp = {x:e.data.global.x, y:e.data.global.y};
+				break;
+			case 'pointermove':
+				
+				this.__pc = {x:e.data.global.x, y:e.data.global.y};
 
 
 
-			this.__pp = {x:e.data.global.x, y:e.data.global.y};
+				if( this.mode === 'drag' && this.__pd ){
+					this.drag(this.__pc.x - this.__pp.x, this.__pc.y - this.__pp.y);
+				}else if( this.mode === 'road' && this.__pd ){
+					this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
+				}else{
+					this.hoverWith( App.Interface.selected() );
+				}
 
+				this.__pp = {x:e.data.global.x, y:e.data.global.y};
+				break;
+			case 'pointerup':
+			case 'mouseup':
+			case 'touchend':
+				
+				delete this.__ps;
+				delete this.__pc;
+				delete this.__pp;
+				this.__pd = false;
+				break;
+			case 'pointertap':
 
-		}else if( e.type ===  'pointerup'){
-			
-			delete this.__ps;
-			delete this.__pc;
-			delete this.__pp;
-			this.__pd = false;
-		
-		}else if( e.type ===  'pointertap'){
-			
-			/*if( this.mode === 'drag' ){
-				this.selected = this.getTileFromEvent(e);
-			}*/
+				break;
 
 		}
 	}
@@ -181,32 +230,34 @@ export class Grid extends PIXI.Container{
 		this.x += dx;
 		this.y += dy;
 	}
-
-	hover(width = 1, height = width){
-		if( this._hover ) this._hover.forEach( (tile)=>{ if(tile) tile.hover = false;} );
-		this._hover = this.getTileArray( this.getTile(this.__pc, false) ,width ,height );
-		this._hover.forEach( (tile)=>{ if(tile) tile.hover = true;} );
+	hoverWith(interfaceSelection){
+		var w = 1, h = 1, m = false;
+		if( interfaceSelection ){
+			[w,h] = interfaceSelection.size;
+			m = interfaceSelection.modulo;
+		}
+		this.hover(w,h,m);
+	}
+	hover(width = 1, height = width, modulo = false){
+		if( this._hover ) this._hover.forEach( (tile)=>{ tile.hover = false;} );
+		this._hover = this.getTileArray( 
+			this.getTile(this.__pc, false),
+			width ,height, modulo
+		);
+		this._hover.forEach( (tile)=>{ tile.hover = true;} );
 	}
 
-	set selected(array){
-
-		// DESELECT ALL
-		if( this._selected ){
-			for(var i=0;i<this._selected.length;i++) this._selected[i].selected = false;
-		}
-
-		//
-		if( !array ) return;
-		if( !Array.isArray(array) ) array = [array];
-
+	select(array = []){
+		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false; });
 		this._selected = array;
-		if( this._selected ){
-			for(var i=0;i<this._selected.length;i++) this._selected[i].selected = true;
-		}
+		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = true; })
 	}
 	
 
 	path(from, to){
+
+		if( !from || !to ) return false;
+
 		
 		// CREATE A PATHFINDER GRID
 		let m = new PF.Grid(this.size.width+1, this.size.height+1);
@@ -229,7 +280,7 @@ export class Grid extends PIXI.Container{
 		}
 
 		// SET SELECTION
-		this.selected = result;
+		this.select(result);
 
 	}
 	

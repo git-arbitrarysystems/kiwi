@@ -26,12 +26,26 @@ export class Interface{
 			var c = this.ce({class:'content', target:g});
 
 			for( var image in Textures[group] ){
+
+				// GET OBJECT INFO
+				let url = Textures[group][image].url,
+					id = group+'/'+image,
+					size = Textures[group][image].size,
+					title = id + ' ' + size,
+					modulo = Textures[group][image].modulo ? 1 : 0;
 				
 				// CREATE TEXTURE BUTTON
-				var b = this.ce({target:c, class:'button', id:group+'/'+image, title:group+'/'+image, url:Textures[group][image]});
+				var b = this.ce({target:c, class:'button', 
+					id:id, 
+					title:title,
+					'data-url':url,
+					'data-size':size,
+					'data-modulo':modulo
+
+				});
 				b.addEventListener('click', (e)=>{ this.selected(e); console.log('Interface.selected:', this.selected() ); })
 
-				var i = this.ce({target:b, tag:'img', src:Textures[group][image]});
+				var i = this.ce({target:b, tag:'img', src:url});
 			}
 		}
 	}
@@ -55,23 +69,44 @@ export class Interface{
 	// SELECT TEXTURE
 	selected(e){
 
-		if( e !== undefined ){
-			
-			if( this.___selected && this.___selected !== e.currentTarget ) this.___selected.classList.remove('selected');
-			
-			if( e.currentTarget ){
-				e.currentTarget.classList.add('selected');
-				this.___selected = e.currentTarget;
-				e.stopImmediatePropagation();
-			}else{
-				this.___selected = false;
-			}
-
-			let id = this.___selected ? this.___selected.id : false,
-				mode = id ? id.split('/')[0] : this.gridModes[0];
-				this.mode(mode);
+		// GETTER
+		if( e === undefined ){
+			return this.___selected;
 		}
-		return this.___selected ? {id:this.___selected.id, url:this.___selected.getAttribute('url') } : false;
+
+		if( this.___selected ){
+			this.___selected.element.classList.remove('selected');	
+		}
+
+		// DESELECT && FALL BACK TO DEFAUT MODE
+		if( !e ){
+			this.mode( this.gridModes[0] );
+			this.___selected = false;
+			return;
+		}
+
+		// SELECT NEW
+		this.___selected = {
+			element:e.currentTarget,
+			id:e.currentTarget.id,
+			url:e.currentTarget.getAttribute('data-url'),
+			size:e.currentTarget.getAttribute('data-size').split(','),
+			modulo:e.currentTarget.getAttribute('data-modulo') === '1' ? true : false
+		}
+
+		// NORMALIZE SIZE
+		this.___selected.size.forEach( (v,i,a)=>{ a[i] = parseInt(v,10); });
+
+		App.Grid.stamp.update(this.___selected);
+
+		// STORE INTERFACE MODE
+		this.mode( this.___selected.id.split('/')[0] )
+
+		// 
+		e.currentTarget.classList.add('selected');
+		e.stopImmediatePropagation();
+
+		return this.___selected;
 	}
 	deselect(){
 		if( this.___selected ){
@@ -85,6 +120,7 @@ export class Interface{
 		if( typeof mode === 'string' && this.gridModesSelector.value !== mode ){
 			console.log('Interface.mode:', mode);
 			this.gridModesSelector.value = mode;
+			
 		}else{
 			return this.gridModesSelector.value;
 		}
