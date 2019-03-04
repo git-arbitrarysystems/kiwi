@@ -15,40 +15,40 @@
 
 	.group{
 
-		background-color:orange;
+		background-color:lightgray;
 		display: inline-block;
-		margin: 1em;
+		margin: 0.1em;
 
 		h2{
 			margin: 0;
+			text-align: center;
 		}
 
 
 		.button{
 
 			width: 4em;
+			height: 4em;
+
 			float: left;
-			padding: 0.25em;
-			box-sizing: border-box;
+
 			cursor: pointer;
-			background-color:green;
 
-			&.selected{
-				border:0.25em solid red;
-				padding:0;
-			}
-
-			img{
-				width: 100%;
-				display: block;
-				background-color:white;
-
-
-			}
+			background-color:white;
+			background-position: center;
+			background-size:90%;
+			background-repeat: no-repeat;
 
 			&:hover{
-				padding:0;
+				background-color:#444;
+				background-size:90%;
 			}
+
+			&.selected{
+				background-color:black;
+			}
+
+
 			
 
 		}

@@ -27,32 +27,38 @@ function replacePrototypeFunctions(src, target) {
     }
 }
 
-function HotModule(module, cls){
+function HotModule(module, ...cls){
 	
 	if( module.hot ){
 		module.hot.accept();
 	}
 
-	let name = cls.name;
+    if( !HotModule.registered ){
+        HotModule.registered = {};
+    }
+
+    Array(...cls).forEach( (value)=>{
+        
+        let name = value.name;
+    
+        
+
+        if( !HotModule.registered[name] ){
+            HotModule.registered[name] = value;
+            if( window.console ) console.log('[HotModule.NEW]',name);
+        }
+
+        // COMPARE & REPLACE
+        if( HotModule.registered[name] !== value ){
+            if( window.console ) console.log('[HotModule.CHANGED]', name);
+            replacePrototypeFunctions(
+                value, 
+                HotModule.registered[name]
+            );
+        }
+    })
+
 	
-	if( !HotModule.registered ){
-		HotModule.registered = {};
-	}
-
-	if( !HotModule.registered[name] ){
-		HotModule.registered[name] = cls;
-		if( window.console ) console.log('[HotModule.NEW]',name);
-	}
-
-	// COMPARE
-	if( HotModule.registered[name] !== cls ){
-		if( window.console ) console.log('[HotModule.CHANGED]', name);
-
-		replacePrototypeFunctions(
-			cls, 
-			HotModule.registered[name]
-		);
-	}
 }
 
 export {HotModule}

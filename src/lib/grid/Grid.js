@@ -2,81 +2,16 @@ import * as PIXI from 'pixi.js';
 import * as PF from 'pathfinding';
 import {ResizeHandler} from 'ResizeHandler';
 import {Tile} from 'grid/Tile';
+import {Stamp} from 'grid/Stamp';
+import {Face} from 'grid/Face';
+import {Transform} from 'grid/Transform';
 import {App} from 'App';
 
-const options = (function(){
-	const options = {};
-	
-	options.tileWidth = 64;
-	options.tileRatio = 0.666667;
-	options.tileHeight = options.tileWidth * options.tileRatio;
-	options.tileDiameter = Math.sqrt( options.tileHeight*options.tileHeight+options.tileWidth*options.tileWidth);
-	options.halfTileWidth = options.tileWidth * 0.5;
-	options.halfTileHeight = options.tileHeight * 0.5;
-	options.tileSkewX = Math.atan2( options.tileWidth, options.tileHeight);
-	options.tileSkewY = Math.atan2( -options.tileHeight, options.tileWidth);
-	
-	return options;
-})();
 
 
 
-const tools = (function(){
-	const tools = {};
-
-	// COORDINATES TO POINT
-	tools.c2p = function(cx,cy){
-		return {
-			x:(cx + cy ) * options.halfTileWidth,
-			y:(cy - cx ) * options.halfTileHeight
-		}
-	}
-
-	// POINT TO COORDINATES
-	tools.p2c = function(x,y){
-		var cx = ( x/options.halfTileWidth - y/options.halfTileHeight ) / 2,
-			cy = y/options.halfTileHeight + cx;
-		return {
-			x:Math.round(cx),
-			y:Math.round(cy)
-		}
-	}
-
-	tools.position = function(sprite){
-		let p = tools.c2p(sprite.cx, sprite.cy);
-		sprite.x = p.x;
-		sprite.y = p.y;
-	}
-
-	tools.transform = function(sprite, span = 1){
-		sprite.anchor.set(0.5);
-		sprite.scale.set( ( options.tileDiameter * 0.5 * span / sprite.texture.width ) * 1.01 );
-		sprite.skew.set(options.tileSkewX, options.tileSkewY);
-		return sprite;
-	}
-
-	return tools;
-
-})();
 
 
-class Stamp extends PIXI.Sprite{
-	constructor(){
-		super();
-	}
-	update(interfaceSelection){
-		this.texture = PIXI.Texture.from(interfaceSelection.url);
-		if( this.texture.width === 1 ){ // TEXTURE IS NOT LOADED YET
-			this.texture.on('update', (e)=>{ this.gridTransform(interfaceSelection); })
-		}else{
-			this.gridTransform(interfaceSelection)
-		}
-	}
-	gridTransform(interfaceSelection){
-		console.log('Stamp.updateTransform', interfaceSelection);
-		tools.transform(this, interfaceSelection.size[0]);
-	}
-}
 
 
 export class Grid extends PIXI.Container{
@@ -125,13 +60,13 @@ export class Grid extends PIXI.Container{
 		this.size.width = this.size.maxx - this.size.minx;
 		this.size.height = this.size.maxy - this.size.miny;
 
-		tools.position( tools.transform( this.tiles[x][y] ) );
+		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
 	}
 	
 	// GET TILE
 	getTile(c,isCoordinate=true){
-		if( !isCoordinate ) c = tools.p2c(c.x-this.x,c.y-this.y);
+		if( !isCoordinate ) c = Transform.p2c(c.x-this.x,c.y-this.y);
 		if( !this.tiles[c.x] ) return undefined;
 		return this.tiles[c.x][c.y];
 	}
@@ -140,7 +75,7 @@ export class Grid extends PIXI.Container{
 	getTileArray(tile, width = 1, height = width, modulo = false){
 		
 		if( !tile ) return [];
-		
+
 		let cx = tile.cx,
 			cy = tile.cy,
 			a = [],x,y;
@@ -168,12 +103,15 @@ export class Grid extends PIXI.Container{
 			}
 		}
 
-
 		for(x=left;x<left+width;x++){
 			for(y=top;y<top+height;y++){
-				if( tile ) a.push( this.getTile({x:x,y:y}, true) );
+				a.push( this.getTile({x:x,y:y}, true) );
 			}
 		}
+
+		a.forEach( (v,i,a) => { if( !v ) a.splice(i,1); });
+
+
 		return a;
 	}
 
@@ -199,13 +137,13 @@ export class Grid extends PIXI.Container{
 				this.__pc = {x:e.data.global.x, y:e.data.global.y};
 
 
-
+				
 				if( this.mode === 'drag' && this.__pd ){
 					this.drag(this.__pc.x - this.__pp.x, this.__pc.y - this.__pp.y);
 				}else if( this.mode === 'road' && this.__pd ){
 					this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
 				}else{
-					this.hoverWith( App.Interface.selected() );
+					this.hover();
 				}
 
 				this.__pp = {x:e.data.global.x, y:e.data.global.y};
@@ -230,21 +168,42 @@ export class Grid extends PIXI.Container{
 		this.x += dx;
 		this.y += dy;
 	}
-	hoverWith(interfaceSelection){
-		var w = 1, h = 1, m = false;
-		if( interfaceSelection ){
-			[w,h] = interfaceSelection.size;
-			m = interfaceSelection.modulo;
-		}
-		this.hover(w,h,m);
-	}
-	hover(width = 1, height = width, modulo = false){
+	hover(){
+		
+		// UNHOVER
 		if( this._hover ) this._hover.forEach( (tile)=>{ tile.hover = false;} );
+
+		let interfaceSelection = Object.assign({
+			size:[1,1],
+			modulo:false
+		}, App.Interface.selected() );
+
+		
+		// GET SELECTION
 		this._hover = this.getTileArray( 
 			this.getTile(this.__pc, false),
-			width ,height, modulo
+			interfaceSelection.size[0] ,interfaceSelection.size[1], interfaceSelection.modulo
 		);
-		this._hover.forEach( (tile)=>{ tile.hover = true;} );
+
+		let max = 1000000,
+			selectionLimits = {left:max,right:-max,top:max,bottom:-max};
+
+		this._hover.forEach( (tile)=>{ 
+			tile.hover = true;
+			selectionLimits.top 	= Math.min(tile.y - Tile.halfTileHeight, selectionLimits.top);
+			selectionLimits.bottom 	= Math.max(tile.y + Tile.halfTileHeight, selectionLimits.bottom);
+			selectionLimits.left 	= Math.min(tile.x - Tile.halfTileWidth,  selectionLimits.left);
+			selectionLimits.right	= Math.max(tile.x + Tile.halfTileWidth,  selectionLimits.right);
+		});
+
+		selectionLimits.height = selectionLimits.bottom - selectionLimits.top;
+		selectionLimits.width = selectionLimits.right - selectionLimits.left;
+
+		// POSITION THE STAMP-TOOL
+		this.stamp.frame(selectionLimits, {x:0.5, y:this.mode === 'build' ? 1 : 0.5});
+		this.stamp.visible = this._hover.length > 0;
+
+
 	}
 
 	select(array = []){

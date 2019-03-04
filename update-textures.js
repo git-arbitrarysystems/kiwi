@@ -17,24 +17,44 @@ const srcDir = './src/assets/psd/';
 const targetDir = './src/assets/img/textures/';
 
 // CONVERT PSD'S
+
+const _default = {
+	modulo:false,
+	skew:true,
+	size:[1,1]
+}
+
 const cpsd = {
 	'surface':{
 		_default:{
 			size:[3,3],
-			modulo:true	
+			modulo:true
 		}
 	},
 	'road':{
 		_default:{
-			size:[1,1]
 		}
 	},
 	'build':{
 		_default:{
-			size:[4,2]
+			skew:false
 		},
 		castle:{
 			size:[6,6]
+		},
+		castleAlt:{
+			size:[4,2]
+		},
+		s1x1:{
+		},
+		s2x2:{
+			size:[2,2]
+		},
+		s4x2:{
+			size:[4,2]
+		},
+		s5x2:{
+			size:[5,2]
 		}
 	}
 }
@@ -51,9 +71,14 @@ function updateTextures(){
 		psd.parse();
 
 
+		// UPDATE PSD SIZE
+
+
 		// CREATE JSON NODE
 		json[s] = {};
 		
+		var width = psd.tree().width,
+			height = psd.tree().height;
 
 		// EXPORT LAYERS
 		var j, layer;
@@ -71,9 +96,14 @@ function updateTextures(){
 				// STORE FOR EXPORT
 				json[s][id] = Object.assign(
 					{},
+					_default,
 					cpsd[s]._default,
 					cpsd[s][id],
 					{url:id},
+					{ 
+						orig:{left:0, top:0, width:width, height:height},
+						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
+					}
 				)
 				
 				// ADD IMPORT SCRIPT LINE

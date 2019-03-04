@@ -1,7 +1,13 @@
 
-import {Textures} from '../../assets/img/textures/Textures.js';
+
 import {App} from 'App';
 import './Interface.scss';
+
+import {Textures} from '../../assets/img/textures/Textures.js';
+const TextureData = {};
+
+
+
 
 export class Interface{
 	constructor(){
@@ -30,22 +36,21 @@ export class Interface{
 				// GET OBJECT INFO
 				let url = Textures[group][image].url,
 					id = group+'/'+image,
-					size = Textures[group][image].size,
-					title = id + ' ' + size,
-					modulo = Textures[group][image].modulo ? 1 : 0;
+					title = id;
+
+				// STORE ARBITRARY DATA
+				TextureData[id] = Textures[group][image];
 				
 				// CREATE TEXTURE BUTTON
 				var b = this.ce({target:c, class:'button', 
 					id:id, 
-					title:title,
-					'data-url':url,
-					'data-size':size,
-					'data-modulo':modulo
-
+					title:title
 				});
+
+				b.style.backgroundImage = 'url('+url+')'
 				b.addEventListener('click', (e)=>{ this.selected(e); console.log('Interface.selected:', this.selected() ); })
 
-				var i = this.ce({target:b, tag:'img', src:url});
+			
 			}
 		}
 	}
@@ -86,13 +91,10 @@ export class Interface{
 		}
 
 		// SELECT NEW
-		this.___selected = {
+		this.___selected = Object.assign({
 			element:e.currentTarget,
-			id:e.currentTarget.id,
-			url:e.currentTarget.getAttribute('data-url'),
-			size:e.currentTarget.getAttribute('data-size').split(','),
-			modulo:e.currentTarget.getAttribute('data-modulo') === '1' ? true : false
-		}
+			id:e.currentTarget.id
+		}, TextureData[e.currentTarget.id] );
 
 		// NORMALIZE SIZE
 		this.___selected.size.forEach( (v,i,a)=>{ a[i] = parseInt(v,10); });
