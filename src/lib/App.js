@@ -16,11 +16,13 @@ export class App extends PIXI.Application{
 		this.background = this.stage.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
 		this.background.tint = 0x123456;
 
+		// INTERFACE
+		this.interface = new Interface();
+
 		// MAIN GRID
 		this.grid = this.stage.addChild( new Grid() );
 
-		// INTERFACE
-		this.interface = new Interface();
+		
 
 		// SETUP RESIZE-HANDLER
 		ResizeHandler.source = this.screen;

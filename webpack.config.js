@@ -21,7 +21,7 @@ module.exports = {
   },
 
   mode:'development',
-  devtool:'eval',
+  devtool:'source-map',
 
   resolve:{
     modules: ['node_modules', '.', 'src', 'src/lib/', 'src/lib/static']

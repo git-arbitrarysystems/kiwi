@@ -20,6 +20,10 @@ export class Grid extends PIXI.Container{
 
 		App.register(this);
 
+
+		// ADD THE FACE OOF THE GRID
+		this.face = this.addChild( new Face() );
+
 		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
 		this.tiles = {};
 
@@ -36,15 +40,19 @@ export class Grid extends PIXI.Container{
 			 allowDiagonal: false
 		});
 
-		this.stamp = this.addChild( new Stamp() )
+		this.stamp = {
+			selected:this.addChild( new Stamp() ),
+			hover:this.addChild( new Stamp() )
+		}
 
+		this.stamp.selected.alpha = 1;
+		this.stamp.hover.alpha = 0.5;
 
 		// INTERACTION
 		this.interactive = true;
 		this.on('pointerdown', (e)=>{ this.pointer(e) } );
 		this.on('pointermove', (e)=>{ this.pointer(e) } );
-		document.addEventListener('mouseup',   (e)=>{ this.pointer(e) } );
-		document.addEventListener('touchend',   (e)=>{ this.pointer(e) } );
+		this.on('pointerup',   (e)=>{ this.pointer(e) } );
 		this.on('pointertap',  (e)=>{ this.pointer(e) } );
 	}
 
@@ -66,6 +74,7 @@ export class Grid extends PIXI.Container{
 	
 	// GET TILE
 	getTile(c,isCoordinate=true){
+		if( !c ) return undefined;
 		if( !isCoordinate ) c = Transform.p2c(c.x-this.x,c.y-this.y);
 		if( !this.tiles[c.x] ) return undefined;
 		return this.tiles[c.x][c.y];
@@ -140,8 +149,6 @@ export class Grid extends PIXI.Container{
 				
 				if( this.mode === 'drag' && this.__pd ){
 					this.drag(this.__pc.x - this.__pp.x, this.__pc.y - this.__pp.y);
-				}else if( this.mode === 'road' && this.__pd ){
-					this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
 				}else{
 					this.hover();
 				}
@@ -156,6 +163,9 @@ export class Grid extends PIXI.Container{
 				delete this.__pc;
 				delete this.__pp;
 				this.__pd = false;
+
+				this.select();
+
 				break;
 			case 'pointertap':
 
@@ -180,42 +190,47 @@ export class Grid extends PIXI.Container{
 
 		
 		// GET SELECTION
-		this._hover = this.getTileArray( 
-			this.getTile(this.__pc, false),
-			interfaceSelection.size[0] ,interfaceSelection.size[1], interfaceSelection.modulo
-		);
+		if( this.mode === 'road' && this.__ps ){
+			this._hover = this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
+		}else{
+			this._hover = this.getTileArray( 
+				this.getTile(this.__pc, false),
+				interfaceSelection.size[0] ,interfaceSelection.size[1], interfaceSelection.modulo
+			);
+		}
 
-		let max = 1000000,
-			selectionLimits = {left:max,right:-max,top:max,bottom:-max};
-
+		// SHOW HOVERING
 		this._hover.forEach( (tile)=>{ 
 			tile.hover = true;
-			selectionLimits.top 	= Math.min(tile.y - Tile.halfTileHeight, selectionLimits.top);
-			selectionLimits.bottom 	= Math.max(tile.y + Tile.halfTileHeight, selectionLimits.bottom);
-			selectionLimits.left 	= Math.min(tile.x - Tile.halfTileWidth,  selectionLimits.left);
-			selectionLimits.right	= Math.max(tile.x + Tile.halfTileWidth,  selectionLimits.right);
 		});
 
-		selectionLimits.height = selectionLimits.bottom - selectionLimits.top;
-		selectionLimits.width = selectionLimits.right - selectionLimits.left;
-
 		// POSITION THE STAMP-TOOL
-		this.stamp.frame(selectionLimits, {x:0.5, y:this.mode === 'build' ? 1 : 0.5});
-		this.stamp.visible = this._hover.length > 0;
-
-
-	}
-
-	select(array = []){
-		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false; });
-		this._selected = array;
-		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = true; })
-	}
+		this.stamp.hover.preview(this._hover);
 	
+
+	}
+
+	select(){
+		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );
+		this._selected = this._hover.slice(0);
+		this.stamp.selected.update(this.stamp.hover.interfaceSelection)
+		this.stamp.selected.preview(this._selected);
+		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = true;} );
+
+		this.confirm();
+	
+	}
+
+	confirm(){
+		if( this.stamp.selected.interfaceSelection ){
+			this.stamp.selected.apply();
+		}
+	}
 
 	path(from, to){
 
-		if( !from || !to ) return false;
+		if( !from || !to ) return [];
+		
 
 		
 		// CREATE A PATHFINDER GRID
@@ -238,8 +253,7 @@ export class Grid extends PIXI.Container{
 			result[i] = this.getTile( {x:result[i][0]+this.size.minx, y:result[i][1]+this.size.miny} );
 		}
 
-		// SET SELECTION
-		this.select(result);
+		return result;
 
 	}
 	

@@ -7,9 +7,7 @@ import {Textures} from '../../assets/img/textures/Textures.js';
 const TextureData = {};
 
 
-
-
-export class Interface{
+class Interface{
 	constructor(){
 
 		App.register(this);
@@ -87,6 +85,7 @@ export class Interface{
 		if( !e ){
 			this.mode( this.gridModes[0] );
 			this.___selected = false;
+			App.Grid.stamp.hover.update(false);
 			return;
 		}
 
@@ -96,10 +95,8 @@ export class Interface{
 			id:e.currentTarget.id
 		}, TextureData[e.currentTarget.id] );
 
-		// NORMALIZE SIZE
-		this.___selected.size.forEach( (v,i,a)=>{ a[i] = parseInt(v,10); });
-
-		App.Grid.stamp.update(this.___selected);
+		// PROPAGATE TO STAMP TOOL
+		App.Grid.stamp.hover.update(this.___selected);
 
 		// STORE INTERFACE MODE
 		this.mode( this.___selected.id.split('/')[0] )
@@ -134,3 +131,5 @@ export class Interface{
 
 import {HotModule} from '../../../HotModule.js'
 HotModule(module, Interface);
+
+export {Interface, TextureData};

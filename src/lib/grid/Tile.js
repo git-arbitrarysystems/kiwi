@@ -1,9 +1,35 @@
 import * as PIXI from 'pixi.js';
 
+
+class TileContent extends Array{
+	constructor( ...items){
+		super(items)
+	}
+	add(id){
+		if( this.indexOf(id) === -1 ){
+			console.log('TileContent.add', id);
+			this.push(id);
+		}
+	}
+	remove(id){
+		let index = this.indexOf(id);
+		if( index !== -1 ){
+			this.splice(index,1);
+			console.log('TileContent.remove', this.join(',') );
+		}
+	}
+	toString(){
+		return '[' + this.join(',') + ']'
+	}
+}
+
 class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);
-		this.alpha = 0.1;
+
+		this.content = new TileContent();
+
+		this.alpha = 0.2;
 		this.cx = cx;
 		this.cy = cy;
 	}
@@ -15,21 +41,24 @@ class Tile extends PIXI.Sprite{
 		this._selected = boolean;
 		this.tint = boolean ? 0xff0000 : 0xffffff;
 	}
+	toString(){
+		return '[Tile '+this.cx+' '+this.cy+']' + this.content.toString() ;
+	}
 }
 
-Tile.tileWidth = 64;
-Tile.tileRatio = 0.666667;
-Tile.tileHeight = Tile.tileWidth * Tile.tileRatio;
-Tile.tileDiameter = Math.sqrt( Tile.tileHeight*Tile.tileHeight+Tile.tileWidth*Tile.tileWidth);
-Tile.halfTileWidth = Tile.tileWidth * 0.5;
-Tile.halfTileHeight = Tile.tileHeight * 0.5;
-Tile.tileSkewX = Math.atan2( Tile.tileWidth, Tile.tileHeight);
-Tile.tileSkewY = Math.atan2( -Tile.tileHeight, Tile.tileWidth);
+Tile.width = 64;
+Tile.ratio = 0.666667;
+Tile.height = Tile.width * Tile.ratio;
+Tile.diameter = Math.sqrt( Tile.height*Tile.height+Tile.width*Tile.width);
+Tile.halfWidth = Tile.width * 0.5;
+Tile.halfHeight = Tile.height * 0.5;
+Tile.skewX = Math.atan2( Tile.width, Tile.height);
+Tile.skewY = Math.atan2( -Tile.height, Tile.width);
 
 
 
-export {Tile};
+export {Tile, TileContent};
 
 
 import {HotModule} from 'HotModule.js'
-HotModule(module, Tile);
+HotModule(module, Tile, TileContent);

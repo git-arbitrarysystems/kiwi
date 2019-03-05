@@ -7,15 +7,15 @@ const Transform = {
 	// COORDINATES TO POINT
 	c2p:function(cx,cy){
 		return {
-			x:(cx + cy ) * Tile.halfTileWidth,
-			y:(cy - cx ) * Tile.halfTileHeight
+			x:(cx + cy ) * Tile.halfWidth,
+			y:(cy - cx ) * Tile.halfHeight
 		}
 	},
 	
 	// POINT TO COORDINATES
 	p2c:function(x,y){
-		var cx = ( x/Tile.halfTileWidth - y/Tile.halfTileHeight ) / 2,
-			cy = y/Tile.halfTileHeight + cx;
+		var cx = ( x/Tile.halfWidth - y/Tile.halfHeight ) / 2,
+			cy = y/Tile.halfHeight + cx;
 		return {
 			x:Math.round(cx),
 			y:Math.round(cy)
@@ -34,13 +34,13 @@ const Transform = {
 		sprite.anchor.set(0.5);
 		sprite.pivot.set(0);
 		if( skewed ){
-			sprite.scale.set( ( Tile.tileDiameter * 0.5 * span / sprite.texture.width ) * overflow );
-			sprite.skew.set( Tile.tileSkewX, Tile.tileSkewY );
+			sprite.scale.set( ( Tile.diameter * 0.5 * span / sprite.texture.width ) * overflow );
+			sprite.skew.set( Tile.skewX, Tile.skewY );
 		}else{
 			
 			var spanWidth = 1;
 			if( span > 1 ) spanWidth = 1 + span*0.5;
-			sprite.scale.set( ( ( Tile.tileWidth * spanWidth) / sprite.texture.width ) * overflow );
+			sprite.scale.set( ( ( Tile.width * spanWidth) / sprite.texture.width ) * overflow );
 			sprite.skew.set(0,0);
 		}
 		return sprite;

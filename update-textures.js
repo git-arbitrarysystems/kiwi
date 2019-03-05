@@ -99,7 +99,7 @@ function updateTextures(){
 					_default,
 					cpsd[s]._default,
 					cpsd[s][id],
-					{url:id},
+					{url:id, type:'\''+s+'\''},
 					{ 
 						orig:{left:0, top:0, width:width, height:height},
 						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}

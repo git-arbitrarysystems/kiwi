@@ -1,6 +1,7 @@
 import grass from './surface_grass.png'
 import water from './surface_water.png'
 import dirt from './surface_dirt.png'
+import sand from './road_sand.png'
 import stone from './road_stone.png'
 import castle from './build_castle.png'
 import castleAlt from './build_castleAlt.png'
@@ -20,6 +21,7 @@ const Textures = {
                 3
             ],
             url: grass,
+            type: 'surface',
             orig: {
                 left: 0,
                 top: 0,
@@ -41,6 +43,7 @@ const Textures = {
                 3
             ],
             url: water,
+            type: 'surface',
             orig: {
                 left: 0,
                 top: 0,
@@ -62,6 +65,7 @@ const Textures = {
                 3
             ],
             url: dirt,
+            type: 'surface',
             orig: {
                 left: 0,
                 top: 0,
@@ -77,6 +81,28 @@ const Textures = {
         }
     },
     road: {
+        sand: {
+            modulo: false,
+            skew: true,
+            size: [
+                1,
+                1
+            ],
+            url: sand,
+            type: 'road',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 128,
+                height: 128
+            },
+            trim: {
+                left: 0,
+                top: 0,
+                width: 128,
+                height: 128
+            }
+        },
         stone: {
             modulo: false,
             skew: true,
@@ -85,6 +111,7 @@ const Textures = {
                 1
             ],
             url: stone,
+            type: 'road',
             orig: {
                 left: 0,
                 top: 0,
@@ -108,6 +135,7 @@ const Textures = {
                 6
             ],
             url: castle,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
@@ -129,6 +157,7 @@ const Textures = {
                 2
             ],
             url: castleAlt,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
@@ -150,6 +179,7 @@ const Textures = {
                 2
             ],
             url: s5x2,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
@@ -171,6 +201,7 @@ const Textures = {
                 2
             ],
             url: s4x2,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
@@ -192,6 +223,7 @@ const Textures = {
                 2
             ],
             url: s2x2,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
@@ -213,6 +245,7 @@ const Textures = {
                 1
             ],
             url: s1x1,
+            type: 'build',
             orig: {
                 left: 0,
                 top: 0,
