@@ -40,13 +40,8 @@ export class Grid extends PIXI.Container{
 			 allowDiagonal: false
 		});
 
-		this.stamp = {
-			selected:this.addChild( new Stamp() ),
-			hover:this.addChild( new Stamp() )
-		}
-
-		this.stamp.selected.alpha = 1;
-		this.stamp.hover.alpha = 0.5;
+		this.stamp = this.addChild( new Stamp() );
+		this.stamp.alpha = 0.5;
 
 		// INTERACTION
 		this.interactive = true;
@@ -164,7 +159,7 @@ export class Grid extends PIXI.Container{
 				delete this.__pp;
 				this.__pd = false;
 
-				this.select();
+				this.confirm();
 
 				break;
 			case 'pointertap':
@@ -205,26 +200,19 @@ export class Grid extends PIXI.Container{
 		});
 
 		// POSITION THE STAMP-TOOL
-		this.stamp.hover.preview(this._hover);
+		this.stamp.selection = this._hover;
 	
 
 	}
 
-	select(){
-		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );
-		this._selected = this._hover.slice(0);
-		this.stamp.selected.update(this.stamp.hover.interfaceSelection)
-		this.stamp.selected.preview(this._selected);
-		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = true;} );
-
-		this.confirm();
 	
-	}
 
 	confirm(){
-		if( this.stamp.selected.interfaceSelection ){
-			this.stamp.selected.apply();
+		if( this.stamp.textureData ){
+			this.stamp.apply();
 		}
+
+		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );
 	}
 
 	path(from, to){

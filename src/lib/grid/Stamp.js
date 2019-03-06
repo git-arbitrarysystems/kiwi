@@ -10,142 +10,171 @@ import {App} from 'App';
 
 
 export class Stamp extends PIXI.Container{
-	constructor(){
+	constructor(interfaceSelection = false, selectedTiles = []){
 		super();
-		this.visible = false;
-		this.reset();
-	}
-
-	reset(){
-		this.sprites = [ this.addChild( new PIXI.Sprite() ) ];
-		this.url = undefined;
-		this.update();
-		this.preview(this.selectedTiles);
-	}
-	
-	// TEXTURE SHORTCUT
-	set texture(texture){ this.sprites.forEach( (s) => { s.texture = texture }); }
-	get texture(){ return this.sprites[0].texture; }
-
-	// ANCHOR SHORTCUT
-	set anchor( obj){ this.sprites.forEach( (s) => { s.anchor.set(obj.x, obj.y); }); }
-	get anchor(){ return this.sprites[0].anchor; }
-
-	update(){
-
-
-		this.interfaceSelection = App.Interface.selected();
-
-		this.visible = this.interfaceSelection ? true : false;
-		if( !this.visible || this.url === this.interfaceSelection.url ) return;
-
-		// CACHE URL
-		this.url = this.interfaceSelection.url;
-
-		// UPDATE TEXTURES
-		this.texture = PIXI.Texture.from(this.interfaceSelection.url);
-		this.texture.orig = new PIXI.Rectangle( 0,0,this.interfaceSelection.orig.width,this.interfaceSelection.orig.height);
-		this.texture.trim = new PIXI.Rectangle( this.interfaceSelection.trim.left, this.interfaceSelection.trim.top, this.interfaceSelection.trim.width, this.interfaceSelection.trim.height );;
-		this.texture.updateUvs();
-
-		if( this.texture.width === 1 ){ // TEXTURE IS NOT LOADED YET
-			this.texture.on('update', (e)=>{ this.gridTransform(); })
-		}else{
-			this.gridTransform()
+		this.sprites = [];
+		this.textureData = interfaceSelection;
+		this.selection = selectedTiles;
+		if( interfaceSelection ){
+			this.updateSpritesPosition();
 		}
-
-	}
-	gridTransform(){
-		this.sprites.forEach( (s) => {
-			Transform.transform(s, this.interfaceSelection.size[0], this.interfaceSelection.skew);
-		})
-		
 	}
 
+	// GET/SET THE AMOUNT OF SPRITES FOR THE STAMP
+	get length(){ return this.sprites.length;}
 	set length(int){
 		int = Math.max(1,int);
 		if( int !== this.length ){
-			while( this.sprites.length < int ){	this.sprites.push( this.addChild( new PIXI.Sprite(this.texture) ) ); }
-			while( this.sprites.length > int ){	this.removeChild( this.sprites.splice(0,1)[0] );}
-			this.gridTransform();
-		}
-	}
-	get length(){
-		return this.sprites.length;
-	}
-
-
-	preview(selectedTiles = [] ){
-
-		this.selectedTiles = selectedTiles;
-
-		if( this.selectedTiles.length === 0 || !this.interfaceSelection ){
-			this.visible = false;
-			return;
-		}else{
-			this.visible = true;
-		}
-
-		let isRoad = this.interfaceSelection.type === 'road',
-			isBuild = this.interfaceSelection.type === 'build';
-
-		this.length = isRoad ? Math.max(selectedTiles.length, 1) : 1;
-		this.anchor = {x:0.5, y:isBuild ? 1 : 0.5}
-
-		// GET SELECTION LIMITS
-			let max = 1000000,
-				limits = {left:max,right:-max,top:max,bottom:-max};
-		if( !isRoad ){
-
-			this.selectedTiles.forEach( (tile,i,a) => {
-				limits.top 		= Math.min(tile.y - Tile.halfHeight, limits.top);
-				limits.bottom 	= Math.max(tile.y + Tile.halfHeight, limits.bottom);
-				limits.left 	= Math.min(tile.x - Tile.halfWidth,  limits.left);
-				limits.right	= Math.max(tile.x + Tile.halfWidth,  limits.right);
-			});
-			limits.height = limits.bottom - limits.top;
-			limits.width = limits.right - limits.left;
 
 			
-		}
-
-		this.sprites.forEach( (sprite,i,a) => {
-			if( isRoad ){
-				if( !sprite.road ) Road.fromSprite(sprite);
-
-				var top = 		( this.selectedTiles[i-1] && this.selectedTiles[i-1].cy < this.selectedTiles[i].cy ) ||
-								( this.selectedTiles[i+1] && this.selectedTiles[i+1].cy < this.selectedTiles[i].cy ),
-					right = 	( this.selectedTiles[i-1] && this.selectedTiles[i-1].cx > this.selectedTiles[i].cx ) ||
-								( this.selectedTiles[i+1] && this.selectedTiles[i+1].cx > this.selectedTiles[i].cx ),
-					bottom = 	( this.selectedTiles[i-1] && this.selectedTiles[i-1].cy > this.selectedTiles[i].cy ) ||
-								( this.selectedTiles[i+1] && this.selectedTiles[i+1].cy > this.selectedTiles[i].cy ),
-					left = 		( this.selectedTiles[i-1] && this.selectedTiles[i-1].cx < this.selectedTiles[i].cx ) ||
-								( this.selectedTiles[i+1] && this.selectedTiles[i+1].cx < this.selectedTiles[i].cx );
-
-			
-
-				sprite.road.connect(top,right,bottom,left);
-				sprite.x = this.selectedTiles[i].x;
-				sprite.y = this.selectedTiles[i].y;
-			}else{
-				if( sprite.road ) sprite.road.clear();
-				sprite.x = ( limits.left + limits.right ) * 0.5
-				sprite.y = limits.top  + limits.height  * this.anchor.y;
+			// ADD SPRITES
+			while( this.sprites.length < int ){
+				var sprite = this.addChild( new PIXI.Sprite(this.texture) );
+				if( this.roadMode ){
+					Road.mixin(sprite);
+				}
+				this.sprites.push( sprite );
+				this.updateSpriteTransform([sprite]);
 			}
+
 			
+
+			// REMOVE SPRITES
+			while( this.sprites.length > int ){	this.sprites.splice(0,1)[0].destroy(); }
+			
+		}
+	}
+
+	// GET/SET THE TEXTUREDATA ELEMENT
+	get textureData(){ return this._textureData; }
+	set textureData(textureData){
+		if( textureData !== this.textureData ){
+			this._textureData = textureData;
+			if( this.textureData ){
+				this.roadMode = ( this.textureData.type === 'road' );
+				this.texture = PIXI.Texture.from(this.textureData.url);
+				this.updateSpriteTransform();
+			}else{
+				this.roadMode = false;
+			}
+		}
+	}
+
+	// UPDATE TEXTURE OF ALL SPRITES
+	get texture(){ return this._texture }
+	set texture(texture){
+
+		if( texture !== this.texture ){
+
+			//console.log('Stamp.texture', 'update');
+			this._texture = texture;
+			
+			// ORIGINAL SIZE
+			this.texture.orig = new PIXI.Rectangle( 0, 0, this.textureData.orig.width, this.textureData.orig.height );
+
+			// TRIMMED AREA
+			this.texture.trim = new PIXI.Rectangle( this.textureData.trim.left, this.textureData.trim.top, this.textureData.trim.width, this.textureData.trim.height );
+			
+			// UPDATE TEXTURE
+			this.texture.updateUvs();
+
+			if( this.texture.width === 1 ){
+				// TEXTURE IS NOT LOADED YET
+				this.texture.on('update', (e)=>{ this.updateSpriteTransform(); })
+			}else{
+				this.updateSpriteTransform()
+			}
+		}
+	};
+
+	// GET / SET SELECTED TILES
+	get selection(){ return this._selection; }
+	set selection( selectedTiles ){
+		var _selectionHasChanged = !this.selection || 
+									this.selection.length !== selectedTiles.length || 
+									selectedTiles.some( (v,i,a) => { if( this._selection[i] !== selectedTiles[i] ){ return true; } }, this);
+		
+		if( _selectionHasChanged ){
+			this._selection = selectedTiles;
+
+			// GET SELECTION LIMITS
+			let max = 1000000;
+			this.selection.limits = {left:max,right:-max,top:max,bottom:-max};
+			this.selection.forEach( (tile,i,a) => {
+				this.selection.limits.top 		= Math.min(tile.y - Tile.halfHeight, this.selection.limits.top);
+				this.selection.limits.bottom 	= Math.max(tile.y + Tile.halfHeight, this.selection.limits.bottom);
+				this.selection.limits.left 		= Math.min(tile.x - Tile.halfWidth,  this.selection.limits.left);
+				this.selection.limits.right		= Math.max(tile.x + Tile.halfWidth,  this.selection.limits.right);
+			});
+			this.selection.limits.height = this.selection.limits.bottom - this.selection.limits.top;
+			this.selection.limits.width = this.selection.limits.right - this.selection.limits.left;
+
+			this.selection.limits.x = ( this.selection.limits.left + this.selection.limits.right ) * 0.5
+			this.selection.limits.y =   this.selection.limits.top  + this.selection.limits.height  * (this.textureData && this.textureData.type === 'build' ? 1 : 0.5);
+
+			this.updateSpritesPosition();
+		}	
+	}
+
+	// GET IS CURRENTLY IN MULTI-SPRITE MODE
+	set roadMode(boolean){
+		if( boolean !== this._roadMode ){
+			this._roadMode = boolean;
+			this.sprites.forEach( (sprite) => {
+				if( sprite.road ) sprite.road.enabled = this.roadMode;
+				else if( !sprite.road && this.roadMode ) Road.mixin(sprite);
+			});
+		}
+	}
+	get roadMode(){
+		return this._roadMode;
+	}
+
+	// UPDATE THE TRANSFORMATION OF EACH SPRITE
+	updateSpriteTransform(sprites = this.sprites){
+		console.log('Stamp.updateSpriteTransform');
+		sprites.forEach( (sprite) => {
+			Transform.transform( sprite, this.textureData.size[0], this.textureData.skew);
+			sprite.anchor.set(0.5, this.textureData.type === 'build' ? 1 : 0.5 )//}//{x:0.5, y:isBuild ? 1 : 0.5}
+			sprite.texture = this.texture;
 		});
 	}
+
+	// UPDATE THE POSITION OF EACH SPRITE // USUALY ON SELECTION CHANGED
+	updateSpritesPosition(){
+		
+		// SET VISIBILE WHEN CONTENT
+		this.visible = !( !this.selection || this.selection.length === 0 || !this.textureData);
+		if( !this.visible ) return;
+
+		// SET POSITIONS
+		if( this.roadMode ){
+			this.length = this.selection.length;
+			this.sprites.forEach( (sprite,i,a) => {
+				sprite.x = this.selection[i].x;
+				sprite.y = this.selection[i].y;
+				sprite.road.updateConnections(i, this.selection);
+			});
+		}else{
+			// UNROAD SPRITE ( REMOVES MASKING )
+			this.length = 1;
+			this.sprites[0].x = this.selection.limits.x;
+			this.sprites[0].y = this.selection.limits.y;
+		}
+
+
+	}
+
+
+
+	
+	
+
+
+
 
 	apply(){
-
-		console.log('Stamp.apply: ###', this.selectedTiles.length, this.interfaceSelection.type, this.sprites.length);
-		if( this.selectedTiles.length === 1 && this.interfaceSelection.type === 'road' ) return;
-
-		this.sprites.forEach( (v,i,a) => {
-			App.Grid.face.addChild(v);
-			v.alpha = 0.5;
-		});
-		this.reset();
+		App.Grid.face.add( this.textureData.id, this.selection );
 	}
 }
 

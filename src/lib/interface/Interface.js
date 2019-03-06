@@ -85,7 +85,7 @@ class Interface{
 		if( !e ){
 			this.mode( this.gridModes[0] );
 			this.___selected = false;
-			App.Grid.stamp.hover.update(false);
+			App.Grid.stamp.textureData = false;
 			return;
 		}
 
@@ -96,7 +96,7 @@ class Interface{
 		}, TextureData[e.currentTarget.id] );
 
 		// PROPAGATE TO STAMP TOOL
-		App.Grid.stamp.hover.update(this.___selected);
+		App.Grid.stamp.textureData = this.___selected;
 
 		// STORE INTERFACE MODE
 		this.mode( this.___selected.id.split('/')[0] )

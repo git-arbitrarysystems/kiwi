@@ -2,12 +2,13 @@ import * as PIXI from 'pixi.js';
 
 
 class TileContent extends Array{
-	constructor( ...items){
-		super(items)
+	constructor( tile, ...items){
+		super(items);
+		this.tile = tile;
 	}
 	add(id){
 		if( this.indexOf(id) === -1 ){
-			console.log('TileContent.add', id);
+			console.log( this.tile.toString() + '.content.add', id);
 			this.push(id);
 		}
 	}
@@ -15,7 +16,7 @@ class TileContent extends Array{
 		let index = this.indexOf(id);
 		if( index !== -1 ){
 			this.splice(index,1);
-			console.log('TileContent.remove', this.join(',') );
+			console.log( this.tile.toString() + '.content.remove' );
 		}
 	}
 	toString(){
@@ -27,7 +28,7 @@ class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);
 
-		this.content = new TileContent();
+		this.content = new TileContent(this);
 
 		this.alpha = 0.2;
 		this.cx = cx;
@@ -42,7 +43,7 @@ class Tile extends PIXI.Sprite{
 		this.tint = boolean ? 0xff0000 : 0xffffff;
 	}
 	toString(){
-		return '[Tile '+this.cx+' '+this.cy+']' + this.content.toString() ;
+		return '[Tile '+this.cx+' '+this.cy+']';
 	}
 }
 
