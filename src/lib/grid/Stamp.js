@@ -164,18 +164,6 @@ export class Stamp extends PIXI.Container{
 
 
 	}
-
-
-
-	
-	
-
-
-
-
-	apply(){
-		App.Grid.face.add( this.textureData.id, this.selection );
-	}
 }
 
 import {HotModule} from 'HotModule'

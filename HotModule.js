@@ -27,6 +27,18 @@ function replacePrototypeFunctions(src, target) {
     }
 }
 
+
+function replaceStaticFunctions(src, target){
+    var props = Object.getOwnPropertyNames(src);
+    for( var s in props ){
+        console.log('s', s);
+        if( src[ props[s] ] !== target[ props[s] ] ){
+            console.log('change');
+            target[ props[s] ] = src[ props[s] ];
+        }
+    }
+}
+
 function HotModule(module, ...cls){
 	
 	if( module.hot ){
@@ -50,11 +62,19 @@ function HotModule(module, ...cls){
 
         // COMPARE & REPLACE
         if( HotModule.registered[name] !== value ){
+            
             if( window.console ) console.log('[HotModule.CHANGED]', name);
             replacePrototypeFunctions(
                 value, 
                 HotModule.registered[name]
             );
+
+            replaceStaticFunctions(
+                value,
+                HotModule.registered[name]
+            );
+
+
         }
     })
 

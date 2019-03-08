@@ -9,6 +9,8 @@ export class App extends PIXI.Application{
 	constructor(settings){
 		super(settings);
 
+
+
 		// ADD TO HTML
 		document.body.appendChild( this.view );
 
@@ -52,4 +54,7 @@ export class App extends PIXI.Application{
 
 	
 };
+
+
+window.App = App;
 

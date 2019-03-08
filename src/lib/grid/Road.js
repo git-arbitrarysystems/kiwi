@@ -1,4 +1,5 @@
 import * as PIXI from 'pixi.js';
+import {App} from 'App';
 
 export class Road{
 	
@@ -11,12 +12,14 @@ export class Road{
 	set enabled(bool){
 		if( bool !== this.enabled ){
 			
+			this._enabled = bool;
+			this.cc = {top:false,right:false,bottom:false,left:false};
+
 			if( !bool ){
 				// CLEAR ALL MASKING
 				this.clear();
 			}else{
 				// CONNECTION CACHE
-				this.cc = {};
 				if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
 				if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
 			}
@@ -31,18 +34,32 @@ export class Road{
 	}
 
 	updateConnections(index, selection){
-		var current = selection[index],
-			prev = selection[index-1],
-			next = selection[index+1];
 
-		this.mask({
-			top:(prev && prev.cy+1 === current.cy ) || (next && next.cy+1 === current.cy ),
-			right:(prev && prev.cx-1 === current.cx ) || (next && next.cx-1 === current.cx ),
-			bottom:(prev && prev.cy-1 === current.cy ) || (next && next.cy-1 === current.cy ),
-			left:(prev && prev.cx+1 === current.cx ) || (next && next.cx+1 === current.cx )
-		});
+		if( typeof index === 'number' ){
+
+			let current = selection[index],
+				connect = {top:false,bottom:false,left:false,right:false};
+
+			selection.forEach( (alt,i,a) => {
+				if( alt !== current ){
+					connect.top 	= connect.top 		|| ( current.cx === alt.cx && current.cy === alt.cy+1),
+					connect.bottom 	= connect.bottom 	|| ( current.cx === alt.cx && current.cy === alt.cy-1),
+					connect.left 	= connect.left 		|| ( current.cy === alt.cy && current.cx === alt.cx+1),
+					connect.right 	= connect.right 	|| ( current.cy === alt.cy && current.cx === alt.cx-1)
+				}
+			});
+
+			this.mask(connect);
+
+		}
+
+		
+
 	}
 	
+	
+
+
 	mask(sides){
 
 		var requiresUpdate = (	sides.top 		!== this.cc.top || 
@@ -71,6 +88,43 @@ export class Road{
 	static mixin(sprite){
 		sprite.road = new Road(sprite);
 		return sprite;
+	}
+
+
+	static recursiveConnect(tile, array = []){
+		
+		let rootNode = (array.length === 0 )
+		
+
+		if( array.indexOf(tile) === -1 ){
+			
+			// PUSH START-TILE
+			array.push(tile);
+
+			// CHECK MY NEIGHBOURS
+			[
+				App.Grid.getTile({x:tile.cx+1, 	y:tile.cy	}),
+				App.Grid.getTile({x:tile.cx-1, 	y:tile.cy	}),
+				App.Grid.getTile({x:tile.cx, 	y:tile.cy+1	}),
+				App.Grid.getTile({x:tile.cx, 	y:tile.cy-1	})
+			].forEach( (v,i,a) => {
+				if( v && v.content.contains('road') ){
+					Road.recursiveConnect(v, array );
+				}
+			});
+		}
+		
+
+		if( rootNode ){
+
+			// CREATE ALL CONNECTIONS
+			array.forEach( (tile,index) => {
+				tile.content.getSprites('road').forEach( (roadSprite) => {
+					roadSprite.road.updateConnections(index, array)
+				});
+			});
+		}
+	
 	}
 }
 

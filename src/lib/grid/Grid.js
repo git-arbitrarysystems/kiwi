@@ -5,6 +5,7 @@ import {Tile} from 'grid/Tile';
 import {Stamp} from 'grid/Stamp';
 import {Face} from 'grid/Face';
 import {Transform} from 'grid/Transform';
+import {Data} from 'grid/Data';
 import {App} from 'App';
 
 
@@ -23,6 +24,9 @@ export class Grid extends PIXI.Container{
 
 		// ADD THE FACE OOF THE GRID
 		this.face = this.addChild( new Face() );
+
+		// HOLDER CLASS FOR THE MAP-DATA
+		this.data = new Data({});
 
 		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
 		this.tiles = {};
@@ -209,7 +213,7 @@ export class Grid extends PIXI.Container{
 
 	confirm(){
 		if( this.stamp.textureData ){
-			this.stamp.apply();
+			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
 		}
 
 		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );

@@ -1,28 +1,6 @@
 import * as PIXI from 'pixi.js';
-
-
-class TileContent extends Array{
-	constructor( tile, ...items){
-		super(items);
-		this.tile = tile;
-	}
-	add(id){
-		if( this.indexOf(id) === -1 ){
-			console.log( this.tile.toString() + '.content.add', id);
-			this.push(id);
-		}
-	}
-	remove(id){
-		let index = this.indexOf(id);
-		if( index !== -1 ){
-			this.splice(index,1);
-			console.log( this.tile.toString() + '.content.remove' );
-		}
-	}
-	toString(){
-		return '[' + this.join(',') + ']'
-	}
-}
+import {TextureData} from 'interface/Interface';
+import {App} from 'App';
 
 class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
@@ -55,6 +33,114 @@ Tile.halfWidth = Tile.width * 0.5;
 Tile.halfHeight = Tile.height * 0.5;
 Tile.skewX = Math.atan2( Tile.width, Tile.height);
 Tile.skewY = Math.atan2( -Tile.height, Tile.width);
+
+
+class TileContent{
+	constructor( tile){
+
+		this.keys = [];
+		this.nodes = [];
+
+		this.tile = tile;
+	}
+	
+
+	add(id, node){
+		if( this.keys.indexOf(id) === -1 ){
+			console.log( this.tile.toString() + '.content.add', node.id);
+			
+			// REGISTER THE NEW CONTENT
+			this.keys.push(id);
+			this.nodes.push(node);
+
+			// GET APPROPRIATE Z-INDEX
+			var zIndex = {
+				'surface':0,
+				'road':1,
+				'build':2
+			}[ TextureData[node.id].type ];
+
+			// APPEND TO FACE
+			node.sprites.forEach( (sprite) => {
+				App.Grid.face.add(sprite, zIndex);
+			});
+
+		}
+	}
+
+	
+
+
+	// REMOVE CONTENT FROM TILE
+	remove(wildcard){
+		let regex = new RegExp(wildcard, 'i');
+
+		this.keys.forEach( (v,index,a) => {
+			
+			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
+			if( regex.test(v) ){
+				
+				// REMOVE KEY FROM TILE
+				let key = this.keys.splice(index,1)[0];
+
+				// REMOVE NODE FROM TILE
+				let node = this.nodes.splice(index,1)[0];
+
+				let tileIndex = node.tiles.indexOf(this.tile),
+					spriteIndex = tileIndex % node.sprites.length;
+
+				if( !isNaN(spriteIndex) ){
+					// REMOVE SPRITE FROM NODE
+					node.sprites.splice(spriteIndex,1)[0].destroy();
+				}
+
+				// REMOVE TILE FROM NODE
+				node.tiles.splice(tileIndex,1);
+
+				console.log( this.tile.toString() + '.content.remove', key, node, this.tile );
+
+			}
+		});
+
+	}
+
+
+	contains(wildcard){
+		let regex = new RegExp(wildcard,'i');
+		return this.keys.some( (v,i,a) => { return regex.test(v) });
+	}
+
+
+	getSprites(wildcard){
+		let regex = new RegExp(wildcard, 'i'),
+			sprites = [];
+		
+		this.keys.forEach( (v,index,a) => {
+
+			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
+			if( regex.test(v) ){
+				
+				let node = this.nodes[index],
+					tileIndex = node.tiles.indexOf(this.tile),
+					spriteIndex = tileIndex % node.sprites.length;
+
+				if( !isNaN(spriteIndex) ){
+					// REMOVE SPRITE FROM NODE
+					sprites.push( node.sprites[spriteIndex] );
+				}
+			}
+		
+		});
+
+		return sprites;
+
+	}
+
+
+	toString(){
+		return '[' + this.keys.join(',') + ']'
+	}
+}
 
 
 
