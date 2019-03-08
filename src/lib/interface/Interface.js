@@ -18,7 +18,7 @@ class Interface{
 
 		// GRID-INTERACTION-MODES
 		this.gridModesSelector = this.ce({target:this.root, tag:'select', disabled:true});
-		this.gridModes = ['drag','road','surface','build'];
+		this.gridModes = ['drag','road','surface','build','destroy-road', 'destroy-build'];
 		this.gridModes.forEach( (value)=>{ this.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
 
 		// TEXTURES
@@ -50,6 +50,19 @@ class Interface{
 
 			
 			}
+
+
+			if( group !== 'surface' ){
+				// DESTROY
+				var d = this.ce({target:c, class:'button', 
+					id:'destroy-' + group, 
+					innerHTML:'destroy ' + group,
+					tag:'button'
+				});
+				d.addEventListener('click', (e)=>{ this.selected(e); console.log('Interface.selected:', this.selected() ); })
+			}
+			
+
 		}
 	}
 
@@ -81,29 +94,34 @@ class Interface{
 			this.___selected.element.classList.remove('selected');	
 		}
 
+		// STORE INTERFACE MODE
+		this.mode( e ? e.currentTarget.id.split('/')[0] : this.gridModes[0] );
+	
+
 		// DESELECT && FALL BACK TO DEFAUT MODE
-		if( !e ){
-			this.mode( this.gridModes[0] );
+		if( ['path','destroy-road', 'destroy-build'].indexOf( this.mode() ) !== -1 ){
 			this.___selected = false;
 			App.Grid.stamp.textureData = false;
 			return;
 		}
 
+
 		// SELECT NEW
 		this.___selected = Object.assign({
 			element:e.currentTarget,
-			id:e.currentTarget.id
+			id:e.currentTarget.id,
+			size:[1,1]
 		}, TextureData[e.currentTarget.id] );
+
 
 		// PROPAGATE TO STAMP TOOL
 		App.Grid.stamp.textureData = this.___selected;
 
-		// STORE INTERFACE MODE
-		this.mode( this.___selected.id.split('/')[0] )
 
 		// 
 		e.currentTarget.classList.add('selected');
 		e.stopImmediatePropagation();
+
 
 		return this.___selected;
 	}

@@ -97,7 +97,7 @@ class TileContent{
 				// REMOVE TILE FROM NODE
 				node.tiles.splice(tileIndex,1);
 
-				console.log( this.tile.toString() + '.content.remove', key, node, this.tile );
+				console.log( this.tile.toString() + '.content.remove', key) //, node );
 
 			}
 		});
@@ -108,6 +108,24 @@ class TileContent{
 	contains(wildcard){
 		let regex = new RegExp(wildcard,'i');
 		return this.keys.some( (v,i,a) => { return regex.test(v) });
+	}
+
+
+
+	select(wildcard){
+		let regex = new RegExp(wildcard, 'i'),
+			tiles = [];
+
+		this.keys.forEach( (v,index,a) => {
+			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
+			if( regex.test(v) ){
+
+				tiles = tiles.concat( this.nodes[index].tiles )
+
+			}
+		});
+		
+		return tiles;
 	}
 
 

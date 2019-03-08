@@ -35,23 +35,30 @@ export class Road{
 
 	updateConnections(index, selection){
 
-		if( typeof index === 'number' ){
+		
 
-			let current = selection[index],
-				connect = {top:false,bottom:false,left:false,right:false};
+		let current = selection[index],
+			connect = {top:false,bottom:false,left:false,right:false};
 
-			selection.forEach( (alt,i,a) => {
-				if( alt !== current ){
-					connect.top 	= connect.top 		|| ( current.cx === alt.cx && current.cy === alt.cy+1),
-					connect.bottom 	= connect.bottom 	|| ( current.cx === alt.cx && current.cy === alt.cy-1),
-					connect.left 	= connect.left 		|| ( current.cy === alt.cy && current.cx === alt.cx+1),
-					connect.right 	= connect.right 	|| ( current.cy === alt.cy && current.cx === alt.cx-1)
-				}
-			});
+		//console.log('Road.updateConnections', current.toString() );
 
-			this.mask(connect);
+		selection.forEach( (alt,i,a) => {
+			if( alt !== current ){
+				connect.top 	= connect.top 		|| ( current.cx === alt.cx && current.cy === alt.cy+1),
+				connect.bottom 	= connect.bottom 	|| ( current.cx === alt.cx && current.cy === alt.cy-1),
+				connect.left 	= connect.left 		|| ( current.cy === alt.cy && current.cx === alt.cx+1),
+				connect.right 	= connect.right 	|| ( current.cy === alt.cy && current.cx === alt.cx-1)
+			}
 
-		}
+			//console.log(alt.toString(), connect );
+		});
+
+		
+		//console.log('#\n');
+
+		this.mask(connect);
+
+		
 
 		
 
@@ -99,7 +106,10 @@ export class Road{
 		if( array.indexOf(tile) === -1 ){
 			
 			// PUSH START-TILE
-			array.push(tile);
+			if( tile.content.contains('road') ){
+				array.push(tile);
+			}
+			
 
 			// CHECK MY NEIGHBOURS
 			[
@@ -117,12 +127,15 @@ export class Road{
 
 		if( rootNode ){
 
+			// console.log('Road.recursiveConnect', tile.toString() );
+			
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {
 					roadSprite.road.updateConnections(index, array)
 				});
 			});
+
 		}
 	
 	}

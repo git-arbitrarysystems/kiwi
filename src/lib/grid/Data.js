@@ -12,6 +12,15 @@ export class Data{
 		console.log('Data.test', id, appendContent);
 		return appendContent;
 	}
+
+	remove(wildcard, fromTiles ){
+		console.log('Data.remove', wildcard, fromTiles );
+		fromTiles.forEach( (tile) => {
+			tile.content.remove(wildcard);
+			Road.recursiveConnect( tile );
+		});
+	}
+
 	add(id, toTiles, testOnly = false){
 
 		var textureData = TextureData[id],
@@ -47,7 +56,11 @@ export class Data{
 			let node = { id:id, tiles:toTiles.slice(0), sprites:stamp.sprites }
 
 			// REGISTER
-			node.tiles.forEach( (tile) => {
+			node.tiles.forEach( (tile, index) => {
+
+				// FOR ROADS EACH NODE IS STORED SEPERATELY
+				if( type === 'road' ) node = { id:id, tiles:[tile], sprites:[stamp.sprites[index]] };
+
 				tile.content.add(id, node );
 			});
 

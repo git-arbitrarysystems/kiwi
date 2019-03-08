@@ -132,7 +132,7 @@ export class Stamp extends PIXI.Container{
 
 	// UPDATE THE TRANSFORMATION OF EACH SPRITE
 	updateSpriteTransform(sprites = this.sprites){
-		console.log('Stamp.updateSpriteTransform');
+		//console.log('Stamp.updateSpriteTransform');
 		sprites.forEach( (sprite) => {
 			Transform.transform( sprite, this.textureData.size[0], this.textureData.skew);
 			sprite.anchor.set(0.5, this.textureData.type === 'build' ? 1 : 0.5 )//}//{x:0.5, y:isBuild ? 1 : 0.5}

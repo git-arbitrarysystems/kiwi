@@ -6,6 +6,7 @@ import {Stamp} from 'grid/Stamp';
 import {Face} from 'grid/Face';
 import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
+import {Road} from 'grid/Road';
 import {App} from 'App';
 
 
@@ -191,6 +192,18 @@ export class Grid extends PIXI.Container{
 		// GET SELECTION
 		if( this.mode === 'road' && this.__ps ){
 			this._hover = this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
+		}else if( this.mode.indexOf('destroy') !== -1 ){
+			
+			// DESTROY MODE HANDLING
+			var what = this.mode.split('-')[1],
+				tile = this.getTile(this.__pc, false);
+
+			if( tile && tile.content.contains(what) ){
+				this._hover = tile.content.select(what);
+			}else{
+				this._hover = [];
+			}
+
 		}else{
 			this._hover = this.getTileArray( 
 				this.getTile(this.__pc, false),
@@ -212,7 +225,10 @@ export class Grid extends PIXI.Container{
 	
 
 	confirm(){
-		if( this.stamp.textureData ){
+
+		if( this.mode.indexOf('destroy') !== -1 ){
+			this.data.remove( this.mode.split('-')[1], this._hover );
+		}else if( this.stamp.textureData ){
 			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
 		}
 
