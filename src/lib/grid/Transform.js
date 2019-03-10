@@ -1,5 +1,6 @@
 
 import {Tile} from 'grid/Tile';
+import {App} from 'App';
 
 
 const Transform = {
@@ -14,6 +15,10 @@ const Transform = {
 	
 	// POINT TO COORDINATES
 	p2c:function(x,y){
+
+		x /= App.Grid.scale.x;
+		y /= App.Grid.scale.y;
+
 		var cx = ( x/Tile.halfWidth - y/Tile.halfHeight ) / 2,
 			cy = y/Tile.halfHeight + cx;
 		return {
@@ -50,3 +55,8 @@ const Transform = {
 
 
 export {Transform}
+
+
+
+import {HotModule} from 'HotModule'
+HotModule(module, Transform);

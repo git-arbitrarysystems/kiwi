@@ -6,6 +6,8 @@ import './Interface.scss';
 import {Textures} from '../../assets/img/textures/Textures.js';
 const TextureData = {};
 
+import {Images} from 'Images';
+
 
 class Interface{
 	constructor(){
@@ -17,9 +19,19 @@ class Interface{
 		this.root.addEventListener('click', (e)=>{this.deselect(); } );
 
 		// GRID-INTERACTION-MODES
+		this.stampModes = ['road','surface','build'];
+		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road', 'destroy-build']);
+
 		this.gridModesSelector = this.ce({target:this.root, tag:'select', disabled:true});
-		this.gridModes = ['drag','road','surface','build','destroy-road', 'destroy-build'];
 		this.gridModes.forEach( (value)=>{ this.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
+
+
+		// SCALE
+		this.scales = [0.25, 0.33, 0.5, 0.75, 1, 1.25, 1.5, 2, 3 ];
+		this.scalesSelector = this.ce({target:this.root, tag:'select'});
+		this.scalesSelector.addEventListener('change', (e) => { App.Grid.scale.set( parseFloat(this.scalesSelector.value, 10) ); })
+		this.scales.forEach( (value)=>{ this.ce({target:this.scalesSelector, value:value, innerHTML:value,tag:'option',selected:(value===1)}); })
+
 
 		// TEXTURES
 		for( var group in Textures ){
@@ -38,6 +50,7 @@ class Interface{
 
 				// STORE ARBITRARY DATA
 				TextureData[id] = Textures[group][image];
+				TextureData[id].id = id;
 				
 				// CREATE TEXTURE BUTTON
 				var b = this.ce({target:c, class:'button', 
@@ -46,7 +59,7 @@ class Interface{
 				});
 
 				b.style.backgroundImage = 'url('+url+')'
-				b.addEventListener('click', (e)=>{ this.selected(e); console.log('Interface.selected:', this.selected() ); })
+				b.addEventListener('click', (e)=>{ this.selected(e);})
 
 			
 			}
@@ -56,10 +69,10 @@ class Interface{
 				// DESTROY
 				var d = this.ce({target:c, class:'button', 
 					id:'destroy-' + group, 
-					innerHTML:'destroy ' + group,
-					tag:'button'
+					title:'detroy ' + group
 				});
-				d.addEventListener('click', (e)=>{ this.selected(e); console.log('Interface.selected:', this.selected() ); })
+				d.style.backgroundImage = 'url('+Images.destroy+')'
+				d.addEventListener('click', (e)=>{ this.selected(e);})
 			}
 			
 
@@ -95,11 +108,17 @@ class Interface{
 		}
 
 		// STORE INTERFACE MODE
-		this.mode( e ? e.currentTarget.id.split('/')[0] : this.gridModes[0] );
-	
+		if( e ){
+			this.mode( e.currentTarget.id.split('/')[0] )
+			e.currentTarget.classList.add('selected');
+			e.stopImmediatePropagation();
+		}else{
+			this.mode( this.gridModes[0] );
+		}
+		
 
 		// DESELECT && FALL BACK TO DEFAUT MODE
-		if( ['path','destroy-road', 'destroy-build'].indexOf( this.mode() ) !== -1 ){
+		if( this.stampModes.indexOf( this.mode() ) === -1 ){
 			this.___selected = false;
 			App.Grid.stamp.textureData = false;
 			return;
@@ -116,11 +135,6 @@ class Interface{
 
 		// PROPAGATE TO STAMP TOOL
 		App.Grid.stamp.textureData = this.___selected;
-
-
-		// 
-		e.currentTarget.classList.add('selected');
-		e.stopImmediatePropagation();
 
 
 		return this.___selected;

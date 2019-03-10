@@ -119,13 +119,26 @@ class TileContent{
 		this.keys.forEach( (v,index,a) => {
 			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
 			if( regex.test(v) ){
-
 				tiles = tiles.concat( this.nodes[index].tiles )
-
 			}
 		});
 		
 		return tiles;
+	}
+
+
+	getDataNodes(wildcard){
+		let regex = new RegExp(wildcard, 'i'),
+			data = [];
+
+		this.keys.forEach( (v,index,a) => {
+			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
+			if( regex.test(v) ){
+				data = data.concat( this.nodes[index] )
+			}
+		});
+		
+		return data;
 	}
 
 

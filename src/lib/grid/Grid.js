@@ -54,6 +54,9 @@ export class Grid extends PIXI.Container{
 		this.on('pointermove', (e)=>{ this.pointer(e) } );
 		this.on('pointerup',   (e)=>{ this.pointer(e) } );
 		this.on('pointertap',  (e)=>{ this.pointer(e) } );
+
+
+			
 	}
 
 	// ADD TILE
@@ -138,12 +141,11 @@ export class Grid extends PIXI.Container{
 
 			case  'pointerdown':
 				this.__pd = true;
-				this.__ps = {x:e.data.global.x, y:e.data.global.y};
-				this.__pp = {x:e.data.global.x, y:e.data.global.y};
+				this.__ps = e.data.getLocalPosition(this.parent, this.__ps) //{x:e.data.global.x, y:e.data.global.y};
+				this.__pp = this.__ps.clone() //{x:e.data.global.x, y:e.data.global.y};
 				break;
 			case 'pointermove':
-				
-				this.__pc = {x:e.data.global.x, y:e.data.global.y};
+				this.__pc =  e.data.getLocalPosition(this.parent, this.__pc);//{x:e.data.global.x, y:e.data.global.y};
 
 
 				
@@ -153,7 +155,7 @@ export class Grid extends PIXI.Container{
 					this.hover();
 				}
 
-				this.__pp = {x:e.data.global.x, y:e.data.global.y};
+				this.__pp = this.__pc.clone()//{x:e.data.global.x, y:e.data.global.y};
 				break;
 			case 'pointerup':
 			case 'mouseup':
@@ -211,13 +213,25 @@ export class Grid extends PIXI.Container{
 			);
 		}
 
+
+		// POSITION THE STAMP-TOOL
+		this.stamp.selection = this._hover;
+		
+		if( 
+			(this.mode === 'destroy-road' && this.__pd) || // AUTO CONFIRM ROAD RESTRUCTION
+			(this.mode === 'surface' && this.__pd )
+		){
+			this.confirm();
+			return;
+		}
+
+
 		// SHOW HOVERING
 		this._hover.forEach( (tile)=>{ 
 			tile.hover = true;
 		});
 
-		// POSITION THE STAMP-TOOL
-		this.stamp.selection = this._hover;
+		
 	
 
 	}
@@ -225,6 +239,8 @@ export class Grid extends PIXI.Container{
 	
 
 	confirm(){
+
+		if( this._hover.length === 0 ) return;
 
 		if( this.mode.indexOf('destroy') !== -1 ){
 			this.data.remove( this.mode.split('-')[1], this._hover );

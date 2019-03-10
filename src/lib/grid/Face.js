@@ -16,9 +16,10 @@ export class Face extends PIXI.Container{
 		
 		//console.log('Face.add', sprite.texture.textureCacheIds[0], zIndex);
 		sprite.zIndex = (zIndex * 100000000 ) + sprite.y - sprite.height * sprite.anchor.y;
-		sprite.alpha = 0.5;
 		this.addChild(sprite);
 		
+		this.alpha = 1;
+
 	}
 }
 

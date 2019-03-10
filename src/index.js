@@ -1,4 +1,4 @@
 import {App} from 'App';
-new App({
+window.app = new App({
 	resizeTo:window
 });

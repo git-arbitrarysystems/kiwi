@@ -2,7 +2,9 @@ import * as PIXI from 'pixi.js';
 import {Transform} from 'grid/Transform';
 import {Tile} from 'grid/Tile';
 import {Road} from 'grid/Road';
+import {Surface} from 'grid/Surface';
 import {App} from 'App';
+import {TextureData} from 'interface/Interface';
 
 
 
@@ -30,8 +32,10 @@ export class Stamp extends PIXI.Container{
 			// ADD SPRITES
 			while( this.sprites.length < int ){
 				var sprite = this.addChild( new PIXI.Sprite(this.texture) );
-				if( this.roadMode ){
+				if( this.mode === 'road' ){
 					Road.mixin(sprite);
+				}else if( this.mode === 'surface' ){
+					Surface.mixin(sprite);
 				}
 				this.sprites.push( sprite );
 				this.updateSpriteTransform([sprite]);
@@ -51,11 +55,11 @@ export class Stamp extends PIXI.Container{
 		if( textureData !== this.textureData ){
 			this._textureData = textureData;
 			if( this.textureData ){
-				this.roadMode = ( this.textureData.type === 'road' );
+				this.mode = this.textureData.type;
 				this.texture = PIXI.Texture.from(this.textureData.url);
 				this.updateSpriteTransform();
 			}else{
-				this.roadMode = false;
+				this.mode = undefined;
 			}
 		}
 	}
@@ -116,19 +120,24 @@ export class Stamp extends PIXI.Container{
 		}	
 	}
 
-	// GET IS CURRENTLY IN MULTI-SPRITE MODE
-	set roadMode(boolean){
-		if( boolean !== this._roadMode ){
-			this._roadMode = boolean;
+
+	// STAMP MODES
+	set mode(str){
+		if( this._mode !== str ){
+			this._mode = str;
 			this.sprites.forEach( (sprite) => {
-				if( sprite.road ) sprite.road.enabled = this.roadMode;
-				else if( !sprite.road && this.roadMode ) Road.mixin(sprite);
-			});
+				if( sprite.road ) sprite.road.enabled = (this.mode === 'road' );
+				if( sprite.surface ) sprite.surface.enabled = (this.mode === 'surface' );
+
+				if( this.mode === 'road' && !sprite.road ) Road.mixin(sprite);
+				if( this.mode === 'surface' && !sprite.surface ) Surface.mixin(sprite)
+
+			})
 		}
 	}
-	get roadMode(){
-		return this._roadMode;
-	}
+	get mode(){ return this._mode };
+
+	
 
 	// UPDATE THE TRANSFORMATION OF EACH SPRITE
 	updateSpriteTransform(sprites = this.sprites){
@@ -148,15 +157,19 @@ export class Stamp extends PIXI.Container{
 		if( !this.visible ) return;
 
 		// SET POSITIONS
-		if( this.roadMode ){
+		if( this.mode === 'road'){
 			this.length = this.selection.length;
 			this.sprites.forEach( (sprite,i,a) => {
 				sprite.x = this.selection[i].x;
 				sprite.y = this.selection[i].y;
 				sprite.road.updateConnections(i, this.selection);
 			});
+		}else if( this.mode === 'surface' ){
+			this.length = 1;
+			this.sprites[0].x = this.selection.limits.x;
+			this.sprites[0].y = this.selection.limits.y;
+			this.sprites[0].surface.updateConnections( this.selection[0], this.textureData.id );
 		}else{
-			// UNROAD SPRITE ( REMOVES MASKING )
 			this.length = 1;
 			this.sprites[0].x = this.selection.limits.x;
 			this.sprites[0].y = this.selection.limits.y;

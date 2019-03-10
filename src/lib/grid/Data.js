@@ -3,6 +3,7 @@ import {TextureData} from 'interface/Interface';
 import {Stamp} from 'grid/Stamp';
 import {App} from 'App';
 import {Road} from 'grid/Road';
+import {Surface} from 'grid/Surface';
 
 export class Data{
 	constructor(data){
@@ -32,7 +33,7 @@ export class Data{
 			tile = toTiles[i];
 			if( type === 'road' && tile.content.contains('road') ){
 				// CLEAR SINGLE TILES
-				if( !testOnly ) tile.content.remove(id);
+				if( !testOnly ) tile.content.remove('road');
 			}else if( type === 'surface' && tile.content.contains('surface') 	){
 				// NEW SURFACE
 				if( !testOnly ) tile.content.remove(type);
@@ -64,9 +65,8 @@ export class Data{
 				tile.content.add(id, node );
 			});
 
-
-			Road.recursiveConnect( node.tiles[0] );
-
+			if( id.indexOf('road') !== -1 	) Road.recursiveConnect( node.tiles[0] );
+			if( id.indexOf('surface') !== -1	) Surface.neighboursConnect( node.tiles[0] );
 
 
 

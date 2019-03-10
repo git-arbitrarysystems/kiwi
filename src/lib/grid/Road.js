@@ -35,12 +35,8 @@ export class Road{
 
 	updateConnections(index, selection){
 
-		
-
 		let current = selection[index],
 			connect = {top:false,bottom:false,left:false,right:false};
-
-		//console.log('Road.updateConnections', current.toString() );
 
 		selection.forEach( (alt,i,a) => {
 			if( alt !== current ){
@@ -49,18 +45,9 @@ export class Road{
 				connect.left 	= connect.left 		|| ( current.cy === alt.cy && current.cx === alt.cx+1),
 				connect.right 	= connect.right 	|| ( current.cy === alt.cy && current.cx === alt.cx-1)
 			}
-
-			//console.log(alt.toString(), connect );
 		});
 
-		
-		//console.log('#\n');
-
 		this.mask(connect);
-
-		
-
-		
 
 	}
 	
@@ -101,7 +88,6 @@ export class Road{
 	static recursiveConnect(tile, array = []){
 		
 		let rootNode = (array.length === 0 )
-		
 
 		if( array.indexOf(tile) === -1 ){
 			
@@ -110,7 +96,6 @@ export class Road{
 				array.push(tile);
 			}
 			
-
 			// CHECK MY NEIGHBOURS
 			[
 				App.Grid.getTile({x:tile.cx+1, 	y:tile.cy	}),
@@ -123,12 +108,8 @@ export class Road{
 				}
 			});
 		}
-		
 
 		if( rootNode ){
-
-			// console.log('Road.recursiveConnect', tile.toString() );
-			
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {
