@@ -3,7 +3,7 @@
 import {App} from 'App';
 import './Interface.scss';
 
-import {Textures} from '../../assets/img/textures/Textures.js';
+import {Textures,SurfaceTileSize} from '../../assets/img/textures/Textures.js';
 const TextureData = {};
 
 import {Images} from 'Images';
@@ -164,4 +164,4 @@ class Interface{
 import {HotModule} from '../../../HotModule.js'
 HotModule(module, Interface);
 
-export {Interface, TextureData};
+export {Interface, TextureData, SurfaceTileSize};

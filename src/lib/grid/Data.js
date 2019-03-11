@@ -5,9 +5,18 @@ import {App} from 'App';
 import {Road} from 'grid/Road';
 import {Surface} from 'grid/Surface';
 
+
+import map from '../../assets/map.json';
+import { save } from 'save-file'
+
+
+
+
 export class Data{
-	constructor(data){
+	constructor(){
+		this.unpack();
 	}
+
 	test(id, toTiles){
 		var appendContent = this.add(id, toTiles, true);
 		console.log('Data.test', id, appendContent);
@@ -68,15 +77,63 @@ export class Data{
 			if( id.indexOf('road') !== -1 	) Road.recursiveConnect( node.tiles[0] );
 			if( id.indexOf('surface') !== -1	) Surface.neighboursConnect( node.tiles[0] );
 
+		}
+	}
 
+	unpack(){
+		for( var id in map ){
+			for(var c = map[id].length, i=0; i<c; i++){
+				var coordinates = map[id][i],
+					tiles = [];
+				for(var l=coordinates.length, j=0; j<l; j+=2){
+					tiles.push( App.Grid.getTile({x:coordinates[j], y:coordinates[j+1]}, true, true) );
+				}
+				this.add(id, tiles);
+			}
+		}
+	}
+
+	store(){
+		
+		let list = [],
+			tiles = App.Grid.tiles;
+
+		var x, y, nodes, i, c, node;
+
+
+		for(x in tiles ){
+			for( y in tiles[x] ){
+				nodes = tiles[x][y].content.getDataNodes();
+				for(c=nodes.length, i=0; i<c; i++){
+					node = nodes[i];
+					if( list.indexOf(node) === -1 ){
+						list.push(node);
+					}
+				}
+			}
+		}
+
+
+		let data = {};
+		for(c=list.length, i=0; i<c; i++){
+			node = list[i];
+			if( !data[node.id] ) data[node.id] = [];
+
+			var coordinates = [];
+			node.tiles.forEach( (tile) => { coordinates.push(tile.cx, tile.cy); })
+			data[node.id].push( coordinates )
 
 		}
 
 
+		save( JSON.stringify(data), 'test.json');
+
+
+
 	}
+
+
 }
-
-
 
 import {HotModule} from 'HotModule'
 HotModule(module, Data);

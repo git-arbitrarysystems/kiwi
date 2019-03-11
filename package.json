@@ -32,6 +32,7 @@
     "psd.js": "^3.2.0",
     "raw-loader": "^1.0.0",
     "sass-loader": "^7.1.0",
+    "save-file": "^2.3.1",
     "style-loader": "^0.23.1",
     "webpack": "^4.29.5",
     "webpack-cli": "^3.2.3",

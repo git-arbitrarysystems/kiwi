@@ -48,11 +48,10 @@ function HotModule(module, ...cls){
         HotModule.registered = {};
     }
 
-    Array(...cls).forEach( (value)=>{
+
+   cls.forEach( (value)=>{
         
         let name = value.name;
-    
-        
 
         if( !HotModule.registered[name] ){
             HotModule.registered[name] = value;

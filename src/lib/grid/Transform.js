@@ -5,6 +5,8 @@ import {App} from 'App';
 
 const Transform = {
 	
+	name:'Transform',
+
 	// COORDINATES TO POINT
 	c2p:function(cx,cy){
 		return {

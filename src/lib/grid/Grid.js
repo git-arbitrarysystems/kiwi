@@ -8,6 +8,7 @@ import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
 import {Road} from 'grid/Road';
 import {App} from 'App';
+import {SurfaceTileSize} from 'interface/Interface';
 
 
 
@@ -26,19 +27,20 @@ export class Grid extends PIXI.Container{
 		// ADD THE FACE OOF THE GRID
 		this.face = this.addChild( new Face() );
 
-		// HOLDER CLASS FOR THE MAP-DATA
-		this.data = new Data({});
-
 		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
 		this.tiles = {};
 
-		// TEMP
-		var x,y, d=15, tile;
+		/*// TEMP
+		var x,y, d=1+5*SurfaceTileSize[0], tile;
 		for(x=-d;x<=d;x++){
 			for(y=-d;y<=d;y++){
 				this.add(x,y);
 			}
-		}
+		}*/
+
+		// HOLDER CLASS FOR THE MAP-DATA
+		this.data = new Data();
+
 
 		// PATHFINDER INSTANCE
 		this.finder = new PF.AStarFinder({
@@ -50,10 +52,12 @@ export class Grid extends PIXI.Container{
 
 		// INTERACTION
 		this.interactive = true;
-		this.on('pointerdown', (e)=>{ this.pointer(e) } );
-		this.on('pointermove', (e)=>{ this.pointer(e) } );
-		this.on('pointerup',   (e)=>{ this.pointer(e) } );
-		this.on('pointertap',  (e)=>{ this.pointer(e) } );
+		this.on('pointerdown', 	(e)=>{ this.pointer(e) } );
+		this.on('pointermove', 	(e)=>{ this.pointer(e) } );
+		this.on('pointerup',   	(e)=>{ this.pointer(e) } );
+		this.on('pointertap',  	(e)=>{ this.pointer(e) } );
+		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
+		this.on('pointercancel',(e)=>{ this.pointer(e) } );
 
 
 			
@@ -64,21 +68,27 @@ export class Grid extends PIXI.Container{
 		if( !this.tiles[x] ) this.tiles[x] = {};
 		if( !this.tiles[x][y] ) this.tiles[x][y] = this.addChild( new Tile(x,y) );
 
+		console.log('Grid.add', x, y);
+
 		this.size.minx = Math.min(x, this.size.minx );
 		this.size.miny = Math.min(y, this.size.miny );
 		this.size.maxx = Math.max(x, this.size.maxx );
 		this.size.maxy = Math.max(y, this.size.maxy );
-		this.size.width = this.size.maxx - this.size.minx;
-		this.size.height = this.size.maxy - this.size.miny;
+		this.size.width = (this.size.maxx - this.size.minx) + 1;
+		this.size.height = (this.size.maxy - this.size.miny) + 1;
 
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
 	}
 	
 	// GET TILE
-	getTile(c,isCoordinate=true){
+	getTile(c,isCoordinate=true, create = false){
 		if( !c ) return undefined;
 		if( !isCoordinate ) c = Transform.p2c(c.x-this.x,c.y-this.y);
+		if( create && (!this.tiles[c.x] || !this.tiles[c.x][c.y]) ){
+			// AUTOCREATE
+			this.add(c.x, c.y);
+		}
 		if( !this.tiles[c.x] ) return undefined;
 		return this.tiles[c.x][c.y];
 	}
@@ -101,9 +111,9 @@ export class Grid extends PIXI.Container{
 			top  = cy - Math.ceil(height*0.5) + 1;
 		
 		if( left < this.size.minx ||
-			left + width >= this.size.maxx ||
+			left + width > this.size.maxx + 1 ||
 			top < this.size.miny ||
-			top + height >= this.size.maxy ){
+			top + height > this.size.maxy + 1 ){
 			
 			if(modulo){
 				// iNVALID
@@ -158,15 +168,15 @@ export class Grid extends PIXI.Container{
 				this.__pp = this.__pc.clone()//{x:e.data.global.x, y:e.data.global.y};
 				break;
 			case 'pointerup':
-			case 'mouseup':
-			case 'touchend':
+			case 'pointercancel':
+			case 'pointerout':
 				
 				delete this.__ps;
 				delete this.__pc;
 				delete this.__pp;
 				this.__pd = false;
 
-				this.confirm();
+				if( e.type === 'pointerup')	this.confirm();
 
 				break;
 			case 'pointertap':
@@ -255,16 +265,19 @@ export class Grid extends PIXI.Container{
 
 		if( !from || !to ) return [];
 		
+		console.log(from.toString() , to.toString(), this.size );
 
 		
 		// CREATE A PATHFINDER GRID
-		let m = new PF.Grid(this.size.width+1, this.size.height+1);
+		let m = new PF.Grid(this.size.width, this.size.height);
+
+		console.log(m);
 		
 		// ANALYSE SURFACE
 		var x,y;
 		for(x in this.tiles ){
-			for(y in this.tiles ){
-				m.setWalkableAt(x-this.size.miny, y-this.size.miny, true);
+			for(y in this.tiles[x] ){
+				m.setWalkableAt(x-this.size.minx, y-this.size.miny, true);
 			}
 		}
 

@@ -24,10 +24,12 @@ const _default = {
 	size:[1,1]
 }
 
+const SurfaceTileSize = [3,3];
+
 const cpsd = {
 	'surface':{
 		_default:{
-			size:[3,3],
+			size:SurfaceTileSize,
 			modulo:true
 		}
 	},
@@ -117,7 +119,14 @@ function updateTextures(){
 	}
 
 	// WRITE JSON DATA
-	m_import += '\n\nconst Textures = ' + JSON.stringify(json, null, 4).replace(/\"/g, '') + ';\n\nexport {Textures}';
+	m_import += `
+
+const SurfaceTileSize = ${JSON.stringify(SurfaceTileSize,null,4)};
+const Textures = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
+export {Textures,SurfaceTileSize}
+
+
+`;
 	fs.writeFile(targetDir + 'Textures.js', m_import, 'utf8', function(){
 		console.log(m_import);
 	});
