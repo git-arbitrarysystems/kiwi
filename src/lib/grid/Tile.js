@@ -37,10 +37,8 @@ Tile.skewY = Math.atan2( -Tile.height, Tile.width);
 
 class TileContent{
 	constructor( tile){
-
 		this.keys = [];
 		this.nodes = [];
-
 		this.tile = tile;
 	}
 	
@@ -75,13 +73,16 @@ class TileContent{
 	remove(wildcard){
 		let regex = new RegExp(wildcard, 'i');
 
-		this.keys.forEach( (v,index,a) => {
-			
+		console.log( 'TileContent.remove', wildcard, this.keys) //, node );
+
+
+
+		for(var index = this.keys.length-1; index >= 0 ; index--){
 			// CHECK CONTENT ID WILDCARD IS IN THE KEYS 
-			if( regex.test(v) ){
-				
+			if( regex.test(this.keys[index]) ){
 				// REMOVE KEY FROM TILE
 				let key = this.keys.splice(index,1)[0];
+					console.log( 'TileContent.remove', key) //, node );
 
 				// REMOVE NODE FROM TILE
 				let node = this.nodes.splice(index,1)[0];
@@ -96,12 +97,8 @@ class TileContent{
 
 				// REMOVE TILE FROM NODE
 				node.tiles.splice(tileIndex,1);
-
-				console.log( this.tile.toString() + '.content.remove', key) //, node );
-
 			}
-		});
-
+		}
 	}
 
 

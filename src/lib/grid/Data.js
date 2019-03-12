@@ -25,10 +25,36 @@ export class Data{
 
 	remove(wildcard, fromTiles ){
 		console.log('Data.remove', wildcard, fromTiles );
-		fromTiles.forEach( (tile) => {
-			tile.content.remove(wildcard);
-			Road.recursiveConnect( tile );
+		for( var i=fromTiles.length-1; i>=0; i--){
+			fromTiles[i].content.remove(wildcard);
+			if( fromTiles[i] ) Road.recursiveConnect( fromTiles[i] );
+		}
+		
+	}
+
+	destroy(tiles){
+		var allNodes = [],
+			nodes;
+
+		tiles.forEach( (tile) => {
+			nodes = tile.content.getDataNodes('');
+			nodes.forEach( (node)=>{
+				if( allNodes.indexOf(node) === -1 ) allNodes.push(node);
+			});
 		});
+
+		// DETROY NODES
+		allNodes.forEach( (node) => {
+			this.remove(node.id, node.tiles);
+		});
+
+		// REMOVE TILES
+		tiles.forEach( (tile) => {
+			App.Grid.remove(tile.cx, tile.cy);
+		});
+
+
+		//console.log('Data.destroy', tiles, allNodes );
 	}
 
 	add(id, toTiles, testOnly = false){

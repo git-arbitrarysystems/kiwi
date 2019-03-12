@@ -8,7 +8,8 @@ import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
 import {Road} from 'grid/Road';
 import {App} from 'App';
-import {SurfaceTileSize} from 'interface/Interface';
+
+import {Ghost} from 'grid/Ghost';
 
 
 
@@ -23,20 +24,45 @@ export class Grid extends PIXI.Container{
 
 		App.register(this);
 
+		// BG
+		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
+		this.background.anchor.set(0.5);
+		this.background.scale.set(1000,1000);
+
 
 		// ADD THE FACE OOF THE GRID
 		this.face = this.addChild( new Face() );
 
-		this.size = {minx:0,miny:0,maxx:0, maxy:0,width:0,height:0};
-		this.tiles = {};
-
-		/*// TEMP
-		var x,y, d=1+5*SurfaceTileSize[0], tile;
-		for(x=-d;x<=d;x++){
-			for(y=-d;y<=d;y++){
-				this.add(x,y);
+		this.size = {
+			reset:function(){
+				this.minx =  Number.MAX_SAFE_INTEGER;
+				this.maxx = -Number.MAX_SAFE_INTEGER;
+				this.miny =  Number.MAX_SAFE_INTEGER;
+				this.maxy = -Number.MAX_SAFE_INTEGER;
+				return this;
+			},
+			get width(){  return (this.maxx - this.minx) + 1 },
+			get height(){ return (this.maxy - this.miny) + 1 },
+			add:function(x,y){
+				this.minx = Math.min(x, this.minx );
+				this.miny = Math.min(y, this.miny );
+				this.maxx = Math.max(x, this.maxx );
+				this.maxy = Math.max(y, this.maxy );
+				return this;
+			},
+			update:function(){
+				this.reset();
+				var x,y;
+				for( x in App.Grid.tiles ){
+					for( y in App.Grid.tiles[x] ){
+						this.add(x,y);
+					}
+				}
+				return this;
 			}
-		}*/
+		}.reset();
+
+		this.tiles = {};
 
 		// HOLDER CLASS FOR THE MAP-DATA
 		this.data = new Data();
@@ -50,14 +76,17 @@ export class Grid extends PIXI.Container{
 		this.stamp = this.addChild( new Stamp() );
 		this.stamp.alpha = 0.5;
 
+		this.ghost = this.addChild( new Ghost() );
+		this.ghost.alpha = 0.5;
+
 		// INTERACTION
 		this.interactive = true;
 		this.on('pointerdown', 	(e)=>{ this.pointer(e) } );
 		this.on('pointermove', 	(e)=>{ this.pointer(e) } );
 		this.on('pointerup',   	(e)=>{ this.pointer(e) } );
 		this.on('pointertap',  	(e)=>{ this.pointer(e) } );
-		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
 		this.on('pointercancel',(e)=>{ this.pointer(e) } );
+		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
 
 
 			
@@ -69,16 +98,24 @@ export class Grid extends PIXI.Container{
 		if( !this.tiles[x][y] ) this.tiles[x][y] = this.addChild( new Tile(x,y) );
 
 		console.log('Grid.add', x, y);
-
-		this.size.minx = Math.min(x, this.size.minx );
-		this.size.miny = Math.min(y, this.size.miny );
-		this.size.maxx = Math.max(x, this.size.maxx );
-		this.size.maxy = Math.max(y, this.size.maxy );
-		this.size.width = (this.size.maxx - this.size.minx) + 1;
-		this.size.height = (this.size.maxy - this.size.miny) + 1;
-
+		this.size.add(x,y);
+		
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
+	}
+
+	remove(x,y){
+		if( !this.tiles[x] ) return false;
+		if( !this.tiles[x][y] ) return false;
+
+		this.tiles[x][y].destroy();
+		delete this.tiles[x][y];
+
+		// UPDATE GRIDSIZE
+		this.size.update();
+
+		return true;
+
 	}
 	
 	// GET TILE
@@ -100,7 +137,7 @@ export class Grid extends PIXI.Container{
 
 		let cx = tile.cx,
 			cy = tile.cy,
-			a = [],x,y;
+			a = [],x,y,t;
 
 		if( modulo ){
 			cx = Math.round(cx / width) * width;
@@ -125,15 +162,15 @@ export class Grid extends PIXI.Container{
 			}
 		}
 
+
 		for(x=left;x<left+width;x++){
 			for(y=top;y<top+height;y++){
-				a.push( this.getTile({x:x,y:y}, true) );
+				t = this.getTile({x:x,y:y}, true)
+				if( t ) a.push(t);
 			}
 		}
 
-		a.forEach( (v,i,a) => { if( !v ) a.splice(i,1); });
-
-
+		if( a.length !== width * height ) return [];
 		return a;
 	}
 
@@ -142,35 +179,56 @@ export class Grid extends PIXI.Container{
 		return App.Interface.mode();
 	}
 
+
+	updateStamp(interfaceSelection){
+		if( this._interfaceSelection !== interfaceSelection ){
+
+			// CACHE
+			this._interfaceSelection = interfaceSelection;
+
+			// PASS TO STAMP
+			this.stamp.textureData = interfaceSelection;
+
+			// APPLY TO GHOST TILES
+			this.ghost.textureDataId = interfaceSelection.id;
+				
+		}
+
+	}
+
 	
 
 
 	pointer( e){
 
+
 		switch(e.type){
 
 			case  'pointerdown':
 				this.__pd = true;
-				this.__ps = e.data.getLocalPosition(this.parent, this.__ps) //{x:e.data.global.x, y:e.data.global.y};
-				this.__pp = this.__ps.clone() //{x:e.data.global.x, y:e.data.global.y};
+				this.__ps = e.data.getLocalPosition(this.parent, this.__ps);
+				this.__pp = this.__ps.clone();
+
+				this.hover();
+
+				if( this.ghost.enabled ){
+					this.ghost.confirm();
+				}
+
 				break;
 			case 'pointermove':
-				this.__pc =  e.data.getLocalPosition(this.parent, this.__pc);//{x:e.data.global.x, y:e.data.global.y};
-
-
-				
+				this.__pc =  e.data.getLocalPosition(this.parent, this.__pc);
 				if( this.mode === 'drag' && this.__pd ){
 					this.drag(this.__pc.x - this.__pp.x, this.__pc.y - this.__pp.y);
 				}else{
 					this.hover();
 				}
 
-				this.__pp = this.__pc.clone()//{x:e.data.global.x, y:e.data.global.y};
+				this.__pp = this.__pc.clone()
 				break;
 			case 'pointerup':
 			case 'pointercancel':
 			case 'pointerout':
-				
 				delete this.__ps;
 				delete this.__pc;
 				delete this.__pp;
@@ -194,6 +252,11 @@ export class Grid extends PIXI.Container{
 		
 		// UNHOVER
 		if( this._hover ) this._hover.forEach( (tile)=>{ tile.hover = false;} );
+		if( this._hoverExtended ) this._hoverExtended.forEach( (tile)=>{ tile.hover = false;} );
+		
+		// CLEAR
+		this._hover = [];
+		this._hoverExtended = [];
 
 		let interfaceSelection = Object.assign({
 			size:[1,1],
@@ -212,8 +275,17 @@ export class Grid extends PIXI.Container{
 
 			if( tile && tile.content.contains(what) ){
 				this._hover = tile.content.select(what);
-			}else{
-				this._hover = [];
+
+				if( this.mode === 'destroy-surface'){
+					this._hover.forEach( (tile) => {
+						tile.content.select('road|build').forEach( (associatedTile) => {
+							if( this._hover.indexOf(associatedTile) === -1 && this._hoverExtended.indexOf(associatedTile) === -1 ){
+								this._hoverExtended.push( associatedTile );
+							}
+						})
+					});
+				}
+
 			}
 
 		}else{
@@ -226,12 +298,25 @@ export class Grid extends PIXI.Container{
 
 		// POSITION THE STAMP-TOOL
 		this.stamp.selection = this._hover;
+
+		// HANDLING CREATION OF NEW TILES
+		this.ghost.enabled = (this.mode === 'surface' && !this._hover.length );
+		if( this.ghost.enabled ){
+			this.ghost.coordinates( Transform.p2c(this.__pc.x-this.x, this.__pc.y-this.y) );
+		} 
 		
-		if( 
-			(this.mode === 'destroy-road' && this.__pd) || // AUTO CONFIRM ROAD RESTRUCTION
-			(this.mode === 'surface' && this.__pd )
-		){
-			this.confirm();
+		// AUTO-CONFIRM
+		if( this.__pd && (
+			(this.mode === 'destroy-surface') ||				// AUTO-CONFIRM ROAD RESTRUCTION
+			(this.mode === 'destroy-road') ||					// AUTO-CONFIRM ROAD RESTRUCTION
+			(this.mode === 'surface' && this._hover.length ) ||	// AUTO-CONFIRM SURFACE PLACEMENT
+			(this.ghost.enabled)								// AUTO-CONFIRM TILE-CREATION
+		)){
+			if( this.ghost.enabled ){
+				this.ghost.confirm();
+			}else{
+				this.confirm();
+			}
 			return;
 		}
 
@@ -240,9 +325,13 @@ export class Grid extends PIXI.Container{
 		this._hover.forEach( (tile)=>{ 
 			tile.hover = true;
 		});
+		this._hoverExtended.forEach( (tile)=>{ 
+			tile.hover = true;
+		});
+		
 
 		
-	
+		
 
 	}
 
@@ -250,10 +339,19 @@ export class Grid extends PIXI.Container{
 
 	confirm(){
 
+
+
 		if( this._hover.length === 0 ) return;
 
 		if( this.mode.indexOf('destroy') !== -1 ){
-			this.data.remove( this.mode.split('-')[1], this._hover );
+
+			if( this.mode === 'destroy-surface' ){
+				this.data.destroy(this._hover);
+				this._hover = [];
+			}else{
+				this.data.remove( this.mode.split('-')[1], this._hover );
+			}
+
 		}else if( this.stamp.textureData ){
 			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
 		}
@@ -269,15 +367,15 @@ export class Grid extends PIXI.Container{
 
 		
 		// CREATE A PATHFINDER GRID
-		let m = new PF.Grid(this.size.width, this.size.height);
+		let m = new PF.Grid(this.size.width, this.size.height),
+			x,y, tile,bool;
 
-		console.log(m);
-		
 		// ANALYSE SURFACE
-		var x,y;
-		for(x in this.tiles ){
-			for(y in this.tiles[x] ){
-				m.setWalkableAt(x-this.size.minx, y-this.size.miny, true);
+		for(y=0;y<m.height;y++){
+			for(x=0;x<m.width;x++){
+				tile = this.getTile({x:x+this.size.minx,y:y+this.size.miny}, true);
+				bool = tile ? true : false;
+				m.setWalkableAt(x,y,bool);
 			}
 		}
 

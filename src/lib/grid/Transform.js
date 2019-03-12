@@ -38,6 +38,13 @@ const Transform = {
 
 	// UPDATE TRANSFORMATION
 	transform: function(sprite, span = 1, skewed = true, overflow = 1.01){
+
+		if( sprite.texture.width === 1 ){
+			// TEXTURE IS NOT LOADED YET
+			sprite.texture.on('update', (e)=>{ this.transform(sprite, span, skewed, overflow); })
+			return;
+		}
+
 		sprite.anchor.set(0.5);
 		sprite.pivot.set(0);
 		if( skewed ){

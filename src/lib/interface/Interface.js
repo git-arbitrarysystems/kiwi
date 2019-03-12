@@ -3,7 +3,7 @@
 import {App} from 'App';
 import './Interface.scss';
 
-import {Textures,SurfaceTileSize} from '../../assets/img/textures/Textures.js';
+import {Textures,GhostTile} from '../../assets/img/textures/Textures.js';
 const TextureData = {};
 
 import {Images} from 'Images';
@@ -20,7 +20,7 @@ class Interface{
 
 		// GRID-INTERACTION-MODES
 		this.stampModes = ['road','surface','build'];
-		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road', 'destroy-build']);
+		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build']);
 
 		this.gridModesSelector = this.ce({target:this.root, tag:'select', disabled:true});
 		this.gridModes.forEach( (value)=>{ this.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
@@ -64,17 +64,15 @@ class Interface{
 			
 			}
 
+			// DESTROY
+			var d = this.ce({target:c, class:'button', 
+				id:'destroy-' + group, 
+				title:'detroy ' + group
+			});
+			d.style.backgroundImage = 'url('+Images.destroy+')'
+			d.addEventListener('click', (e)=>{ this.selected(e);})
 
-			if( group !== 'surface' ){
-				// DESTROY
-				var d = this.ce({target:c, class:'button', 
-					id:'destroy-' + group, 
-					title:'detroy ' + group
-				});
-				d.style.backgroundImage = 'url('+Images.destroy+')'
-				d.addEventListener('click', (e)=>{ this.selected(e);})
-			}
-			
+
 
 		}
 	}
@@ -103,7 +101,7 @@ class Interface{
 			return this.___selected;
 		}
 
-		if( this.___selected ){
+		if( this.___selected && this.___selected.element ){
 			this.___selected.element.classList.remove('selected');	
 		}
 
@@ -119,8 +117,8 @@ class Interface{
 
 		// DESELECT && FALL BACK TO DEFAUT MODE
 		if( this.stampModes.indexOf( this.mode() ) === -1 ){
-			this.___selected = false;
-			App.Grid.stamp.textureData = false;
+			this.___selected = {element:e.currentTarget};
+			App.Grid.updateStamp(false);
 			return;
 		}
 
@@ -134,7 +132,7 @@ class Interface{
 
 
 		// PROPAGATE TO STAMP TOOL
-		App.Grid.stamp.textureData = this.___selected;
+		App.Grid.updateStamp( this.___selected );
 
 
 		return this.___selected;
@@ -164,4 +162,4 @@ class Interface{
 import {HotModule} from '../../../HotModule.js'
 HotModule(module, Interface);
 
-export {Interface, TextureData, SurfaceTileSize};
+export {Interface, TextureData, GhostTile};

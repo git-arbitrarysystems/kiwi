@@ -11,10 +11,13 @@ import s2x2 from './build_s2x2.png'
 import s1x1 from './build_s1x1.png'
 
 
-const SurfaceTileSize = [
-    3,
-    3
-];
+const GhostTile = {
+    size: [
+        3,
+        3
+    ],
+    modulo: true
+};
 const Textures = {
     surface: {
         grass: {
@@ -265,6 +268,6 @@ const Textures = {
         }
     }
 };
-export {Textures,SurfaceTileSize}
+export {Textures,GhostTile}
 
 

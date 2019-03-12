@@ -24,12 +24,15 @@ const _default = {
 	size:[1,1]
 }
 
-const SurfaceTileSize = [3,3];
+const GhostTile = {
+	size:[3,3],
+	modulo:true
+}
 
 const cpsd = {
 	'surface':{
 		_default:{
-			size:SurfaceTileSize,
+			size:GhostTile.size,
 			modulo:true
 		}
 	},
@@ -121,9 +124,9 @@ function updateTextures(){
 	// WRITE JSON DATA
 	m_import += `
 
-const SurfaceTileSize = ${JSON.stringify(SurfaceTileSize,null,4)};
+const GhostTile = ${JSON.stringify(GhostTile,null,4).replace(/\"/g, '')};
 const Textures = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
-export {Textures,SurfaceTileSize}
+export {Textures,GhostTile}
 
 
 `;
