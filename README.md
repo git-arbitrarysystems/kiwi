@@ -7,5 +7,6 @@
 2. store / retreive maps ✓
 3. expand map tool ✓
 4. resize-to-fit grid background ✓
+5. modify storage to {l,t,w,h} 
 
 

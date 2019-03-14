@@ -3,7 +3,11 @@ import water from './surface_water.png'
 import dirt from './surface_dirt.png'
 import sand from './road_sand.png'
 import stone from './road_stone.png'
+import vinyard from './build_vinyard.png'
+import vinyard_surface from './build_vinyard_surface.png'
+import pine_2 from './build_pine_2.png'
 import fruit_tree from './build_fruit_tree.png'
+import fruit_tree_surface from './build_fruit_tree_surface.png'
 import waterwell from './build_waterwell.png'
 import castle from './build_castle.png'
 import castle_surface from './build_castle_surface.png'
@@ -154,6 +158,69 @@ const Textures  = {
         }
     },
     build: {
+        vinyard: {
+            modulo: false,
+            skew: false,
+            size: [
+                6,
+                6
+            ],
+            images: {
+                main: {
+                    url: vinyard,
+                    trim: {
+                        left: 3,
+                        top: 210,
+                        width: 508,
+                        height: 315
+                    }
+                },
+                surface: {
+                    url: vinyard_surface,
+                    trim: {
+                        left: 1,
+                        top: 408,
+                        width: 510,
+                        height: 194
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 495
+        },
+        pine_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: pine_2,
+                    trim: {
+                        left: 35,
+                        top: 19,
+                        width: 423,
+                        height: 569
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 514
+        },
         fruit_tree: {
             modulo: false,
             skew: false,
@@ -165,10 +232,19 @@ const Textures  = {
                 main: {
                     url: fruit_tree,
                     trim: {
-                        left: 74,
-                        top: 8,
-                        width: 437,
-                        height: 466
+                        left: 124,
+                        top: 110,
+                        width: 328,
+                        height: 362
+                    }
+                },
+                surface: {
+                    url: fruit_tree_surface,
+                    trim: {
+                        left: 4,
+                        top: 253,
+                        width: 503,
+                        height: 335
                     }
                 }
             },

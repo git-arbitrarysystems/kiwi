@@ -39,12 +39,19 @@ module.exports.Tiles = {
 			size:[3,3],
 			cutoff:475
 		},
+		pine_2:{
+			cutoff:514
+		},
 		waterwell:{
 			cutoff:470
 		},
 		fruit_tree:{
 			size:[2,2],
 			cutoff:440
+		},
+		vinyard:{
+			size:[6,6],
+			cutoff:495
 		}
 	}
 }

@@ -94,8 +94,6 @@ export class Grid extends PIXI.Container{
 			var rand = this.rand('dirt|grass');
 			if( rand ){
 				new Kiwi(rand);
-			}else{
-				i--
 			}
 		}
 		

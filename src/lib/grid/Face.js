@@ -8,6 +8,8 @@ export class Face extends PIXI.Container{
 	constructor(){
 		super();
 
+		
+
 		this.renderTypes = ['surface', 'road'];
 		this.renderTypes.forEach( (type, index) => {
 			this[type] = this.addChild( new PIXI.Container() );
@@ -18,13 +20,26 @@ export class Face extends PIXI.Container{
 
 		this.sortableChildren = true;
 
+		//this.tint = 0xccddee;
+
 	
 
 	}
+
+	get tint(){ return this._tint || 0xffffff; };
+	set tint(tint){
+		this._tint = tint;
+		this.children.forEach( (child) => {
+			child.tint = tint;
+		})
+
+	}
+
 	add( sprite, type){
 		
 		// SET APPROPRIATE Z-INDEX
 		sprite.zIndex = 100000 + sprite.y;
+		
 		if( sprite.cutoff ){
 			//console.log('Face.add(cutoff)', sprite.zIndex, sprite.cutoff);
 			sprite.zIndex -= ( sprite.anchor.y * sprite.texture.height - sprite.cutoff ) * sprite.scale.y;
@@ -48,6 +63,7 @@ export class Face extends PIXI.Container{
 			this.renderTexture(type);
 		}else{
 			this.addChild(sprite);
+			sprite.tint = this.tint;
 			if( sprite.surfaceSprite ){
 				this.add( sprite.surfaceSprite, 'surface' )
 			}

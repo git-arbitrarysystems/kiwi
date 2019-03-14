@@ -110,10 +110,12 @@ export class Data{
 	unpack(){
 		for( var id in map ){
 			for(var c = map[id].length, i=0; i<c; i++){
-				var coordinates = map[id][i],
-					tiles = [];
-				for(var l=coordinates.length, j=0; j<l; j+=2){
-					tiles.push( App.Grid.getTile({x:coordinates[j], y:coordinates[j+1]}, true, true) );
+				var block = map[id][i],
+					tiles = [], x, y;
+				for( x=block[0];x<block[0]+(block[2]||1);x++){
+					for(y=block[1];y<block[1]+(block[3]||1);y++){
+						tiles.push( App.Grid.getTile({x:x, y:y}, true, true) );
+					}
 				}
 				this.add(id, tiles);
 			}
@@ -146,9 +148,21 @@ export class Data{
 			node = list[i];
 			if( !data[node.id] ) data[node.id] = [];
 
-			var coordinates = [];
-			node.tiles.forEach( (tile) => { coordinates.push(tile.cx, tile.cy); })
-			data[node.id].push( coordinates )
+			// BLOCK FORMAT [left,top,width,height]
+			var block = [1000000,1000000,1,1];
+			node.tiles.forEach( (tile) => {
+				
+				block[0] = Math.min(block[0], tile.cx);
+				block[1] = Math.min(block[1], tile.cy);
+				block[2] = Math.max(tile.cx - block[0] + 1, block[2]);
+				block[3] = Math.max(tile.cy - block[1] + 1, block[3]);
+			})
+
+			if( block[2] === 1 && block[3] === 1 ){
+				block.splice(2,2);
+			}
+
+			data[node.id].push( block )
 
 		}
 
