@@ -29,7 +29,9 @@ class Interface{
 		// SCALE
 		this.scales = [0.25, 0.33, 0.5, 0.75, 1, 1.25, 1.5, 2, 3 ];
 		this.scalesSelector = this.ce({target:this.root, tag:'select'});
-		this.scalesSelector.addEventListener('change', (e) => { App.Grid.scale.set( parseFloat(this.scalesSelector.value, 10) ); })
+		this.scalesSelector.addEventListener('change', (e) => {
+			App.Grid.scale.set( parseFloat(this.scalesSelector.value, 10) );
+		})
 		this.scales.forEach( (value)=>{ this.ce({target:this.scalesSelector, value:value, innerHTML:value,tag:'option',selected:(value===1)}); })
 
 

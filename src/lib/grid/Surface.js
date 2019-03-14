@@ -95,7 +95,7 @@ export class Surface{
 		}
 
 		
-
+		
 		for( s in neighbours ){
 			if( neighbours[s] ){
 
@@ -117,6 +117,7 @@ export class Surface{
 				}
 			}
 		}
+		
 	}
 
 	overflows( from, to ){
@@ -130,6 +131,8 @@ export class Surface{
 
 
 	drawMask(side, graphics, size, span){
+
+		
 
 		var i,
 			offset = size * -0.5,

@@ -8,15 +8,18 @@ export class Face extends PIXI.Container{
 	constructor(){
 		super();
 		this.sortableChildren = true;
+
 	}
 	add( sprite, zIndex = 0){
 		// ALREADY ADDED
 		if( sprite.parent === this ) return;
-
+		
 		
 		//console.log('Face.add', sprite.texture.textureCacheIds[0], zIndex);
 		sprite.zIndex = (zIndex * 100000000 ) + sprite.y - sprite.height * sprite.anchor.y;
+		
 		this.addChild(sprite);
+		//sprite.cacheAsBitmap = true;
 		
 		this.alpha = 1;
 

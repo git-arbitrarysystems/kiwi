@@ -26,8 +26,7 @@ export class Grid extends PIXI.Container{
 
 		// BG
 		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
-		this.background.anchor.set(0.5);
-		this.background.scale.set(1000,1000);
+	
 
 
 		// ADD THE FACE OOF THE GRID
@@ -92,6 +91,9 @@ export class Grid extends PIXI.Container{
 			
 	}
 
+
+	
+
 	// ADD TILE
 	add(x,y){
 		if( !this.tiles[x] ) this.tiles[x] = {};
@@ -99,6 +101,8 @@ export class Grid extends PIXI.Container{
 
 		console.log('Grid.add', x, y);
 		this.size.add(x,y);
+
+		
 		
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
