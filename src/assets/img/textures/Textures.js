@@ -5,14 +5,20 @@ import sand from './road_sand.png'
 import stone from './road_stone.png'
 import vinyard from './build_vinyard.png'
 import vinyard_surface from './build_vinyard_surface.png'
+import fire_1 from './build_fire_1.png'
+import fire_1_surface from './build_fire_1_surface.png'
+import hut_2 from './build_hut_2.png'
+import hut_2_surface from './build_hut_2_surface.png'
+import hut_1 from './build_hut_1.png'
+import hut_1_surface from './build_hut_1_surface.png'
 import pine_2 from './build_pine_2.png'
 import fruit_tree from './build_fruit_tree.png'
 import fruit_tree_surface from './build_fruit_tree_surface.png'
 import waterwell from './build_waterwell.png'
 import castle from './build_castle.png'
 import castle_surface from './build_castle_surface.png'
-import pine from './build_pine.png'
-import pine_surface from './build_pine_surface.png'
+import pine_1 from './build_pine_1.png'
+import pine_1_surface from './build_pine_1_surface.png'
 
 
 const GhostTile = {
@@ -194,6 +200,114 @@ const Textures  = {
             },
             cutoff: 495
         },
+        fire_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: fire_1,
+                    trim: {
+                        left: 166,
+                        top: 246,
+                        width: 162,
+                        height: 264
+                    }
+                },
+                surface: {
+                    url: fire_1_surface,
+                    trim: {
+                        left: 40,
+                        top: 239,
+                        width: 415,
+                        height: 313
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 490
+        },
+        hut_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                1
+            ],
+            images: {
+                main: {
+                    url: hut_2,
+                    trim: {
+                        left: 63,
+                        top: 287,
+                        width: 366,
+                        height: 176
+                    }
+                },
+                surface: {
+                    url: hut_2_surface,
+                    trim: {
+                        left: 45,
+                        top: 308,
+                        width: 180,
+                        height: 211
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 460
+        },
+        hut_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                2
+            ],
+            images: {
+                main: {
+                    url: hut_1,
+                    trim: {
+                        left: 111,
+                        top: 239,
+                        width: 396,
+                        height: 275
+                    }
+                },
+                surface: {
+                    url: hut_1_surface,
+                    trim: {
+                        left: 3,
+                        top: 340,
+                        width: 377,
+                        height: 215
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 460
+        },
         pine_2: {
             modulo: false,
             skew: false,
@@ -295,10 +409,10 @@ const Textures  = {
                 main: {
                     url: castle,
                     trim: {
-                        left: 29,
-                        top: 0,
+                        left: 27,
+                        top: -2,
                         width: 483,
-                        height: 490
+                        height: 489
                     }
                 },
                 surface: {
@@ -318,9 +432,9 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 475
+            cutoff: 465
         },
-        pine: {
+        pine_1: {
             modulo: false,
             skew: false,
             size: [
@@ -329,7 +443,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: pine,
+                    url: pine_1,
                     trim: {
                         left: 47,
                         top: 0,
@@ -338,7 +452,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: pine_surface,
+                    url: pine_1_surface,
                     trim: {
                         left: 0,
                         top: 271,

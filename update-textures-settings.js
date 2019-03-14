@@ -33,14 +33,26 @@ module.exports.Tiles = {
 		},
 		castle:{
 			size:[5,5],
-			cutoff:475
+			cutoff:465
 		},
-		pine:{
+		pine_1:{
 			size:[3,3],
 			cutoff:475
 		},
 		pine_2:{
 			cutoff:514
+		},
+		hut_1:{
+			size:[1,2],
+			cutoff:460
+		},
+		hut_2:{
+			size:[2,1],
+			cutoff:460
+		},
+		fire_1:{
+			size:[1,1],
+			cutoff:490
 		},
 		waterwell:{
 			cutoff:470

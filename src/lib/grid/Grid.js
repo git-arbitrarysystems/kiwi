@@ -27,7 +27,8 @@ export class Grid extends PIXI.Container{
 
 		// BG
 		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
-		this.background.tint = 0xff0000;
+		this.background.tint = 0xffffff;
+		this.background.alpha = 0.01;
 	
 
 
@@ -155,7 +156,7 @@ export class Grid extends PIXI.Container{
 
 		this.scale.set(scale);
 
-		this.background.padding = 10 / scale;
+		this.background.padding = 0;//10 / scale;
 		this.background.width = (this.screen.width / this.scale.x) - this.background.padding * 2;
 		this.background.height = (this.screen.height / this.scale.y) - this.background.padding * 2;
 		this.drag(0,0);
