@@ -62,6 +62,9 @@ export class Data{
 		var textureData = TextureData[id],
 			type = textureData.type;
 
+
+		//console.log('Data.add', id, textureData);
+
 		// CHECK IF IT CAN BE ADDED
 		var appendContent = true;
 		for( var i=toTiles.length-1, tile; i>=0 ; i--){
@@ -82,8 +85,6 @@ export class Data{
 		if( testOnly ){
 			 return appendContent;
 		}else if( appendContent){
-
-			console.log('Data.add',id);
 
 			// CREATE A STAMP
 			let stamp = new Stamp(textureData, toTiles);

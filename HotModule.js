@@ -31,8 +31,8 @@ function replacePrototypeFunctions(src, target) {
 function replaceStaticFunctions(src, target){
     var props = Object.getOwnPropertyNames(src);
     for( var s in props ){
-        if( src[ props[s] ] !== target[ props[s] ] ){
-            console.log('change');
+        if( props[s] !== 'prototype' && src[ props[s] ] !== target[ props[s] ] ){
+            console.log('change', props[s]);
             target[ props[s] ] = src[ props[s] ];
         }
     }

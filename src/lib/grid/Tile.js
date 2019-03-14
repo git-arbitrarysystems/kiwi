@@ -43,27 +43,29 @@ class TileContent{
 	}
 	
 
+	updateTileBools(){
+		this.tile.water = this.contains('water');
+		this.tile.build = this.contains('build');
+	}
+
 	add(id, node){
 		if( this.keys.indexOf(id) === -1 ){
-			console.log( this.tile.toString() + '.content.add', node.id);
+			//console.log( this.tile.toString() + '.content.add', node.id);
 			
 			// REGISTER THE NEW CONTENT
 			this.keys.push(id);
 			this.nodes.push(node);
 
-			// GET APPROPRIATE Z-INDEX
-			var zIndex = {
-				'surface':0,
-				'road':1,
-				'build':2
-			}[ TextureData[node.id].type ];
-
 			// APPEND TO FACE
 			node.sprites.forEach( (sprite) => {
-				App.Grid.face.add(sprite, zIndex);
+				App.Grid.face.add(sprite, TextureData[node.id].type );
 			});
 
 		}
+
+
+		this.updateTileBools();
+
 	}
 
 	
@@ -82,7 +84,7 @@ class TileContent{
 			if( regex.test(this.keys[index]) ){
 				// REMOVE KEY FROM TILE
 				let key = this.keys.splice(index,1)[0];
-					console.log( 'TileContent.remove', key) //, node );
+				//console.log( 'TileContent.remove', key) //, node );
 
 				// REMOVE NODE FROM TILE
 				let node = this.nodes.splice(index,1)[0];
@@ -92,20 +94,26 @@ class TileContent{
 
 				if( !isNaN(spriteIndex) ){
 					// REMOVE SPRITE FROM NODE
-					node.sprites.splice(spriteIndex,1)[0].destroy();
+					App.Grid.face.remove( node.sprites.splice(spriteIndex,1)[0] , TextureData[node.id].type );
 				}
 
 				// REMOVE TILE FROM NODE
 				node.tiles.splice(tileIndex,1);
 			}
 		}
+
+
+		this.updateTileBools();
+
 	}
 
 
 	contains(wildcard){
 		let regex = new RegExp(wildcard,'i');
-		return this.keys.some( (v,i,a) => { return regex.test(v) });
+
+		return this.keys.some( (v,i,a) => { return regex.test(v)});
 	}
+
 
 
 

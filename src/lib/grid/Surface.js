@@ -100,7 +100,7 @@ export class Surface{
 			if( neighbours[s] ){
 
 				var requiresUpdate = ( this.overlays[s].textureDataId !== neighbours[s].id );
-				console.log('Surface.updateConnection',neighbours[s].id, '>>', myTextureDataId, 'update:', requiresUpdate );
+				//console.log('Surface.updateConnection',neighbours[s].id, '>>', myTextureDataId, 'update:', requiresUpdate );
 
 				if( requiresUpdate ){
 					let textureData = TextureData[ neighbours[s].id ]
@@ -108,7 +108,7 @@ export class Surface{
 					// SET SPITE TEXTURE
 					this.overlays[s].textureDataId = textureData.id;
 					this.overlays[s].visible = true;
-					this.overlays[s].texture = PIXI.Texture.from( textureData.url )
+					this.overlays[s].texture = PIXI.Texture.from( textureData.images.main.url )
 					
 					this.drawMask(s, this.overlays[s].maskGraphics, this.overlays[s].texture.width, textureData.size[0] )
 					this.overlays[s].mask = true ? this.overlays[s].maskGraphics : null;

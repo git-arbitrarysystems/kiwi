@@ -34,14 +34,14 @@
 
 			cursor: pointer;
 
+
 			background-color:white;
-			background-position: center;
-			background-size:90%;
+			background-position: center center;
+			background-size:contain;
 			background-repeat: no-repeat;
 
 			&:hover{
 				background-color:#444;
-				background-size:90%;
 			}
 
 			&.selected{

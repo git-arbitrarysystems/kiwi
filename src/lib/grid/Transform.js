@@ -37,7 +37,7 @@ const Transform = {
 	},
 
 	// UPDATE TRANSFORMATION
-	transform: function(sprite, span = 1, skewed = true, overflow = 1.01){
+	transform: function(sprite, span = [1,1], skewed = true, overflow = 1.01){
 
 		if( sprite.texture.width === 1 ){
 			// TEXTURE IS NOT LOADED YET
@@ -45,15 +45,16 @@ const Transform = {
 			return;
 		}
 
+		var spanWidth = ( span[0] + span[1] ) * 0.5;
+			
+
 		sprite.anchor.set(0.5);
 		sprite.pivot.set(0);
 		if( skewed ){
-			sprite.scale.set( ( Tile.diameter * 0.5 * span / sprite.texture.width ) * overflow );
+			sprite.scale.set( ( Tile.diameter * 0.5 * spanWidth / sprite.texture.width ) * overflow );
 			sprite.skew.set( Tile.skewX, Tile.skewY );
 		}else{
-			
-			var spanWidth = 1;
-			if( span > 1 ) spanWidth = 1 + span*0.5;
+
 			sprite.scale.set( ( ( Tile.width * spanWidth) / sprite.texture.width ) * overflow );
 			sprite.skew.set(0,0);
 		}

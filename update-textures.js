@@ -13,56 +13,8 @@ const empty = require('empty-folder');
 const watch = require('node-watch');
 
 
-const srcDir = './src/assets/psd/';
-const targetDir = './src/assets/img/textures/';
+var settings = require('./update-textures-settings.js');
 
-// CONVERT PSD'S
-
-const _default = {
-	modulo:false,
-	skew:true,
-	size:[1,1]
-}
-
-const GhostTile = {
-	size:[3,3],
-	modulo:true
-}
-
-const cpsd = {
-	'surface':{
-		_default:{
-			size:GhostTile.size,
-			modulo:true
-		}
-	},
-	'road':{
-		_default:{
-		}
-	},
-	'build':{
-		_default:{
-			skew:false
-		},
-		castle:{
-			size:[6,6]
-		},
-		castleAlt:{
-			size:[4,2]
-		},
-		s1x1:{
-		},
-		s2x2:{
-			size:[2,2]
-		},
-		s4x2:{
-			size:[4,2]
-		},
-		s5x2:{
-			size:[5,2]
-		}
-	}
-}
 
 
 
@@ -70,9 +22,9 @@ function updateTextures(){
 	var json = {};
 	var m_import = '';
 
-	for(var s in cpsd){
+	for(var s in settings.Tiles){
 		
-		var psd = PSD.fromFile(srcDir + s + '.psd')
+		var psd = PSD.fromFile(settings.source + s + '.psd')
 		psd.parse();
 
 
@@ -93,26 +45,43 @@ function updateTextures(){
 			if( layer.name.indexOf('_') === 0 ){
 				// EXPORT
 				var name = s + layer.name + '.png',
-					id = layer.name.substr(1),
-					callback = ( function(n){ return ()=>{ console.log(n) } })(targetDir + name + '... ready');
+					id = layer.name.substr(1).replace('_surface', ''),
+					callback = ( function(n){ return ()=>{ console.log(n) } })(settings.target + name + '... ready');
 
-				layer.image.saveAsPng( targetDir + name ).then( callback );
+				if( !json[s][id] ){
+					json[s][id] = Object.assign(
+						{},
+						settings.DefaultTile,
+						{
+							images:{},
+							type:'\''+s+'\'',
+							orig:{left:0, top:0, width:width, height:height}
+						},
+						settings.Tiles[s]._default,
+						settings.Tiles[s][id]
+					);
+				}
 
-				// STORE FOR EXPORT
-				json[s][id] = Object.assign(
-					{},
-					_default,
-					cpsd[s]._default,
-					cpsd[s][id],
-					{url:id, type:'\''+s+'\''},
-					{ 
-						orig:{left:0, top:0, width:width, height:height},
-						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
-					}
-				)
+				layer.image.saveAsPng( settings.target + name ).then( callback );
 				
+			
+				
+				if( layer.name.indexOf('_surface') !== -1 ){
+					json[s][id].images = Object.assign(json[s][id].images, {surface:{
+						url:layer.name.substr(1),
+						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
+					}});
+				}else{
+					json[s][id].images = Object.assign(json[s][id].images, {main:{
+						url:layer.name.substr(1),
+						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
+					}});
+				}
+				
+				console.log(id, layer.name);
+
 				// ADD IMPORT SCRIPT LINE
-				m_import += 'import ' + id + ' from \'./' + name + '\'\n';
+				m_import += 'import ' + layer.name.substr(1) + ' from \'./' + name + '\'\n';
 
 
 			}
@@ -121,23 +90,33 @@ function updateTextures(){
 
 	}
 
+	console.log(m_import);
+
+
 	// WRITE JSON DATA
 	m_import += `
 
-const GhostTile = ${JSON.stringify(GhostTile,null,4).replace(/\"/g, '')};
-const Textures = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
+const GhostTile = ${JSON.stringify(settings.DefaultGhostTile,null,4).replace(/\"/g, '')};
+const Textures  = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
 export {Textures,GhostTile}
 
+if( module.hot ){
+	module.hot.dispose( function(){
+		window.location.reload();
+	});
+	module.hot.accept();
+	
+}
 
 `;
-	fs.writeFile(targetDir + 'Textures.js', m_import, 'utf8', function(){
-		console.log(m_import);
+	fs.writeFile(settings.target + 'Textures.js', m_import, 'utf8', function(){
+		//console.log(m_import);
 	});
 }
 
 function wrapper(){
 	if( process.argv.indexOf('empty') !== -1 ){
-		empty(targetDir, false, function(){
+		empty(settings.target, false, function(){
 			updateTextures();
 		});
 	}else{
@@ -147,8 +126,16 @@ function wrapper(){
 
 
 if( process.argv.indexOf('watch') !== -1 ){
-	watch('./src/assets/psd', { recursive: true }, function(evt, name) {
-		console.log('%s changed.', name);
+
+	watch('./update-textures-settings.js', {}, function(evt, name){
+		console.log('%s has changed.', name);
+		delete require.cache[require.resolve('./update-textures-settings.js')]
+		settings = require('./update-textures-settings.js');
+		wrapper();
+	})
+
+	watch(settings.source, { recursive: true }, function(evt, name) {
+		console.log('%s has changed.', name);
 		wrapper();
 	})
 }else{

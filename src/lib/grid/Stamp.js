@@ -5,6 +5,7 @@ import {Road} from 'grid/Road';
 import {Surface} from 'grid/Surface';
 import {App} from 'App';
 import {TextureData} from 'interface/Interface';
+import {Texture} from 'grid/Texture';
 
 
 
@@ -32,8 +33,8 @@ export class Stamp extends PIXI.Container{
 			// ADD SPRITES
 			while( this.sprites.length < int ){
 				var sprite = this.addChild( new PIXI.Sprite(this.texture) );
-				if( this.mode === 'road' ){
-					Road.mixin(sprite);
+				if (this.mode === 'road') {
+					Road.mixin(sprite);/**/
 				}else if( this.mode === 'surface' ){
 					Surface.mixin(sprite);
 				}
@@ -56,7 +57,8 @@ export class Stamp extends PIXI.Container{
 			this._textureData = textureData;
 			if( this.textureData ){
 				this.mode = this.textureData.type;
-				this.texture = PIXI.Texture.from(this.textureData.url);
+				this.texture = PIXI.Texture.from(this.textureData.images.main.url);
+
 				this.updateSpriteTransform();
 			}else{
 				this.mode = undefined;
@@ -70,17 +72,19 @@ export class Stamp extends PIXI.Container{
 
 		if( texture !== this.texture ){
 
+
+			//console.log('Stamp.set(texture)', texture);
 			//console.log('Stamp.texture', 'update');
-			this._texture = texture;
+			this._texture = Texture(this.textureData);
 			
-			// ORIGINAL SIZE
+			/*// ORIGINAL SIZE
 			this.texture.orig = new PIXI.Rectangle( 0, 0, this.textureData.orig.width, this.textureData.orig.height );
 
 			// TRIMMED AREA
-			this.texture.trim = new PIXI.Rectangle( this.textureData.trim.left, this.textureData.trim.top, this.textureData.trim.width, this.textureData.trim.height );
+			this.texture.trim = new PIXI.Rectangle( this.textureData.images.main.trim.left, this.textureData.images.main.trim.top, this.textureData.images.main.trim.width, this.textureData.images.main.trim.height );
 			
 			// UPDATE TEXTURE
-			this.texture.updateUvs();
+			this.texture.updateUvs();*/
 
 			if( this.texture.width === 1 ){
 				// TEXTURE IS NOT LOADED YET
@@ -143,9 +147,28 @@ export class Stamp extends PIXI.Container{
 	updateSpriteTransform(sprites = this.sprites){
 		//console.log('Stamp.updateSpriteTransform');
 		sprites.forEach( (sprite) => {
-			Transform.transform( sprite, this.textureData.size[0], this.textureData.skew);
+			Transform.transform( sprite, this.textureData.size, this.textureData.skew);
 			sprite.anchor.set(0.5, this.textureData.type === 'build' ? 1 : 0.5 )//}//{x:0.5, y:isBuild ? 1 : 0.5}
 			sprite.texture = this.texture;
+			sprite.cutoff = this.textureData.cutoff;
+
+			if( this.textureData.images.surface ){
+
+				if( !this.surfaceSprite ){
+					this.surfaceSprite = this.addChildAt( new PIXI.Sprite(), 0 );
+				}
+
+				this.surfaceSprite.texture = Texture(this.textureData, 'surface');
+				
+				Transform.transform( this.surfaceSprite, this.textureData.size, false );
+				this.surfaceSprite.anchor.set(0.5, 1 );
+
+			}else if( this.surfaceSprite ){
+
+				this.surfaceSprite.destroy();
+				this.surfaceSprite = undefined;
+			}
+
 		});
 	}
 
@@ -173,6 +196,13 @@ export class Stamp extends PIXI.Container{
 			this.length = 1;
 			this.sprites[0].x = this.selection.limits.x;
 			this.sprites[0].y = this.selection.limits.y;
+
+			if( this.surfaceSprite ){
+				this.sprites[0].surfaceSprite = this.surfaceSprite;
+				this.surfaceSprite.x = this.selection.limits.x;
+				this.surfaceSprite.y = this.selection.limits.y;
+			}
+
 		}
 
 

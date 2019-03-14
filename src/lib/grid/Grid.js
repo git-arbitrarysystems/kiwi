@@ -7,6 +7,7 @@ import {Face} from 'grid/Face';
 import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
 import {Road} from 'grid/Road';
+import {Kiwi} from 'grid/Kiwi';
 import {App} from 'App';
 
 import {Ghost} from 'grid/Ghost';
@@ -26,6 +27,7 @@ export class Grid extends PIXI.Container{
 
 		// BG
 		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
+		this.background.tint = 0xff0000;
 	
 
 
@@ -87,6 +89,16 @@ export class Grid extends PIXI.Container{
 		this.on('pointercancel',(e)=>{ this.pointer(e) } );
 		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
 
+		// RANDOM KIWI LAND!!!
+		for(var i=0; i<200;i++){
+			var rand = this.rand('dirt|grass');
+			if( rand ){
+				new Kiwi(rand);
+			}else{
+				i--
+			}
+		}
+		
 
 			
 	}
@@ -99,11 +111,9 @@ export class Grid extends PIXI.Container{
 		if( !this.tiles[x] ) this.tiles[x] = {};
 		if( !this.tiles[x][y] ) this.tiles[x][y] = this.addChild( new Tile(x,y) );
 
-		console.log('Grid.add', x, y);
+		//console.log('Grid.add', x, y);
 		this.size.add(x,y);
 
-		
-		
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
 	}
@@ -121,6 +131,40 @@ export class Grid extends PIXI.Container{
 		return true;
 
 	}
+
+
+	rand(regex){
+		var ka = Object.keys(this.tiles),
+			ra = ka[Math.floor(Math.random() * ka.length)],
+			kb = Object.keys(this.tiles[ra]),
+			rb = kb[Math.floor(Math.random() * kb.length)];
+
+		if( this.tiles[ra][rb].content.contains(regex) ){
+			return this.tiles[ra][rb];
+		}
+		return undefined;
+	}
+
+	get screen(){ return this._screen };
+	set screen(rect){
+		this._screen = rect;
+		this.x = this.screen.width * 0.5;
+		this.y = this.screen.height * 0.5;
+		this.updateScale();
+	}
+
+	updateScale(scale = this.scale.x){
+
+		this.scale.set(scale);
+
+		this.background.padding = 10 / scale;
+		this.background.width = (this.screen.width / this.scale.x) - this.background.padding * 2;
+		this.background.height = (this.screen.height / this.scale.y) - this.background.padding * 2;
+		this.drag(0,0);
+
+
+	}
+
 	
 	// GET TILE
 	getTile(c,isCoordinate=true, create = false){
@@ -135,46 +179,55 @@ export class Grid extends PIXI.Container{
 	}
 
 	// GET TILE ARRAY
-	getTileArray(tile, width = 1, height = width, modulo = false){
+	getTileArray(tile, interfaceSelection){
 		
 		if( !tile ) return [];
 
 		let cx = tile.cx,
 			cy = tile.cy,
-			a = [],x,y,t;
+			a = [],x,y,selectTile;
 
-		if( modulo ){
-			cx = Math.round(cx / width) * width;
-			cy = Math.round(cy / height) * height;
+		if( interfaceSelection.modulo ){
+			cx = Math.round(cx / interfaceSelection.size[0]) * interfaceSelection.size[0];
+			cy = Math.round(cy / interfaceSelection.size[1]) * interfaceSelection.size[1];
 		}
 
-		var left = cx - Math.ceil(width*0.5)  + 1,
-			top  = cy - Math.ceil(height*0.5) + 1;
+		var left = cx - Math.ceil(interfaceSelection.size[0]*0.5)  + 1,
+			top  = cy - Math.ceil(interfaceSelection.size[1]*0.5) + 1;
 		
 		if( left < this.size.minx ||
-			left + width > this.size.maxx + 1 ||
+			left + interfaceSelection.size[0] > this.size.maxx + 1 ||
 			top < this.size.miny ||
-			top + height > this.size.maxy + 1 ){
+			top + interfaceSelection.size[1] > this.size.maxy + 1 ){
 			
-			if(modulo){
+			if(interfaceSelection.modulo){
 				// iNVALID
 				return [];
 			}else{
 				// LIMIT
-				left = Math.min( Math.max( left, this.size.minx ), this.size.maxx - width  + 1),
-				top  = Math.min( Math.max( top , this.size.miny ), this.size.maxy - height + 1);
+				left = Math.min( Math.max( left, this.size.minx ), this.size.maxx - interfaceSelection.size[0]  + 1),
+				top  = Math.min( Math.max( top , this.size.miny ), this.size.maxy - interfaceSelection.size[1] + 1);
 			}
 		}
 
 
-		for(x=left;x<left+width;x++){
-			for(y=top;y<top+height;y++){
-				t = this.getTile({x:x,y:y}, true)
-				if( t ) a.push(t);
+		for(x=left;x<left+interfaceSelection.size[0];x++){
+			for(y=top;y<top+interfaceSelection.size[1];y++){
+				
+				selectTile = this.getTile({x:x,y:y}, true);
+				if( selectTile ){
+					if( interfaceSelection.type === 'build' && selectTile.content.contains('build') || selectTile.content.contains('water') ) return []
+					a.push(selectTile);
+				}
+				
+
+
+
+				
 			}
 		}
 
-		if( a.length !== width * height ) return [];
+		if( a.length !== interfaceSelection.size[0] * interfaceSelection.size[1] ) return [];
 		return a;
 	}
 
@@ -251,6 +304,8 @@ export class Grid extends PIXI.Container{
 	drag(dx, dy){
 		this.x += dx;
 		this.y += dy;
+		this.background.x = -(this.x / this.scale.x) + this.background.padding;
+		this.background.y = -(this.y / this.scale.y) + this.background.padding;
 	}
 	hover(){
 		
@@ -295,7 +350,7 @@ export class Grid extends PIXI.Container{
 		}else{
 			this._hover = this.getTileArray( 
 				this.getTile(this.__pc, false),
-				interfaceSelection.size[0] ,interfaceSelection.size[1], interfaceSelection.modulo
+				interfaceSelection
 			);
 		}
 
@@ -366,10 +421,7 @@ export class Grid extends PIXI.Container{
 	path(from, to){
 
 		if( !from || !to ) return [];
-		
-		console.log(from.toString() , to.toString(), this.size );
-
-		
+				
 		// CREATE A PATHFINDER GRID
 		let m = new PF.Grid(this.size.width, this.size.height),
 			x,y, tile,bool;
@@ -378,7 +430,8 @@ export class Grid extends PIXI.Container{
 		for(y=0;y<m.height;y++){
 			for(x=0;x<m.width;x++){
 				tile = this.getTile({x:x+this.size.minx,y:y+this.size.miny}, true);
-				bool = tile ? true : false;
+				bool = tile ? !tile.water : false;
+				//if( tile.content.contains('water') ) bool = false;
 				m.setWalkableAt(x,y,bool);
 			}
 		}

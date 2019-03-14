@@ -76,6 +76,7 @@ export class Road{
 			if( this.cc.left 	) this.sprite.mask.drawRect(-radius*2,-radius,radius*2,radius*2);
 			this.sprite.mask.endFill();
 
+
 		}
 	}
 	
