@@ -35,6 +35,7 @@ module.exports.Tiles = {
 			size:[5,5],
 			cutoff:465
 		},
+		
 		pine_1:{
 			size:[3,3],
 			cutoff:475
@@ -42,6 +43,7 @@ module.exports.Tiles = {
 		pine_2:{
 			cutoff:514
 		},
+		
 		hut_1:{
 			size:[1,2],
 			cutoff:460
@@ -49,6 +51,10 @@ module.exports.Tiles = {
 		hut_2:{
 			size:[2,1],
 			cutoff:460
+		},
+		hut_with_garden_1:{
+			size:[3,3],
+			cutoff:465
 		},
 		fire_1:{
 			size:[1,1],
@@ -64,6 +70,21 @@ module.exports.Tiles = {
 		vinyard:{
 			size:[6,6],
 			cutoff:495
+		},
+		school:{
+			size:[3,3],
+			cutoff:313
+		},
+		flowers_1:{
+			cutoff:440
 		}
 	}
 }
+
+
+
+
+
+
+
+

@@ -5,6 +5,12 @@ import sand from './road_sand.png'
 import stone from './road_stone.png'
 import vinyard from './build_vinyard.png'
 import vinyard_surface from './build_vinyard_surface.png'
+import flowers_1 from './build_flowers_1.png'
+import flowers_1_surface from './build_flowers_1_surface.png'
+import school from './build_school.png'
+import school_surface from './build_school_surface.png'
+import hut_with_garden_1 from './build_hut_with_garden_1.png'
+import hut_with_garden_1_surface from './build_hut_with_garden_1_surface.png'
 import fire_1 from './build_fire_1.png'
 import fire_1_surface from './build_fire_1_surface.png'
 import hut_2 from './build_hut_2.png'
@@ -199,6 +205,114 @@ const Textures  = {
                 height: 613
             },
             cutoff: 495
+        },
+        flowers_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: flowers_1,
+                    trim: {
+                        left: 98,
+                        top: 261,
+                        width: 303,
+                        height: 233
+                    }
+                },
+                surface: {
+                    url: flowers_1_surface,
+                    trim: {
+                        left: 0,
+                        top: 271,
+                        width: 503,
+                        height: 342
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 440
+        },
+        school: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: school,
+                    trim: {
+                        left: 38,
+                        top: 50,
+                        width: 466,
+                        height: 288
+                    }
+                },
+                surface: {
+                    url: school_surface,
+                    trim: {
+                        left: 12,
+                        top: 257,
+                        width: 495,
+                        height: 342
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 313
+        },
+        hut_with_garden_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: hut_with_garden_1,
+                    trim: {
+                        left: 0,
+                        top: 156,
+                        width: 455,
+                        height: 313
+                    }
+                },
+                surface: {
+                    url: hut_with_garden_1_surface,
+                    trim: {
+                        left: 4,
+                        top: 390,
+                        width: 472,
+                        height: 186
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 465
         },
         fire_1: {
             modulo: false,
@@ -410,9 +524,9 @@ const Textures  = {
                     url: castle,
                     trim: {
                         left: 27,
-                        top: -2,
+                        top: 0,
                         width: 483,
-                        height: 489
+                        height: 487
                     }
                 },
                 surface: {

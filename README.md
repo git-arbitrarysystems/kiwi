@@ -8,5 +8,6 @@
 3. expand map tool ✓
 4. resize-to-fit grid background ✓
 5. modify data storage to [left,top,w,h] ✓
+6. zIndexing of buildings' surfaceSprite
 
 

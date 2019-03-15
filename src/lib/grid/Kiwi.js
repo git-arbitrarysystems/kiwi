@@ -10,7 +10,7 @@ export class Kiwi extends PIXI.Sprite{
 		super();
 		this.texture = PIXI.Texture.from(Images.kiwi);
 		this.anchor.set(185/512, 435/512);
-		this.scale.set( Tile.width * 1 / 512 );
+		this.scale.set( Tile.width * 1 / (512 * 1.5) );
 
 
 
