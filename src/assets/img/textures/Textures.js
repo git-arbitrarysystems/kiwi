@@ -6,6 +6,9 @@ import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
 import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
+import build_lake_2 from './build_lake_2.png'
+import build_lake_1 from './build_lake_1.png'
+import build_red_tent from './build_red_tent.png'
 import build_dark_hut_1 from './build_dark_hut_1.png'
 import build_dark_hut_2 from './build_dark_hut_2.png'
 import build_dark_hut_3 from './build_dark_hut_3.png'
@@ -246,6 +249,87 @@ const Textures  = {
                 height: 613
             },
             cutoff: 495
+        },
+        lake_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_lake_2,
+                    trim: {
+                        left: 42,
+                        top: 284,
+                        width: 366,
+                        height: 273
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 390
+        },
+        lake_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                5,
+                5
+            ],
+            images: {
+                main: {
+                    url: build_lake_1,
+                    trim: {
+                        left: 0,
+                        top: 249,
+                        width: 512,
+                        height: 364
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 360
+        },
+        red_tent: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_red_tent,
+                    trim: {
+                        left: 63,
+                        top: 135,
+                        width: 413,
+                        height: 406
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 445
         },
         dark_hut_1: {
             modulo: false,

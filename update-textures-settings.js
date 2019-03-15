@@ -84,6 +84,9 @@ module.exports.Tiles = {
 			size:[2,2],
 			cutoff:445
 		},
+		red_tent:{
+			cutoff:445
+		},
 		fire_1:{
 			size:[1,1],
 			cutoff:490
@@ -120,6 +123,14 @@ module.exports.Tiles = {
 		quarry:{
 			size:[4,4],
 			cutoff:465
+		},
+		lake_1:{
+			size:[5,5],
+			cutoff:360
+		},
+		lake_2:{
+			size:[2,2],
+			cutoff:390
 		}
 
 	}
