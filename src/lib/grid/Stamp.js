@@ -86,7 +86,7 @@ export class Stamp extends PIXI.Container{
 			// UPDATE TEXTURE
 			this.texture.updateUvs();*/
 
-			if( this.texture.width === 1 ){
+			if( !this.texture.valid ){
 				// TEXTURE IS NOT LOADED YET
 				this.texture.on('update', (e)=>{ this.updateSpriteTransform(); })
 			}else{

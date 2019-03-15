@@ -6,6 +6,9 @@ import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
 import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
+import build_dark_hut_1 from './build_dark_hut_1.png'
+import build_dark_hut_2 from './build_dark_hut_2.png'
+import build_dark_hut_3 from './build_dark_hut_3.png'
 import build_temple from './build_temple.png'
 import build_berries_blue from './build_berries_blue.png'
 import build_hut_with_garden_4 from './build_hut_with_garden_4.png'
@@ -244,6 +247,87 @@ const Textures  = {
             },
             cutoff: 495
         },
+        dark_hut_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_dark_hut_1,
+                    trim: {
+                        left: 55,
+                        top: 19,
+                        width: 396,
+                        height: 445
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 445
+        },
+        dark_hut_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_dark_hut_2,
+                    trim: {
+                        left: 126,
+                        top: 56,
+                        width: 333,
+                        height: 410
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 445
+        },
+        dark_hut_3: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_dark_hut_3,
+                    trim: {
+                        left: 61,
+                        top: 166,
+                        width: 451,
+                        height: 313
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 445
+        },
         temple: {
             modulo: false,
             skew: false,
@@ -256,9 +340,9 @@ const Textures  = {
                     url: build_temple,
                     trim: {
                         left: 0,
-                        top: 98,
-                        width: 511,
-                        height: 353
+                        top: 81,
+                        width: 512,
+                        height: 378
                     }
                 }
             },
@@ -269,7 +353,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 435
+            cutoff: 444
         },
         berries_blue: {
             modulo: false,

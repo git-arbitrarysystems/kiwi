@@ -60,7 +60,18 @@ export class Face extends PIXI.Container{
 			this[type].addChild(sprite);
 			this[type].visible = true;
 			this[type+'Sprite'].visible = false;
-			this.renderTexture(type);
+			
+			if( !sprite.texture.valid ){
+				sprite.texture.on('update', () => {
+					this.renderTexture(type);
+				})
+			}else{
+				this.renderTexture(type);
+			}
+			
+
+
+
 		}else{
 			this.addChild(sprite);
 			sprite.tint = this.tint;

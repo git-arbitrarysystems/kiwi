@@ -37,7 +37,7 @@ module.exports.Tiles = {
 		},
 		temple:{
 			size:[5,5],
-			cutoff:435
+			cutoff:444
 		},
 		
 		pine_1:{
@@ -71,6 +71,18 @@ module.exports.Tiles = {
 		hut_with_garden_4:{
 			size:[3,3],
 			cutoff:500
+		},
+		dark_hut_1:{
+			size:[3,3],
+			cutoff:445
+		},
+		dark_hut_2:{
+			size:[3,3],
+			cutoff:445
+		},
+		dark_hut_3:{
+			size:[2,2],
+			cutoff:445
 		},
 		fire_1:{
 			size:[1,1],
