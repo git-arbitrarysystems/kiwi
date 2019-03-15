@@ -22,9 +22,9 @@ function updateTextures(){
 	var json = {};
 	var m_import = '';
 
-	for(var s in settings.Tiles){
+	for(var group in settings.Tiles){
 		
-		var psd = PSD.fromFile(settings.source + s + '.psd')
+		var psd = PSD.fromFile(settings.source + group + '.psd')
 		psd.parse();
 
 
@@ -32,7 +32,7 @@ function updateTextures(){
 
 
 		// CREATE JSON NODE
-		json[s] = {};
+		json[group] = {};
 		
 		var width = psd.tree().width,
 			height = psd.tree().height;
@@ -44,21 +44,21 @@ function updateTextures(){
 			
 			if( layer.name.indexOf('_') === 0 ){
 				// EXPORT
-				var name = s + layer.name + '.png',
+				var name = group + layer.name + '.png',
 					id = layer.name.substr(1).replace('_surface', ''),
 					callback = ( function(n){ return ()=>{ console.log(n) } })(settings.target + name + '... ready');
 
-				if( !json[s][id] ){
-					json[s][id] = Object.assign(
+				if( !json[group][id] ){
+					json[group][id] = Object.assign(
 						{},
 						settings.DefaultTile,
 						{
 							images:{},
-							type:'\''+s+'\'',
+							type:'\''+group+'\'',
 							orig:{left:0, top:0, width:width, height:height}
 						},
-						settings.Tiles[s]._default,
-						settings.Tiles[s][id]
+						settings.Tiles[group]._default,
+						settings.Tiles[group][id]
 					);
 				}
 
@@ -67,13 +67,13 @@ function updateTextures(){
 			
 				
 				if( layer.name.indexOf('_surface') !== -1 ){
-					json[s][id].images = Object.assign(json[s][id].images, {surface:{
-						url:layer.name.substr(1),
+					json[group][id].images = Object.assign(json[group][id].images, {surface:{
+						url:group + '_' + layer.name.substr(1),
 						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
 					}});
 				}else{
-					json[s][id].images = Object.assign(json[s][id].images, {main:{
-						url:layer.name.substr(1),
+					json[group][id].images = Object.assign(json[group][id].images, {main:{
+						url:group + '_' + layer.name.substr(1),
 						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
 					}});
 				}
@@ -81,7 +81,7 @@ function updateTextures(){
 				console.log(id, layer.name);
 
 				// ADD IMPORT SCRIPT LINE
-				m_import += 'import ' + layer.name.substr(1) + ' from \'./' + name + '\'\n';
+				m_import += 'import ' + group + '_' + layer.name.substr(1) + ' from \'./' + name + '\'\n';
 
 
 			}

@@ -92,8 +92,8 @@ export class Grid extends PIXI.Container{
 
 		// RANDOM KIWI LAND!!!
 		for(var i=0; i<200;i++){
-			var rand = this.rand('dirt|grass');
-			if( rand ){
+			var rand = this.rand();
+			if( rand && !rand.water ){
 				new Kiwi(rand);
 			}
 		}
@@ -132,16 +132,17 @@ export class Grid extends PIXI.Container{
 	}
 
 
-	rand(regex){
-		var ka = Object.keys(this.tiles),
-			ra = ka[Math.floor(Math.random() * ka.length)],
-			kb = Object.keys(this.tiles[ra]),
-			rb = kb[Math.floor(Math.random() * kb.length)];
+	rand(){
+		let ka = Object.keys(this.tiles);
+		if( ka.length === 0 ) return undefined;
 
-		if( this.tiles[ra][rb].content.contains(regex) ){
-			return this.tiles[ra][rb];
-		}
-		return undefined;
+		let ra = ka[Math.floor(Math.random() * ka.length)],
+			kb = Object.keys(this.tiles[ra]);
+		if( kb.length === 0 ) return undefined;
+
+		let rb = kb[Math.floor(Math.random() * kb.length)];
+		return this.tiles[ra][rb];
+		
 	}
 
 	get screen(){ return this._screen };

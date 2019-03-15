@@ -35,10 +35,10 @@ export class Face extends PIXI.Container{
 
 	}
 
-	add( sprite, type){
+	add( sprite, type, addedZIndex = 0){
 		
 		// SET APPROPRIATE Z-INDEX
-		sprite.zIndex = 100000 + sprite.y;
+		sprite.zIndex = 100000 + sprite.y + addedZIndex;
 		
 		if( sprite.cutoff ){
 			//console.log('Face.add(cutoff)', sprite.zIndex, sprite.cutoff);
@@ -65,7 +65,7 @@ export class Face extends PIXI.Container{
 			this.addChild(sprite);
 			sprite.tint = this.tint;
 			if( sprite.surfaceSprite ){
-				this.add( sprite.surfaceSprite, 'surface' )
+				this.add( sprite.surfaceSprite, 'surface', 100000 )
 			}
 			//this.children.sort( (a,b) => { return a.zIndex - b.zIndex })
 		}

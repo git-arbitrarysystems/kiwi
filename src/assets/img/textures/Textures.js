@@ -1,30 +1,42 @@
-import grass from './surface_grass.png'
-import water from './surface_water.png'
-import dirt from './surface_dirt.png'
-import sand from './road_sand.png'
-import stone from './road_stone.png'
-import vinyard from './build_vinyard.png'
-import vinyard_surface from './build_vinyard_surface.png'
-import flowers_1 from './build_flowers_1.png'
-import flowers_1_surface from './build_flowers_1_surface.png'
-import school from './build_school.png'
-import school_surface from './build_school_surface.png'
-import hut_with_garden_1 from './build_hut_with_garden_1.png'
-import hut_with_garden_1_surface from './build_hut_with_garden_1_surface.png'
-import fire_1 from './build_fire_1.png'
-import fire_1_surface from './build_fire_1_surface.png'
-import hut_2 from './build_hut_2.png'
-import hut_2_surface from './build_hut_2_surface.png'
-import hut_1 from './build_hut_1.png'
-import hut_1_surface from './build_hut_1_surface.png'
-import pine_2 from './build_pine_2.png'
-import fruit_tree from './build_fruit_tree.png'
-import fruit_tree_surface from './build_fruit_tree_surface.png'
-import waterwell from './build_waterwell.png'
-import castle from './build_castle.png'
-import castle_surface from './build_castle_surface.png'
-import pine_1 from './build_pine_1.png'
-import pine_1_surface from './build_pine_1_surface.png'
+import surface_grass from './surface_grass.png'
+import surface_water from './surface_water.png'
+import surface_stone from './surface_stone.png'
+import surface_dirt from './surface_dirt.png'
+import road_sand from './road_sand.png'
+import road_stone from './road_stone.png'
+import build_vinyard from './build_vinyard.png'
+import build_vinyard_surface from './build_vinyard_surface.png'
+import build_temple from './build_temple.png'
+import build_berries_blue from './build_berries_blue.png'
+import build_hut_with_garden_4 from './build_hut_with_garden_4.png'
+import build_berries_red from './build_berries_red.png'
+import build_hut_with_garden_3 from './build_hut_with_garden_3.png'
+import build_hut_with_garden_3_surface from './build_hut_with_garden_3_surface.png'
+import build_hut_with_garden_2 from './build_hut_with_garden_2.png'
+import build_hut_with_garden_2_surface from './build_hut_with_garden_2_surface.png'
+import build_quarry from './build_quarry.png'
+import build_farm from './build_farm.png'
+import build_farm_surface from './build_farm_surface.png'
+import build_flowers_1 from './build_flowers_1.png'
+import build_flowers_1_surface from './build_flowers_1_surface.png'
+import build_school from './build_school.png'
+import build_school_surface from './build_school_surface.png'
+import build_hut_with_garden_1 from './build_hut_with_garden_1.png'
+import build_hut_with_garden_1_surface from './build_hut_with_garden_1_surface.png'
+import build_fire_1 from './build_fire_1.png'
+import build_fire_1_surface from './build_fire_1_surface.png'
+import build_hut_2 from './build_hut_2.png'
+import build_hut_2_surface from './build_hut_2_surface.png'
+import build_hut_1 from './build_hut_1.png'
+import build_hut_1_surface from './build_hut_1_surface.png'
+import build_pine_2 from './build_pine_2.png'
+import build_fruit_tree from './build_fruit_tree.png'
+import build_fruit_tree_surface from './build_fruit_tree_surface.png'
+import build_waterwell from './build_waterwell.png'
+import build_castle from './build_castle.png'
+import build_castle_surface from './build_castle_surface.png'
+import build_pine_1 from './build_pine_1.png'
+import build_pine_1_surface from './build_pine_1_surface.png'
 
 
 const GhostTile = {
@@ -45,7 +57,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: grass,
+                    url: surface_grass,
                     trim: {
                         left: 0,
                         top: 0,
@@ -71,7 +83,33 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: water,
+                    url: surface_water,
+                    trim: {
+                        left: 0,
+                        top: 0,
+                        width: 512,
+                        height: 512
+                    }
+                }
+            },
+            type: 'surface',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 512
+            }
+        },
+        stone: {
+            modulo: true,
+            skew: true,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: surface_stone,
                     trim: {
                         left: 0,
                         top: 0,
@@ -97,7 +135,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: dirt,
+                    url: surface_dirt,
                     trim: {
                         left: 0,
                         top: 0,
@@ -125,7 +163,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: sand,
+                    url: road_sand,
                     trim: {
                         left: 0,
                         top: 0,
@@ -151,7 +189,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: stone,
+                    url: road_stone,
                     trim: {
                         left: 0,
                         top: 0,
@@ -179,7 +217,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: vinyard,
+                    url: build_vinyard,
                     trim: {
                         left: 3,
                         top: 210,
@@ -188,7 +226,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: vinyard_surface,
+                    url: build_vinyard_surface,
                     trim: {
                         left: 1,
                         top: 408,
@@ -206,6 +244,249 @@ const Textures  = {
             },
             cutoff: 495
         },
+        temple: {
+            modulo: false,
+            skew: false,
+            size: [
+                5,
+                5
+            ],
+            images: {
+                main: {
+                    url: build_temple,
+                    trim: {
+                        left: 0,
+                        top: 98,
+                        width: 511,
+                        height: 353
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 435
+        },
+        berries_blue: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_berries_blue,
+                    trim: {
+                        left: 63,
+                        top: 167,
+                        width: 403,
+                        height: 379
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 420
+        },
+        hut_with_garden_4: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_4,
+                    trim: {
+                        left: 4,
+                        top: 108,
+                        width: 504,
+                        height: 361
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        berries_red: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_berries_red,
+                    trim: {
+                        left: 79,
+                        top: 286,
+                        width: 354,
+                        height: 256
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 450
+        },
+        hut_with_garden_3: {
+            modulo: false,
+            skew: false,
+            size: [
+                4,
+                4
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_3,
+                    trim: {
+                        left: 13,
+                        top: 110,
+                        width: 482,
+                        height: 437
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_3_surface,
+                    trim: {
+                        left: 13,
+                        top: 102,
+                        width: 494,
+                        height: 509
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 450
+        },
+        hut_with_garden_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_2,
+                    trim: {
+                        left: 172,
+                        top: 197,
+                        width: 328,
+                        height: 272
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_2_surface,
+                    trim: {
+                        left: 124,
+                        top: 345,
+                        width: 335,
+                        height: 210
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 440
+        },
+        quarry: {
+            modulo: false,
+            skew: false,
+            size: [
+                4,
+                4
+            ],
+            images: {
+                main: {
+                    url: build_quarry,
+                    trim: {
+                        left: 32,
+                        top: 110,
+                        width: 450,
+                        height: 391
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 465
+        },
+        farm: {
+            modulo: false,
+            skew: false,
+            size: [
+                4,
+                4
+            ],
+            images: {
+                main: {
+                    url: build_farm,
+                    trim: {
+                        left: 114,
+                        top: 278,
+                        width: 244,
+                        height: 156
+                    }
+                },
+                surface: {
+                    url: build_farm_surface,
+                    trim: {
+                        left: 67,
+                        top: 335,
+                        width: 379,
+                        height: 241
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 425
+        },
         flowers_1: {
             modulo: false,
             skew: false,
@@ -215,7 +496,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: flowers_1,
+                    url: build_flowers_1,
                     trim: {
                         left: 98,
                         top: 261,
@@ -224,7 +505,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: flowers_1_surface,
+                    url: build_flowers_1_surface,
                     trim: {
                         left: 0,
                         top: 271,
@@ -251,7 +532,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: school,
+                    url: build_school,
                     trim: {
                         left: 38,
                         top: 50,
@@ -260,7 +541,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: school_surface,
+                    url: build_school_surface,
                     trim: {
                         left: 12,
                         top: 257,
@@ -287,7 +568,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: hut_with_garden_1,
+                    url: build_hut_with_garden_1,
                     trim: {
                         left: 0,
                         top: 156,
@@ -296,7 +577,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: hut_with_garden_1_surface,
+                    url: build_hut_with_garden_1_surface,
                     trim: {
                         left: 4,
                         top: 390,
@@ -323,7 +604,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: fire_1,
+                    url: build_fire_1,
                     trim: {
                         left: 166,
                         top: 246,
@@ -332,7 +613,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: fire_1_surface,
+                    url: build_fire_1_surface,
                     trim: {
                         left: 40,
                         top: 239,
@@ -359,7 +640,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: hut_2,
+                    url: build_hut_2,
                     trim: {
                         left: 63,
                         top: 287,
@@ -368,7 +649,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: hut_2_surface,
+                    url: build_hut_2_surface,
                     trim: {
                         left: 45,
                         top: 308,
@@ -395,7 +676,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: hut_1,
+                    url: build_hut_1,
                     trim: {
                         left: 111,
                         top: 239,
@@ -404,7 +685,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: hut_1_surface,
+                    url: build_hut_1_surface,
                     trim: {
                         left: 3,
                         top: 340,
@@ -431,7 +712,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: pine_2,
+                    url: build_pine_2,
                     trim: {
                         left: 35,
                         top: 19,
@@ -458,7 +739,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: fruit_tree,
+                    url: build_fruit_tree,
                     trim: {
                         left: 124,
                         top: 110,
@@ -467,7 +748,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: fruit_tree_surface,
+                    url: build_fruit_tree_surface,
                     trim: {
                         left: 4,
                         top: 253,
@@ -494,7 +775,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: waterwell,
+                    url: build_waterwell,
                     trim: {
                         left: 34,
                         top: 0,
@@ -521,7 +802,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: castle,
+                    url: build_castle,
                     trim: {
                         left: 27,
                         top: 0,
@@ -530,7 +811,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: castle_surface,
+                    url: build_castle_surface,
                     trim: {
                         left: 21,
                         top: 283,
@@ -557,7 +838,7 @@ const Textures  = {
             ],
             images: {
                 main: {
-                    url: pine_1,
+                    url: build_pine_1,
                     trim: {
                         left: 47,
                         top: 0,
@@ -566,7 +847,7 @@ const Textures  = {
                     }
                 },
                 surface: {
-                    url: pine_1_surface,
+                    url: build_pine_1_surface,
                     trim: {
                         left: 0,
                         top: 271,

@@ -126,6 +126,7 @@ export class Surface{
 		if( from === to ) return false;
 		if( from === 'water' ) return true;
 		if( from === 'grass' && to === 'dirt' ) return true;
+		if( to === 'stone' ) return true;
 		return false;
 	}
 
