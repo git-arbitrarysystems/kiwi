@@ -18,5 +18,7 @@
 12. boats
 13. multiple kiwi-types
 14. wehrbäume
+15. building entry tiles
+16. building free/occupied tiles
 
 

@@ -72,6 +72,10 @@ module.exports.Tiles = {
 			size:[3,3],
 			cutoff:500
 		},
+		hut_with_garden_5:{
+			size:[3,3],
+			cutoff:560
+		},
 		dark_hut_1:{
 			size:[3,3],
 			cutoff:445
@@ -81,7 +85,7 @@ module.exports.Tiles = {
 			cutoff:445
 		},
 		dark_hut_3:{
-			size:[2,2],
+			size:[3,3],
 			cutoff:445
 		},
 		red_tent:{
@@ -131,6 +135,37 @@ module.exports.Tiles = {
 		lake_2:{
 			size:[2,2],
 			cutoff:390
+		},
+		tiny_island:{
+			cutoff:512
+		},
+		volcano:{
+			size:[5,5],
+			cutoff:440
+		},
+		defense_tree_1:{
+			size:[2,2],
+			cutoff:525
+		},
+		defense_tree_2:{
+			size:[2,2],
+			cutoff:507
+		},
+		defense_tree_dark_1:{
+			size:[2,2],
+			cutoff:475
+		},
+		defense_tree_dark_2:{
+			size:[2,2],
+			cutoff:475
+		},
+		defense_tree_dark_3:{
+			size:[2,2],
+			cutoff:475
+		},
+		catapult_1:{
+			size:[2,1],
+			cutoff:565
 		}
 
 	}

@@ -15,12 +15,42 @@ const watch = require('node-watch');
 
 var settings = require('./update-textures-settings.js');
 
+var imageCount = 0;
+var m_import = '';
+var json = {};
 
+function imageReady(info){
+	imageCount--;
+	console.log(imageCount, info);
+	if( imageCount === 0 ){
+		// WRITE JSON DATA
+		m_import += `
+
+const GhostTile = ${JSON.stringify(settings.DefaultGhostTile,null,4).replace(/\"/g, '')};
+const Textures  = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
+export {Textures,GhostTile}
+
+if( module.hot ){
+	module.hot.dispose( function(){
+		window.location.reload();
+	});
+	module.hot.accept();
+	
+}
+
+`;
+
+		//console.log(m_import);
+		fs.writeFile(settings.target + 'Textures.js', m_import, 'utf8', function(){
+			//console.log(m_import);
+		});
+	}
+}
 
 
 function updateTextures(){
-	var json = {};
-	var m_import = '';
+	json = {};
+	m_import = '';
 
 	for(var group in settings.Tiles){
 		
@@ -46,7 +76,7 @@ function updateTextures(){
 				// EXPORT
 				var name = group + layer.name + '.png',
 					id = layer.name.substr(1).replace('_surface', ''),
-					callback = ( function(n){ return ()=>{ console.log(n) } })(settings.target + name + '... ready');
+					callback = ( function(n){ return ()=>{ imageReady(n) } })(settings.target + name + '... ready');
 
 				if( !json[group][id] ){
 					json[group][id] = Object.assign(
@@ -62,6 +92,7 @@ function updateTextures(){
 					);
 				}
 
+				imageCount++;
 				layer.image.saveAsPng( settings.target + name ).then( callback );
 				
 			
@@ -78,7 +109,7 @@ function updateTextures(){
 					}});
 				}
 				
-				console.log(id, layer.name);
+				//console.log(id, layer.name);
 
 				// ADD IMPORT SCRIPT LINE
 				m_import += 'import ' + group + '_' + layer.name.substr(1) + ' from \'./' + name + '\'\n';
@@ -89,29 +120,7 @@ function updateTextures(){
 
 
 	}
-
-	console.log(m_import);
-
-
-	// WRITE JSON DATA
-	m_import += `
-
-const GhostTile = ${JSON.stringify(settings.DefaultGhostTile,null,4).replace(/\"/g, '')};
-const Textures  = ${JSON.stringify(json, null, 4).replace(/\"/g, '')};
-export {Textures,GhostTile}
-
-if( module.hot ){
-	module.hot.dispose( function(){
-		window.location.reload();
-	});
-	module.hot.accept();
 	
-}
-
-`;
-	fs.writeFile(settings.target + 'Textures.js', m_import, 'utf8', function(){
-		//console.log(m_import);
-	});
 }
 
 function wrapper(){

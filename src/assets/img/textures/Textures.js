@@ -4,6 +4,19 @@ import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
 import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
+import build_catapult_1 from './build_catapult_1.png'
+import build_catapult_1_surface from './build_catapult_1_surface.png'
+import build_defense_tree_dark_3 from './build_defense_tree_dark_3.png'
+import build_defense_tree_dark_2 from './build_defense_tree_dark_2.png'
+import build_defense_tree_dark_1 from './build_defense_tree_dark_1.png'
+import build_defense_tree_1 from './build_defense_tree_1.png'
+import build_defense_tree_2 from './build_defense_tree_2.png'
+import build_volcano from './build_volcano.png'
+import build_volcano_surface from './build_volcano_surface.png'
+import build_tiny_island_surface from './build_tiny_island_surface.png'
+import build_tiny_island from './build_tiny_island.png'
+import build_hut_with_garden_5 from './build_hut_with_garden_5.png'
+import build_hut_with_garden_5_surface from './build_hut_with_garden_5_surface.png'
 import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
 import build_lake_2 from './build_lake_2.png'
@@ -214,6 +227,285 @@ const Textures  = {
         }
     },
     build: {
+        catapult_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_catapult_1,
+                    trim: {
+                        left: 17,
+                        top: 21,
+                        width: 417,
+                        height: 560
+                    }
+                },
+                surface: {
+                    url: build_catapult_1_surface,
+                    trim: {
+                        left: 22,
+                        top: 149,
+                        width: 369,
+                        height: 456
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 565
+        },
+        defense_tree_dark_3: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_defense_tree_dark_3,
+                    trim: {
+                        left: 102,
+                        top: 11,
+                        width: 399,
+                        height: 469
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 475
+        },
+        defense_tree_dark_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_defense_tree_dark_2,
+                    trim: {
+                        left: 2,
+                        top: 0,
+                        width: 480,
+                        height: 474
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 475
+        },
+        defense_tree_dark_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_defense_tree_dark_1,
+                    trim: {
+                        left: 57,
+                        top: 14,
+                        width: 451,
+                        height: 471
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 475
+        },
+        defense_tree_1: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_defense_tree_1,
+                    trim: {
+                        left: 54,
+                        top: 0,
+                        width: 392,
+                        height: 544
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 525
+        },
+        defense_tree_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_defense_tree_2,
+                    trim: {
+                        left: 56,
+                        top: 0,
+                        width: 456,
+                        height: 527
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 507
+        },
+        volcano: {
+            modulo: false,
+            skew: false,
+            size: [
+                5,
+                5
+            ],
+            images: {
+                main: {
+                    url: build_volcano,
+                    trim: {
+                        left: 29,
+                        top: 69,
+                        width: 449,
+                        height: 391
+                    }
+                },
+                surface: {
+                    url: build_volcano_surface,
+                    trim: {
+                        left: 20,
+                        top: 397,
+                        width: 490,
+                        height: 190
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 440
+        },
+        tiny_island: {
+            modulo: false,
+            skew: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                surface: {
+                    url: build_tiny_island_surface,
+                    trim: {
+                        left: 84,
+                        top: 341,
+                        width: 324,
+                        height: 235
+                    }
+                },
+                main: {
+                    url: build_tiny_island,
+                    trim: {
+                        left: 174,
+                        top: 287,
+                        width: 195,
+                        height: 227
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 512
+        },
+        hut_with_garden_5: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_5,
+                    trim: {
+                        left: 144,
+                        top: 300,
+                        width: 326,
+                        height: 279
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_5_surface,
+                    trim: {
+                        left: 67,
+                        top: 300,
+                        width: 397,
+                        height: 313
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 560
+        },
         vinyard: {
             modulo: false,
             skew: false,
@@ -389,8 +681,8 @@ const Textures  = {
             modulo: false,
             skew: false,
             size: [
-                2,
-                2
+                3,
+                3
             ],
             images: {
                 main: {

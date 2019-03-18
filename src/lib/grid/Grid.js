@@ -91,7 +91,7 @@ export class Grid extends PIXI.Container{
 		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
 
 		// RANDOM KIWI LAND!!!
-		for(var i=0; i<200;i++){
+		for(var i=0; i<400;i++){
 			var rand = this.rand();
 			if( rand && !rand.water ){
 				new Kiwi(rand);
