@@ -166,6 +166,10 @@ module.exports.Tiles = {
 		catapult_1:{
 			size:[2,1],
 			cutoff:565
+		},
+		catapult_2:{
+			size:[3,1],
+			cutoff:530
 		}
 
 	}

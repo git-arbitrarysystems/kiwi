@@ -4,6 +4,8 @@ import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
 import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
+import build_catapult_2 from './build_catapult_2.png'
+import build_catapult_2_surface from './build_catapult_2_surface.png'
 import build_catapult_1 from './build_catapult_1.png'
 import build_catapult_1_surface from './build_catapult_1_surface.png'
 import build_defense_tree_dark_3 from './build_defense_tree_dark_3.png'
@@ -227,6 +229,42 @@ const Textures  = {
         }
     },
     build: {
+        catapult_2: {
+            modulo: false,
+            skew: false,
+            size: [
+                3,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_catapult_2,
+                    trim: {
+                        left: 100,
+                        top: 225,
+                        width: 135,
+                        height: 312
+                    }
+                },
+                surface: {
+                    url: build_catapult_2_surface,
+                    trim: {
+                        left: 79,
+                        top: 130,
+                        width: 508,
+                        height: 447
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 530
+        },
         catapult_1: {
             modulo: false,
             skew: false,
