@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import {Transform} from 'grid/Transform';
 import {Tile} from 'grid/Tile';
 import {Road} from 'grid/Road';
+import {Fence} from 'grid/Fence';
 import {Surface} from 'grid/Surface';
 import {App} from 'App';
 import {TextureData} from 'interface/Interface';
@@ -34,7 +35,9 @@ export class Stamp extends PIXI.Container{
 			while( this.sprites.length < int ){
 				var sprite = this.addChild( new PIXI.Sprite(this.texture) );
 				if (this.mode === 'road') {
-					Road.mixin(sprite);/**/
+					Road.mixin(sprite);
+				}else if (this.mode === 'fence') {
+					Fence.mixin(sprite);
 				}else if( this.mode === 'surface' ){
 					Surface.mixin(sprite);
 				}
@@ -132,8 +135,10 @@ export class Stamp extends PIXI.Container{
 			this.sprites.forEach( (sprite) => {
 				if( sprite.road ) sprite.road.enabled = (this.mode === 'road' );
 				if( sprite.surface ) sprite.surface.enabled = (this.mode === 'surface' );
+				if( sprite.fence ) sprite.fence.enabled = (this.mode === 'fence' );
 
 				if( this.mode === 'road' && !sprite.road ) Road.mixin(sprite);
+				if( this.mode === 'fence' && !sprite.fence ) Fence.mixin(sprite);
 				if( this.mode === 'surface' && !sprite.surface ) Surface.mixin(sprite)
 
 			})
@@ -147,20 +152,25 @@ export class Stamp extends PIXI.Container{
 	updateSpriteTransform(sprites = this.sprites){
 		//console.log('Stamp.updateSpriteTransform');
 		sprites.forEach( (sprite) => {
-			Transform.transform( sprite, this.textureData.size, this.textureData.skew);
+			Transform.transform( sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 			sprite.anchor.set(0.5, this.textureData.type === 'build' ? 1 : 0.5 )//}//{x:0.5, y:isBuild ? 1 : 0.5}
 			sprite.texture = this.texture;
 			sprite.cutoff = this.textureData.cutoff;
 
-			if( this.textureData.images.surface ){
+			if( this.textureData.type === 'fence'){
+				sprite.anchor.set(0.5, 1)//}//{x:0.5, y:isBuild ? 1 : 0.5}
+			}
+			
 
+			if( this.textureData.images.surface ){
+				
 				if( !this.surfaceSprite ){
 					this.surfaceSprite = this.addChildAt( new PIXI.Sprite(), 0 );
 				}
 
 				this.surfaceSprite.texture = Texture(this.textureData, 'surface');
 				
-				Transform.transform( this.surfaceSprite, this.textureData.size, false );
+				Transform.transform( this.surfaceSprite, this.textureData.size, false, false );
 				this.surfaceSprite.anchor.set(0.5, 1 );
 
 			}else if( this.surfaceSprite ){
@@ -180,12 +190,12 @@ export class Stamp extends PIXI.Container{
 		if( !this.visible ) return;
 
 		// SET POSITIONS
-		if( this.mode === 'road'){
+		if( this.mode === 'road' || this.mode === 'fence'){
 			this.length = this.selection.length;
 			this.sprites.forEach( (sprite,i,a) => {
 				sprite.x = this.selection[i].x;
 				sprite.y = this.selection[i].y;
-				sprite.road.updateConnections(i, this.selection);
+				sprite[this.mode].updateConnections(i, this.selection);
 			});
 		}else if( this.mode === 'surface' ){
 			this.length = 1;

@@ -4,6 +4,15 @@ import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
 import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
+import fence_high_wood from './fence_high_wood.png'
+import build_palmtree_with_hut from './build_palmtree_with_hut.png'
+import build_palmtree_with_hut_surface from './build_palmtree_with_hut_surface.png'
+import build_palmtree_4 from './build_palmtree_4.png'
+import build_palmtree_3 from './build_palmtree_3.png'
+import build_palmtree_2 from './build_palmtree_2.png'
+import build_palmtree_1 from './build_palmtree_1.png'
+import build_small_forest from './build_small_forest.png'
+import build_small_forest_surface from './build_small_forest_surface.png'
 import build_catapult_2 from './build_catapult_2.png'
 import build_catapult_2_surface from './build_catapult_2_surface.png'
 import build_catapult_1 from './build_catapult_1.png'
@@ -17,8 +26,6 @@ import build_volcano from './build_volcano.png'
 import build_volcano_surface from './build_volcano_surface.png'
 import build_tiny_island_surface from './build_tiny_island_surface.png'
 import build_tiny_island from './build_tiny_island.png'
-import build_hut_with_garden_5 from './build_hut_with_garden_5.png'
-import build_hut_with_garden_5_surface from './build_hut_with_garden_5_surface.png'
 import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
 import build_lake_2 from './build_lake_2.png'
@@ -29,12 +36,7 @@ import build_dark_hut_2 from './build_dark_hut_2.png'
 import build_dark_hut_3 from './build_dark_hut_3.png'
 import build_temple from './build_temple.png'
 import build_berries_blue from './build_berries_blue.png'
-import build_hut_with_garden_4 from './build_hut_with_garden_4.png'
 import build_berries_red from './build_berries_red.png'
-import build_hut_with_garden_3 from './build_hut_with_garden_3.png'
-import build_hut_with_garden_3_surface from './build_hut_with_garden_3_surface.png'
-import build_hut_with_garden_2 from './build_hut_with_garden_2.png'
-import build_hut_with_garden_2_surface from './build_hut_with_garden_2_surface.png'
 import build_quarry from './build_quarry.png'
 import build_farm from './build_farm.png'
 import build_farm_surface from './build_farm_surface.png'
@@ -42,6 +44,15 @@ import build_flowers_1 from './build_flowers_1.png'
 import build_flowers_1_surface from './build_flowers_1_surface.png'
 import build_school from './build_school.png'
 import build_school_surface from './build_school_surface.png'
+import build_hut_with_garden_5 from './build_hut_with_garden_5.png'
+import build_hut_with_garden_5_surface from './build_hut_with_garden_5_surface.png'
+import build_hut_with_garden_6_surface from './build_hut_with_garden_6_surface.png'
+import build_hut_with_garden_6 from './build_hut_with_garden_6.png'
+import build_hut_with_garden_4 from './build_hut_with_garden_4.png'
+import build_hut_with_garden_3 from './build_hut_with_garden_3.png'
+import build_hut_with_garden_3_surface from './build_hut_with_garden_3_surface.png'
+import build_hut_with_garden_2 from './build_hut_with_garden_2.png'
+import build_hut_with_garden_2_surface from './build_hut_with_garden_2_surface.png'
 import build_hut_with_garden_1 from './build_hut_with_garden_1.png'
 import build_hut_with_garden_1_surface from './build_hut_with_garden_1_surface.png'
 import build_fire_1 from './build_fire_1.png'
@@ -52,7 +63,6 @@ import build_hut_1 from './build_hut_1.png'
 import build_hut_1_surface from './build_hut_1_surface.png'
 import build_pine_2 from './build_pine_2.png'
 import build_fruit_tree from './build_fruit_tree.png'
-import build_fruit_tree_surface from './build_fruit_tree_surface.png'
 import build_waterwell from './build_waterwell.png'
 import build_castle from './build_castle.png'
 import build_castle_surface from './build_castle_surface.png'
@@ -71,7 +81,8 @@ const Textures  = {
     surface: {
         grass: {
             modulo: true,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 3,
                 3
@@ -97,7 +108,8 @@ const Textures  = {
         },
         water: {
             modulo: true,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 3,
                 3
@@ -123,7 +135,8 @@ const Textures  = {
         },
         stone: {
             modulo: true,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 3,
                 3
@@ -149,7 +162,8 @@ const Textures  = {
         },
         dirt: {
             modulo: true,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 3,
                 3
@@ -177,7 +191,8 @@ const Textures  = {
     road: {
         sand: {
             modulo: false,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 1,
                 1
@@ -203,7 +218,8 @@ const Textures  = {
         },
         stone: {
             modulo: false,
-            skew: true,
+            skewX: true,
+            skewY: true,
             size: [
                 1,
                 1
@@ -228,10 +244,226 @@ const Textures  = {
             }
         }
     },
+    fence: {
+        high_wood: {
+            modulo: false,
+            skewX: false,
+            skewY: true,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: fence_high_wood,
+                    trim: {
+                        left: 0,
+                        top: 71,
+                        width: 255,
+                        height: 415
+                    }
+                }
+            },
+            type: 'fence',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 256,
+                height: 512
+            }
+        }
+    },
     build: {
+        palmtree_with_hut: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                2,
+                2
+            ],
+            images: {
+                main: {
+                    url: build_palmtree_with_hut,
+                    trim: {
+                        left: 2,
+                        top: 227,
+                        width: 518,
+                        height: 240
+                    }
+                },
+                surface: {
+                    url: build_palmtree_with_hut_surface,
+                    trim: {
+                        left: -8,
+                        top: 175,
+                        width: 518,
+                        height: 380
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 450
+        },
+        palmtree_4: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_palmtree_4,
+                    trim: {
+                        left: 38,
+                        top: 57,
+                        width: 459,
+                        height: 471
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        palmtree_3: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_palmtree_3,
+                    trim: {
+                        left: -59,
+                        top: 0,
+                        width: 537,
+                        height: 528
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        palmtree_2: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_palmtree_2,
+                    trim: {
+                        left: 5,
+                        top: 46,
+                        width: 497,
+                        height: 468
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        palmtree_1: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: build_palmtree_1,
+                    trim: {
+                        left: 57,
+                        top: 119,
+                        width: 463,
+                        height: 462
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        small_forest: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_small_forest,
+                    trim: {
+                        left: -10,
+                        top: 300,
+                        width: 512,
+                        height: 328
+                    }
+                },
+                surface: {
+                    url: build_small_forest_surface,
+                    trim: {
+                        left: -10,
+                        top: 194,
+                        width: 512,
+                        height: 434
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 565
+        },
         catapult_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 1
@@ -267,7 +499,8 @@ const Textures  = {
         },
         catapult_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 1
@@ -303,7 +536,8 @@ const Textures  = {
         },
         defense_tree_dark_3: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -330,7 +564,8 @@ const Textures  = {
         },
         defense_tree_dark_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -357,7 +592,8 @@ const Textures  = {
         },
         defense_tree_dark_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -384,7 +620,8 @@ const Textures  = {
         },
         defense_tree_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -411,7 +648,8 @@ const Textures  = {
         },
         defense_tree_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -438,7 +676,8 @@ const Textures  = {
         },
         volcano: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 5,
                 5
@@ -474,7 +713,8 @@ const Textures  = {
         },
         tiny_island: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -508,45 +748,10 @@ const Textures  = {
             },
             cutoff: 512
         },
-        hut_with_garden_5: {
-            modulo: false,
-            skew: false,
-            size: [
-                3,
-                3
-            ],
-            images: {
-                main: {
-                    url: build_hut_with_garden_5,
-                    trim: {
-                        left: 144,
-                        top: 300,
-                        width: 326,
-                        height: 279
-                    }
-                },
-                surface: {
-                    url: build_hut_with_garden_5_surface,
-                    trim: {
-                        left: 67,
-                        top: 300,
-                        width: 397,
-                        height: 313
-                    }
-                }
-            },
-            type: 'build',
-            orig: {
-                left: 0,
-                top: 0,
-                width: 512,
-                height: 613
-            },
-            cutoff: 560
-        },
         vinyard: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 6,
                 6
@@ -582,7 +787,8 @@ const Textures  = {
         },
         lake_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -609,7 +815,8 @@ const Textures  = {
         },
         lake_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 5,
                 5
@@ -636,7 +843,8 @@ const Textures  = {
         },
         red_tent: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -663,7 +871,8 @@ const Textures  = {
         },
         dark_hut_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3
@@ -690,7 +899,8 @@ const Textures  = {
         },
         dark_hut_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3
@@ -717,7 +927,8 @@ const Textures  = {
         },
         dark_hut_3: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3
@@ -744,7 +955,8 @@ const Textures  = {
         },
         temple: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 5,
                 5
@@ -771,7 +983,8 @@ const Textures  = {
         },
         berries_blue: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -796,36 +1009,10 @@ const Textures  = {
             },
             cutoff: 420
         },
-        hut_with_garden_4: {
-            modulo: false,
-            skew: false,
-            size: [
-                3,
-                3
-            ],
-            images: {
-                main: {
-                    url: build_hut_with_garden_4,
-                    trim: {
-                        left: 4,
-                        top: 108,
-                        width: 504,
-                        height: 361
-                    }
-                }
-            },
-            type: 'build',
-            orig: {
-                left: 0,
-                top: 0,
-                width: 512,
-                height: 613
-            },
-            cutoff: 500
-        },
         berries_red: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 1
@@ -850,81 +1037,10 @@ const Textures  = {
             },
             cutoff: 450
         },
-        hut_with_garden_3: {
-            modulo: false,
-            skew: false,
-            size: [
-                4,
-                4
-            ],
-            images: {
-                main: {
-                    url: build_hut_with_garden_3,
-                    trim: {
-                        left: 13,
-                        top: 110,
-                        width: 482,
-                        height: 437
-                    }
-                },
-                surface: {
-                    url: build_hut_with_garden_3_surface,
-                    trim: {
-                        left: 13,
-                        top: 102,
-                        width: 494,
-                        height: 509
-                    }
-                }
-            },
-            type: 'build',
-            orig: {
-                left: 0,
-                top: 0,
-                width: 512,
-                height: 613
-            },
-            cutoff: 450
-        },
-        hut_with_garden_2: {
-            modulo: false,
-            skew: false,
-            size: [
-                3,
-                3
-            ],
-            images: {
-                main: {
-                    url: build_hut_with_garden_2,
-                    trim: {
-                        left: 172,
-                        top: 197,
-                        width: 328,
-                        height: 272
-                    }
-                },
-                surface: {
-                    url: build_hut_with_garden_2_surface,
-                    trim: {
-                        left: 124,
-                        top: 345,
-                        width: 335,
-                        height: 210
-                    }
-                }
-            },
-            type: 'build',
-            orig: {
-                left: 0,
-                top: 0,
-                width: 512,
-                height: 613
-            },
-            cutoff: 440
-        },
         quarry: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 4,
                 4
@@ -951,7 +1067,8 @@ const Textures  = {
         },
         farm: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 4,
                 4
@@ -987,7 +1104,8 @@ const Textures  = {
         },
         flowers_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -1023,7 +1141,8 @@ const Textures  = {
         },
         school: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3
@@ -1057,9 +1176,186 @@ const Textures  = {
             },
             cutoff: 313
         },
+        hut_with_garden_5: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_5,
+                    trim: {
+                        left: 144,
+                        top: 300,
+                        width: 326,
+                        height: 279
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_5_surface,
+                    trim: {
+                        left: 67,
+                        top: 300,
+                        width: 397,
+                        height: 313
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 560
+        },
+        hut_with_garden_6: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                surface: {
+                    url: build_hut_with_garden_6_surface,
+                    trim: {
+                        left: 23,
+                        top: 370,
+                        width: 502,
+                        height: 168
+                    }
+                },
+                main: {
+                    url: build_hut_with_garden_6,
+                    trim: {
+                        left: -32,
+                        top: 68,
+                        width: 576,
+                        height: 487
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 430
+        },
+        hut_with_garden_4: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_4,
+                    trim: {
+                        left: 4,
+                        top: 108,
+                        width: 504,
+                        height: 361
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 500
+        },
+        hut_with_garden_3: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                4,
+                4
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_3,
+                    trim: {
+                        left: 13,
+                        top: 110,
+                        width: 482,
+                        height: 437
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_3_surface,
+                    trim: {
+                        left: 13,
+                        top: 102,
+                        width: 494,
+                        height: 509
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 450
+        },
+        hut_with_garden_2: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: build_hut_with_garden_2,
+                    trim: {
+                        left: 172,
+                        top: 197,
+                        width: 328,
+                        height: 272
+                    }
+                },
+                surface: {
+                    url: build_hut_with_garden_2_surface,
+                    trim: {
+                        left: 124,
+                        top: 345,
+                        width: 335,
+                        height: 210
+                    }
+                }
+            },
+            type: 'build',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 613
+            },
+            cutoff: 440
+        },
         hut_with_garden_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3
@@ -1095,7 +1391,8 @@ const Textures  = {
         },
         fire_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -1131,7 +1428,8 @@ const Textures  = {
         },
         hut_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 1
@@ -1167,7 +1465,8 @@ const Textures  = {
         },
         hut_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 2
@@ -1203,7 +1502,8 @@ const Textures  = {
         },
         pine_2: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -1230,7 +1530,8 @@ const Textures  = {
         },
         fruit_tree: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 2,
                 2
@@ -1243,15 +1544,6 @@ const Textures  = {
                         top: 110,
                         width: 328,
                         height: 362
-                    }
-                },
-                surface: {
-                    url: build_fruit_tree_surface,
-                    trim: {
-                        left: 4,
-                        top: 253,
-                        width: 503,
-                        height: 335
                     }
                 }
             },
@@ -1266,7 +1558,8 @@ const Textures  = {
         },
         waterwell: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 1,
                 1
@@ -1293,7 +1586,8 @@ const Textures  = {
         },
         castle: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 5,
                 5
@@ -1329,7 +1623,8 @@ const Textures  = {
         },
         pine_1: {
             modulo: false,
-            skew: false,
+            skewX: false,
+            skewY: false,
             size: [
                 3,
                 3

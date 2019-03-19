@@ -4,7 +4,8 @@ module.exports = {
 	target:'./src/assets/img/textures/',
 	DefaultTile:{
 		modulo:false,
-		skew:true,
+		skewX:true,
+		skewY:true,
 		size:[1,1]
 	},
 	DefaultGhostTile:{
@@ -26,9 +27,16 @@ module.exports.Tiles = {
 		_default:{
 		}
 	},
+	'fence':{
+		_default:{
+			skewX:false,
+			skewY:true
+		}
+	},
 	'build':{
 		_default:{
-			skew:false,
+			skewX:false,
+			skewY:false,
 			cutoff:true
 		},
 		castle:{
@@ -76,6 +84,14 @@ module.exports.Tiles = {
 			size:[3,3],
 			cutoff:560
 		},
+		hut_with_garden_6:{
+			size:[3,3],
+			cutoff:430
+		},
+		small_forest:{
+			size:[3,3],
+			cutoff:565
+		},
 		dark_hut_1:{
 			size:[3,3],
 			cutoff:445
@@ -87,6 +103,22 @@ module.exports.Tiles = {
 		dark_hut_3:{
 			size:[3,3],
 			cutoff:445
+		},
+		palmtree_with_hut:{
+			size:[2,2],
+			cutoff:450
+		},
+		palmtree_1:{
+			cutoff:500
+		},
+		palmtree_2:{
+			cutoff:500
+		},
+		palmtree_3:{
+			cutoff:500
+		},
+		palmtree_4:{
+			cutoff:500
 		},
 		red_tent:{
 			cutoff:445

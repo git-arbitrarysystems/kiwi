@@ -37,11 +37,11 @@ const Transform = {
 	},
 
 	// UPDATE TRANSFORMATION
-	transform: function(sprite, span = [1,1], skewed = true, overflow = 1.01){
+	transform: function(sprite, span = [1,1], skewX = true, skewY = true, overflow = 1.01){
 
 		if( sprite.texture.width === 1 ){
 			// TEXTURE IS NOT LOADED YET
-			sprite.texture.on('update', (e)=>{ this.transform(sprite, span, skewed, overflow); })
+			sprite.texture.on('update', (e)=>{ this.transform(sprite, span, skewX, skewY, overflow); })
 			return;
 		}
 
@@ -50,14 +50,16 @@ const Transform = {
 
 		sprite.anchor.set(0.5);
 		sprite.pivot.set(0);
-		if( skewed ){
+		if( skewX || skewY ){
 			sprite.scale.set( ( Tile.diameter * 0.5 * spanWidth / sprite.texture.width ) * overflow );
-			sprite.skew.set( Tile.skewX, Tile.skewY );
 		}else{
-
 			sprite.scale.set( ( ( Tile.width * spanWidth) / sprite.texture.width ) * overflow );
-			sprite.skew.set(0,0);
 		}
+
+		sprite.skew.set( skewX ? Tile.skewX : 0, skewY ? Tile.skewY : 0 );
+
+
+
 		return sprite;
 	}
 };

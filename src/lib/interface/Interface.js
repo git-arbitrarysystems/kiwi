@@ -19,8 +19,8 @@ class Interface{
 		this.root.addEventListener('click', (e)=>{this.deselect(); } );
 
 		// GRID-INTERACTION-MODES
-		this.stampModes = ['road','surface','build'];
-		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build']);
+		this.stampModes = ['road','surface','build', 'fence'];
+		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build', 'destroy-fence']);
 
 		this.gridModesSelector = this.ce({target:this.root, tag:'select', disabled:true});
 		this.gridModes.forEach( (value)=>{ this.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })

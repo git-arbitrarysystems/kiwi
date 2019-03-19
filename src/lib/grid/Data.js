@@ -3,6 +3,7 @@ import {TextureData} from 'interface/Interface';
 import {Stamp} from 'grid/Stamp';
 import {App} from 'App';
 import {Road} from 'grid/Road';
+import {Fence} from 'grid/Fence';
 import {Surface} from 'grid/Surface';
 
 
@@ -72,6 +73,9 @@ export class Data{
 			if( type === 'road' && tile.content.contains('road') ){
 				// CLEAR SINGLE TILES
 				if( !testOnly ) tile.content.remove('road');
+			}else if( type === 'fence' && tile.content.contains('fence') ){
+				// CLEAR SINGLE TILES
+				if( !testOnly ) tile.content.remove('fence');
 			}else if( type === 'surface' && tile.content.contains('surface') 	){
 				// NEW SURFACE
 				if( !testOnly ) tile.content.remove(type);
@@ -96,13 +100,14 @@ export class Data{
 			node.tiles.forEach( (tile, index) => {
 
 				// FOR ROADS EACH NODE IS STORED SEPERATELY
-				if( type === 'road' ) node = { id:id, tiles:[tile], sprites:[stamp.sprites[index]] };
+				if( type === 'road' || type === 'fence' ) node = { id:id, tiles:[tile], sprites:[stamp.sprites[index]] };
 
 				tile.content.add(id, node );
 			});
 
-			if( id.indexOf('road') !== -1 	) Road.recursiveConnect( node.tiles[0] );
-			if( id.indexOf('surface') !== -1	) Surface.neighboursConnect( node.tiles[0] );
+			if( id.indexOf('fence') !== -1 	) 		Fence.recursiveConnect( node.tiles[0] );
+			if( id.indexOf('road') !== -1 	) 		Road.recursiveConnect( node.tiles[0] );
+			if( id.indexOf('surface') !== -1	) 	Surface.neighboursConnect( node.tiles[0] );
 
 		}
 	}

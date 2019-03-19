@@ -324,7 +324,7 @@ export class Grid extends PIXI.Container{
 
 		
 		// GET SELECTION
-		if( this.mode === 'road' && this.__ps ){
+		if( (this.mode === 'road' || this.mode === 'fence') && this.__ps ){
 			this._hover = this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
 		}else if( this.mode.indexOf('destroy') !== -1 ){
 			
@@ -337,7 +337,7 @@ export class Grid extends PIXI.Container{
 
 				if( this.mode === 'destroy-surface'){
 					this._hover.forEach( (tile) => {
-						tile.content.select('road|build').forEach( (associatedTile) => {
+						tile.content.select('road|build|fence').forEach( (associatedTile) => {
 							if( this._hover.indexOf(associatedTile) === -1 && this._hoverExtended.indexOf(associatedTile) === -1 ){
 								this._hoverExtended.push( associatedTile );
 							}
@@ -366,8 +366,9 @@ export class Grid extends PIXI.Container{
 		
 		// AUTO-CONFIRM
 		if( this.__pd && (
-			(this.mode === 'destroy-surface') ||				// AUTO-CONFIRM ROAD RESTRUCTION
-			(this.mode === 'destroy-road') ||					// AUTO-CONFIRM ROAD RESTRUCTION
+			(this.mode === 'destroy-surface') ||				// AUTO-CONFIRM SURFACE DESTRUCTION
+			(this.mode === 'destroy-road') ||					// AUTO-CONFIRM ROAD DESTRUCTION
+			(this.mode === 'destroy-fence') ||					// AUTO-CONFIRM FENCE DESTRUCTION
 			(this.mode === 'surface' && this._hover.length ) ||	// AUTO-CONFIRM SURFACE PLACEMENT
 			(this.ghost.enabled)								// AUTO-CONFIRM TILE-CREATION
 		)){
