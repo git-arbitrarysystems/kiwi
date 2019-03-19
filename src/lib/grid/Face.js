@@ -23,6 +23,7 @@ export class Face extends PIXI.Container{
 		//this.tint = 0xccddee;
 
 	
+	
 
 	}
 
@@ -74,11 +75,31 @@ export class Face extends PIXI.Container{
 
 		}else{
 			this.addChild(sprite);
-			sprite.tint = this.tint;
-			if( sprite.surfaceSprite ){
-				this.add( sprite.surfaceSprite, 'surface', 100000 )
-			}
-			//this.children.sort( (a,b) => { return a.zIndex - b.zIndex })
+
+			 ['surfaceSprite', 'topConnector', 'bottomConnector'].forEach( (id) => {
+			 	if( sprite[id] ){
+
+			 		console.log('Face.add(derivate:'+id+')');
+
+			 		switch( id ){
+			 			case 'surfaceSprite':
+			 				this.add( sprite[id], 'surface', 100000 )
+			 				break;
+			 			case 'topConnector':
+			 				this.add( sprite[id], 'fence', -0.1 )
+			 				break;
+			 			case 'bottomConnector':
+			 				this.add( sprite[id], 'fence',  0.1 )
+			 				break;
+			 		}
+
+
+			 		
+
+			 	}
+			 })
+
+			
 		}
 
 
@@ -87,6 +108,17 @@ export class Face extends PIXI.Container{
 	}
 
 	remove( sprite, type ){
+
+		if( sprite.topConnector ){
+
+			if( sprite.topConnector.mask ) sprite.topConnector.mask.destroy();
+			sprite.topConnector.destroy();
+		}
+
+		if( sprite.bottomConnector ){
+			if( sprite.bottomConnector.mask ) sprite.bottomConnector.mask.destroy();
+			sprite.bottomConnector.destroy();
+		}
 
 		if( sprite.surfaceSprite ){
 			sprite.surfaceSprite.destroy();
@@ -107,6 +139,8 @@ export class Face extends PIXI.Container{
 
 
 	renderTexture(type, delay = true){
+
+		return;
 
 		if( delay ){
 			var self = this;

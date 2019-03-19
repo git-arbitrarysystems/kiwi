@@ -40,7 +40,7 @@ export class Kiwi extends PIXI.Sprite{
 
 	move(dx,dy){
 		var tile = App.Grid.getTile({x:this.tile.cx + dx, y:this.tile.cy + dy});
-		if( tile && !tile.water ){
+		if( tile && !tile.water && !tile.content.contains('fence ') ){
 			this.tile = tile;
 			var sx = Math.abs(this.scale.x) *( (dx<0||dy<0) ? -1 : 1 );
 			this.scale.set(sx, Math.abs(sx) );

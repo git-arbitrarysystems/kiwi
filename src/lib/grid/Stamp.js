@@ -151,16 +151,27 @@ export class Stamp extends PIXI.Container{
 	// UPDATE THE TRANSFORMATION OF EACH SPRITE
 	updateSpriteTransform(sprites = this.sprites){
 		//console.log('Stamp.updateSpriteTransform');
+
+
 		sprites.forEach( (sprite) => {
+
+
+				
+
 			Transform.transform( sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			sprite.anchor.set(0.5, this.textureData.type === 'build' ? 1 : 0.5 )//}//{x:0.5, y:isBuild ? 1 : 0.5}
+			sprite.anchor.set(0.5,  ( this.textureData.type === 'build' || this.textureData.type === 'fence') ? 1 : 0.5 );
 			sprite.texture = this.texture;
 			sprite.cutoff = this.textureData.cutoff;
 
-			if( this.textureData.type === 'fence'){
-				sprite.anchor.set(0.5, 1)//}//{x:0.5, y:isBuild ? 1 : 0.5}
-			}
-			
+			[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
+				if( connector ){
+					connector.texture = sprite.texture;
+					connector.anchor.set( sprite.anchor.x, sprite.anchor.y );
+					connector.scale.set( sprite.scale.x, sprite.scale.y );
+					connector.skew.set( sprite.skew.x, -sprite.skew.y)
+				}
+			})
+
 
 			if( this.textureData.images.surface ){
 				
@@ -192,10 +203,20 @@ export class Stamp extends PIXI.Container{
 		// SET POSITIONS
 		if( this.mode === 'road' || this.mode === 'fence'){
 			this.length = this.selection.length;
+
 			this.sprites.forEach( (sprite,i,a) => {
 				sprite.x = this.selection[i].x;
 				sprite.y = this.selection[i].y;
+
+				[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
+					if( connector ){
+						connector.x = sprite.x;
+						connector.y = sprite.y;
+					}
+				})
+
 				sprite[this.mode].updateConnections(i, this.selection);
+
 			});
 		}else if( this.mode === 'surface' ){
 			this.length = 1;

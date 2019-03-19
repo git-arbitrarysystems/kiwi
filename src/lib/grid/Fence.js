@@ -1,5 +1,6 @@
 import * as PIXI from 'pixi.js';
 import {App} from 'App';
+import {Tile} from 'grid/Tile';
 
 export class Fence{
 	
@@ -14,26 +15,51 @@ export class Fence{
 			
 			this._enabled = bool;
 			this.cc = {top:false,right:false,bottom:false,left:false};
-
+			
 			if( !bool ){
-				// CLEAR ALL MASKING
 				this.clear();
 			}else{
-				// CONNECTION CACHE
-				//if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
-				//if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
-			}
-		}
-	}
-	
-	clear(){
-		if( this.sprite.mask ){
-			//this.sprite.mask.destroy();
-			//this.sprite.mask = null;
+				if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
+				if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
+
+				if( !this.sprite.bottomConnector ) this.sprite.bottomConnector = new PIXI.Sprite(this.sprite.texture);
+				if( !this.sprite.bottomConnector.parent ) this.sprite.parent.addChild( this.sprite.bottomConnector);
+				if( !this.sprite.bottomConnector.mask ) this.sprite.bottomConnector.mask = new PIXI.Graphics();
+				if( !this.sprite.bottomConnector.mask.parent ) this.sprite.bottomConnector.addChild( this.sprite.bottomConnector.mask );
+
+				this.sprite.parent.addChild( this.sprite );
+
+				if( !this.sprite.topConnector ) this.sprite.topConnector = new PIXI.Sprite(this.sprite.texture);
+				if( !this.sprite.topConnector.parent ) this.sprite.parent.addChild( this.sprite.topConnector );
+				if( !this.sprite.topConnector.mask ) this.sprite.topConnector.mask = new PIXI.Graphics();
+				if( !this.sprite.topConnector.mask.parent ) this.sprite.topConnector.addChild( this.sprite.topConnector.mask );
+
+
+			} 
 		}
 	}
 
+	clear(){
+
+		console.log('Fence.clear');
+
+		if( this.sprite.mask ){
+			this.sprite.mask.destroy();
+			this.sprite.mask = null;
+		}
+
+	}
+
+
 	updateConnections(index, selection){
+
+		if( !this.sprite.texture.valid ){
+			this.sprite.texture.on('update', ()=>{ this.updateConnections(index, selection) });
+			return;
+		}
+
+		this.sprite.topConnector.visible = this.cc.top;
+		this.sprite.bottomConnector.visible = this.cc.bottom;
 
 		let current = selection[index],
 			connect = {top:false,bottom:false,left:false,right:false};
@@ -47,34 +73,75 @@ export class Fence{
 			}
 		});
 
-		this.mask(connect);
+		var requiresUpdate = (	connect.top 	!== this.cc.top || 
+								connect.right 	!== this.cc.right || 
+								connect.bottom 	!== this.cc.bottom ||
+								connect.left	!== this.cc.left );
 
-	}
-	
-	
-
-
-	mask(sides){
-
-		var requiresUpdate = (	sides.top 		!== this.cc.top || 
-								sides.right 	!== this.cc.right || 
-								sides.bottom 	!== this.cc.bottom ||
-								sides.left		!== this.cc.left );
 		if( requiresUpdate ){
+			//console.log('Fence.mask', current.toString(), connect);
+
 			// CACHE
-			this.cc = sides;
+			this.cc = connect;
+			
+			if( connect.left || connect.right ){
+				this.sprite.visible = true;
+				this.sprite.mask.clear();
+				this.sprite.mask.beginFill(0xff0000);
+				if( connect.right ) this.sprite.mask.drawRect(
+					-this.sprite.texture.width*0.0,
+					-this.sprite.texture.height,
+					this.sprite.texture.width * 0.5,
+					this.sprite.texture.height
+				);
 
-			console.log('Fence.mask', this.cc, this.sprite.skew);
-
-			//this.sprite.anchor.set(Math.cos(this.sprite.skew.y),1)
-			if( this.cc.top || this.cc.bottom ){
-				this.sprite.skew.y = Math.abs(this.sprite.skew.y);
+				if( connect.left ) this.sprite.mask.drawRect(
+					-this.sprite.texture.width*0.5,
+					-this.sprite.texture.height,
+					this.sprite.texture.width * 0.5,
+					this.sprite.texture.height
+				);
+				this.sprite.mask.endFill();
 			}else{
-				this.sprite.skew.y = -Math.abs(this.sprite.skew.y);
+				this.sprite.visible = false;
 			}
 
+
+			if( connect.top ){
+				this.sprite.topConnector.visible = true;
+				this.sprite.topConnector.mask.clear();
+				this.sprite.topConnector.mask.beginFill(0xff0000);
+				this.sprite.topConnector.mask.drawRect(
+					-this.sprite.topConnector.texture.width*0.5,
+					-this.sprite.topConnector.texture.height,
+					this.sprite.topConnector.texture.width * 0.5,
+					this.sprite.topConnector.texture.height
+				);
+			}else{
+				this.sprite.topConnector.visible = false;
+			}
+
+
+			if( connect.bottom ){
+				this.sprite.bottomConnector.visible = true;
+				this.sprite.bottomConnector.mask.clear();
+				this.sprite.bottomConnector.mask.beginFill(0xff0000);
+				this.sprite.bottomConnector.mask.drawRect(
+					-this.sprite.bottomConnector.texture.width*0.0,
+					-this.sprite.bottomConnector.texture.height,
+					this.sprite.bottomConnector.texture.width * 0.5,
+					this.sprite.bottomConnector.texture.height
+				);
+			}else{
+				this.sprite.bottomConnector.visible = false;
+			}
+
+
 		}
+		
 	}
+	
+
 	
 	static mixin(sprite){
 		sprite.fence = new Fence(sprite);

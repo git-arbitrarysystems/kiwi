@@ -13,10 +13,8 @@ export class Ghost extends PIXI.Sprite{
 
 	get textureDataId(){ return this._textureDataId }
 	set textureDataId(id){
-
-		console.log('Ghost.textureDataId', id );
-
 		if( id && TextureData[id] && TextureData[id].type === 'surface' && this.textureDataId !== id ){
+			console.log('Ghost.textureDataId', id );
 			this._textureDataId = id;
 			this.texture = PIXI.Texture.from( TextureData[id].images.main.url );
 			Transform.transform(this, GhostTile.size );

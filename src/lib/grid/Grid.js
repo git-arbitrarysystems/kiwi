@@ -266,6 +266,12 @@ export class Grid extends PIXI.Container{
 				this.__ps = e.data.getLocalPosition(this.parent, this.__ps);
 				this.__pp = this.__ps.clone();
 
+				let tile = this.getTile(this.__ps, false) 
+				if( tile ){
+					console.log( tile.toString() );
+				}
+
+
 				this.hover();
 
 				if( this.ghost.enabled ){
@@ -414,6 +420,10 @@ export class Grid extends PIXI.Container{
 
 		}else if( this.stamp.textureData ){
 			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
+			this.stamp.sprites.forEach( (sprite) => {
+				if( sprite.topConnector ) sprite.topConnector.visible = false;
+				if( sprite.bottomConnector ) sprite.bottomConnector.visible = false;
+			} )
 		}
 
 		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );

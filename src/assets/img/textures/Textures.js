@@ -259,8 +259,8 @@ const Textures  = {
                     trim: {
                         left: 0,
                         top: 71,
-                        width: 255,
-                        height: 415
+                        width: 256,
+                        height: 441
                     }
                 }
             },

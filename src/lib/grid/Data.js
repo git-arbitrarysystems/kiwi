@@ -29,6 +29,7 @@ export class Data{
 		for( var i=fromTiles.length-1; i>=0; i--){
 			fromTiles[i].content.remove(wildcard);
 			if( fromTiles[i] ) Road.recursiveConnect( fromTiles[i] );
+			if( fromTiles[i] ) Fence.recursiveConnect( fromTiles[i] );
 		}
 		
 	}
@@ -99,7 +100,7 @@ export class Data{
 			// REGISTER
 			node.tiles.forEach( (tile, index) => {
 
-				// FOR ROADS EACH NODE IS STORED SEPERATELY
+				// FOR ROADS && FENCES EACH NODE IS STORED SEPERATELY
 				if( type === 'road' || type === 'fence' ) node = { id:id, tiles:[tile], sprites:[stamp.sprites[index]] };
 
 				tile.content.add(id, node );
