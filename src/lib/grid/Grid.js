@@ -6,12 +6,13 @@ import {Stamp} from 'grid/Stamp';
 import {Face} from 'grid/Face';
 import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
-import {Road} from 'grid/Road';
-import {Kiwi} from 'grid/Kiwi';
+
 import {App} from 'App';
 
 import {Ghost} from 'grid/Ghost';
 
+import {Road} from 'grid/types/Road';
+import {Kiwi} from 'grid/types/Kiwi';
 
 
 

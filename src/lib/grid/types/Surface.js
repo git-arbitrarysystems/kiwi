@@ -2,61 +2,73 @@ import * as PIXI from 'pixi.js';
 import {App} from 'App';
 import {Tile} from 'grid/Tile';
 import {TextureData} from 'interface/Interface';
+import {Generic} from 'grid/types/Generic';
+import {Transform} from 'grid/Transform';
 
-export class Surface{
+export class Surface extends Generic{
 	
 	constructor(sprite){
-		this.sprite = sprite;
-		this.enabled = true;
+		super(sprite);
+		
+		this.on('update-position', (e) => {
+			this.updateConnections();
+		});
+
+
+		this.on('update-transform', (e) => {
+			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.sprite.anchor.set(0.5, 0.5 );
+			if( this.tile ) this.updateConnections();
+		});
+
+
 	}
 
-	get enabled(){ return this._enabled }
-	set enabled(bool){
-		if( bool !== this.enabled ){
-			
-			this._enabled = bool;
-			this.cc = {top:false,right:false,bottom:false,left:false};
-			this.overlays = {};
 
-			if( !bool ){
-				// CLEAR ALL MASKING
-				this.clear();
-			}else{
-				// PREPARE SPRITES & MASKS
-				for( var s in this.cc){
-					if( !this.overlays[s] 						) this.overlays[s] = new PIXI.Sprite();
-					if( !this.overlays[s].parent				) this.sprite.addChild( this.overlays[s] );
-					if( !this.overlays[s].maskGraphics 			) this.overlays[s].maskGraphics = new PIXI.Graphics();
-					if( !this.overlays[s].maskGraphics.parent 	) this.overlays[s].addChild( this.overlays[s].maskGraphics );
 
-					// CENTER
-					this.overlays[s].anchor.set( 0.5 );
+	// OVERRIDE FUNCTIONS
+	enable(){
+		
+		// PEPARE VARS
+		this.cc = {top:false,right:false,bottom:false,left:false};
+		this.overlays = {};
 
-				}
-			}
+		// PREPARE SPRITES & MASKS
+		for( var s in this.cc){
+			if( !this.overlays[s] 						) this.overlays[s] = new PIXI.Sprite();
+			if( !this.overlays[s].parent				) this.sprite.addChild( this.overlays[s] );
+			if( !this.overlays[s].maskGraphics 			) this.overlays[s].maskGraphics = new PIXI.Graphics();
+			if( !this.overlays[s].maskGraphics.parent	) this.overlays[s].addChild( this.overlays[s].maskGraphics );
+
+			// CENTER
+			this.overlays[s].anchor.set( 0.5 );
 		}
+
 	}
-	
-	clear(){
+
+	disable(){
+		//console.log('Surface.disable');
+
+	}
+
+	destroy(){
+		//console.log('Surface.destroy', this.sprite.parent);
 		for( var s in this.cc){
 			if( this.overlays[s] ){
-				this.overlays[s].destroy(true)
+				this.overlays[s].destroy({children:true})
 			}
 		}
 	}
 
-	updateConnections(tile, myTextureDataId, updateNeighbours = false){
 
+	updateConnections(updateNeighbours = false){
 
-		//console.log('Surface.updateConnections', myTextureDataId, updateNeighbours);
-
-		let myTextureData = TextureData[myTextureDataId],
-			surfaceSize = 3,
+		let surfaceSize = 3,
 			neighbours = {
-				left:App.Grid.getTile({x:tile.cx - surfaceSize, y:tile.cy}),
-				right:App.Grid.getTile({x:tile.cx + surfaceSize, y:tile.cy}),
-				top:App.Grid.getTile({x:tile.cx, y:tile.cy-surfaceSize}),
-				bottom:App.Grid.getTile({x:tile.cx, y:tile.cy+surfaceSize})
+				left:App.Grid.getTile({x:this.tile.cx - surfaceSize, y:this.tile.cy}),
+				right:App.Grid.getTile({x:this.tile.cx + surfaceSize, y:this.tile.cy}),
+				top:App.Grid.getTile({x:this.tile.cx, y:this.tile.cy-surfaceSize}),
+				bottom:App.Grid.getTile({x:this.tile.cx, y:this.tile.cy+surfaceSize})
 			}
 
 
@@ -69,7 +81,7 @@ export class Surface{
 				if( neighbours[s] ){
 					neighbourDataNode = neighbours[s].content.getDataNodes('surface');
 					if( neighbourDataNode.length === 1 ){
-						neighbours[s].content.getSprites('surface')[0].surface.updateConnections(neighbours[s],neighbourDataNode[0].id);
+						neighbours[s].content.getSprites('surface')[0].surface.updateConnections();
 					}
 				}
 			}
@@ -84,7 +96,7 @@ export class Surface{
 				neighbourDataNode = neighbours[s].content.getDataNodes('surface');
 				if(
 					neighbourDataNode.length === 1 && 
-					this.overflows( neighbourDataNode[0].id, myTextureDataId )					
+					this.overflows( neighbourDataNode[0].id, this.textureDataId )					
 				){
 					neighbours[s] = neighbourDataNode[0];
 				}else{
@@ -262,15 +274,15 @@ export class Surface{
 	}
 
 	
-	static mixin(sprite){
+	/*static mixin(sprite){
 		sprite.surface = new Surface(sprite);
 		return sprite;
-	}
+	}*/
 
 	static neighboursConnect(tile){
 		var node = tile.content.getDataNodes('surface')[0],
 			sprite = tile.content.getSprites('surface')[0];
-		sprite.surface.updateConnections(tile, node.id, true)
+		sprite.surface.updateConnections(true)
 	}
 
 	

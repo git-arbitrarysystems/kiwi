@@ -8,8 +8,6 @@ export class Face extends PIXI.Container{
 	constructor(){
 		super();
 
-		
-
 		this.renderTypes = ['surface', 'road'];
 		this.renderTypes.forEach( (type, index) => {
 			this[type] = this.addChild( new PIXI.Container() );
@@ -19,30 +17,19 @@ export class Face extends PIXI.Container{
 		});
 
 		this.sortableChildren = true;
-
-		//this.tint = 0xccddee;
-
-	
-	
-
 	}
 
-	get tint(){ return this._tint || 0xffffff; };
-	set tint(tint){
-		this._tint = tint;
-		this.children.forEach( (child) => {
-			child.tint = tint;
-		})
-
-	}
+	
 
 	add( sprite, type, addedZIndex = 0){
+
+		//console.log('add', type);
 		
 		// SET APPROPRIATE Z-INDEX
 		sprite.zIndex = 100000 + sprite.y + addedZIndex;
 		
 		if( sprite.cutoff ){
-			//console.log('Face.add(cutoff)', sprite.zIndex, sprite.cutoff);
+			console.log('Face.add', sprite.texture.textureCacheIds[0],sprite.cutoff);
 			sprite.zIndex -= ( sprite.anchor.y * sprite.texture.height - sprite.cutoff ) * sprite.scale.y;
 			//console.log('Face.add(cutoff)', sprite.zIndex, sprite.cutoff);
 		}
@@ -76,7 +63,8 @@ export class Face extends PIXI.Container{
 		}else{
 			this.addChild(sprite);
 
-			 ['surfaceSprite', 'topConnector', 'bottomConnector'].forEach( (id) => {
+
+			 /*['surfaceSprite', 'topConnector', 'bottomConnector'].forEach( (id) => {
 			 	if( sprite[id] ){
 
 			 		console.log('Face.add(derivate:'+id+')');
@@ -97,10 +85,21 @@ export class Face extends PIXI.Container{
 			 		
 
 			 	}
-			 })
+			 })*/
 
 			
 		}
+ 	
+ 		if( sprite.derivates ){
+ 			var s,d;
+			//console.log('Face.add.derivate', sprite.derivates);
+			for( s in sprite.derivates ){
+				d = sprite.derivates[s];
+
+				this.add( d.sprite, d.type || '', d.addedZIndex || 0 );
+			}
+ 		}
+		
 
 
 		
@@ -109,22 +108,11 @@ export class Face extends PIXI.Container{
 
 	remove( sprite, type ){
 
-		if( sprite.topConnector ){
-
-			if( sprite.topConnector.mask ) sprite.topConnector.mask.destroy();
-			sprite.topConnector.destroy();
+		for( var s in sprite.derivates ){
+			sprite.derivates[s].sprite.destroy({children:true});
+			if( sprite.derivates[s].type ) type = sprite.derivates[s].type;
 		}
-
-		if( sprite.bottomConnector ){
-			if( sprite.bottomConnector.mask ) sprite.bottomConnector.mask.destroy();
-			sprite.bottomConnector.destroy();
-		}
-
-		if( sprite.surfaceSprite ){
-			sprite.surfaceSprite.destroy();
-			type = 'surface'
-		}
-		sprite.destroy();
+		sprite.destroy({children:true});
 		
 		if( this[type] ){
 			this[type].visible = true;
@@ -140,7 +128,7 @@ export class Face extends PIXI.Container{
 
 	renderTexture(type, delay = true){
 
-		return;
+		
 
 		if( delay ){
 			var self = this;
@@ -182,3 +170,12 @@ export class Face extends PIXI.Container{
 
 import {HotModule} from 'HotModule'
 HotModule(module, Face);
+
+/*get tint(){ return this._tint || 0xffffff; };
+	set tint(tint){
+		this._tint = tint;
+		this.children.forEach( (child) => {
+			child.tint = tint;
+		})
+
+	}*/

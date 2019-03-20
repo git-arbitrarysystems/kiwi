@@ -1,4 +1,3 @@
-
 import {Tile} from 'grid/Tile';
 import {App} from 'App';
 

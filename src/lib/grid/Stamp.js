@@ -1,13 +1,14 @@
 import * as PIXI from 'pixi.js';
-import {Transform} from 'grid/Transform';
-import {Tile} from 'grid/Tile';
-import {Road} from 'grid/Road';
-import {Fence} from 'grid/Fence';
-import {Surface} from 'grid/Surface';
+
 import {App} from 'App';
 import {TextureData} from 'interface/Interface';
+
+import {Transform} from 'grid/Transform';
+import {Tile} from 'grid/Tile';
 import {Texture} from 'grid/Texture';
 
+
+import * as Type from 'grid/types/Type';
 
 
 
@@ -33,16 +34,20 @@ export class Stamp extends PIXI.Container{
 			
 			// ADD SPRITES
 			while( this.sprites.length < int ){
-				var sprite = this.addChild( new PIXI.Sprite(this.texture) );
-				if (this.mode === 'road') {
+				var sprite = this.addChild( new PIXI.Sprite() );
+				Type.Generic.mixin(this.mode, sprite, this.textureData.id );
+
+				/*if (this.mode === 'road') {
 					Road.mixin(sprite);
 				}else if (this.mode === 'fence') {
 					Fence.mixin(sprite);
 				}else if( this.mode === 'surface' ){
 					Surface.mixin(sprite);
-				}
+				}else if( this.mode === 'build' ){
+					Build.mixin(sprite);
+				}*/
 				this.sprites.push( sprite );
-				this.updateSpriteTransform([sprite]);
+				//this.updateSpriteTransform([sprite]);
 			}
 
 			
@@ -60,9 +65,8 @@ export class Stamp extends PIXI.Container{
 			this._textureData = textureData;
 			if( this.textureData ){
 				this.mode = this.textureData.type;
-				this.texture = PIXI.Texture.from(this.textureData.images.main.url);
-
-				this.updateSpriteTransform();
+				//this.texture = PIXI.Texture.from(this.textureData.images.main.url);
+				//this.updateSpriteTransform();
 			}else{
 				this.mode = undefined;
 			}
@@ -70,24 +74,12 @@ export class Stamp extends PIXI.Container{
 	}
 
 	// UPDATE TEXTURE OF ALL SPRITES
-	get texture(){ return this._texture }
+	/*get texture(){ return this._texture }
 	set texture(texture){
 
 		if( texture !== this.texture ){
 
-
-			//console.log('Stamp.set(texture)', texture);
-			//console.log('Stamp.texture', 'update');
 			this._texture = Texture(this.textureData);
-			
-			/*// ORIGINAL SIZE
-			this.texture.orig = new PIXI.Rectangle( 0, 0, this.textureData.orig.width, this.textureData.orig.height );
-
-			// TRIMMED AREA
-			this.texture.trim = new PIXI.Rectangle( this.textureData.images.main.trim.left, this.textureData.images.main.trim.top, this.textureData.images.main.trim.width, this.textureData.images.main.trim.height );
-			
-			// UPDATE TEXTURE
-			this.texture.updateUvs();*/
 
 			if( !this.texture.valid ){
 				// TEXTURE IS NOT LOADED YET
@@ -96,7 +88,7 @@ export class Stamp extends PIXI.Container{
 				this.updateSpriteTransform()
 			}
 		}
-	};
+	};*/
 
 	// GET / SET SELECTED TILES
 	get selection(){ return this._selection; }
@@ -133,15 +125,8 @@ export class Stamp extends PIXI.Container{
 		if( this._mode !== str ){
 			this._mode = str;
 			this.sprites.forEach( (sprite) => {
-				if( sprite.road ) sprite.road.enabled = (this.mode === 'road' );
-				if( sprite.surface ) sprite.surface.enabled = (this.mode === 'surface' );
-				if( sprite.fence ) sprite.fence.enabled = (this.mode === 'fence' );
-
-				if( this.mode === 'road' && !sprite.road ) Road.mixin(sprite);
-				if( this.mode === 'fence' && !sprite.fence ) Fence.mixin(sprite);
-				if( this.mode === 'surface' && !sprite.surface ) Surface.mixin(sprite)
-
-			})
+				Type.Generic.mixin(this.mode, sprite, this.textureData.id);
+			});
 		}
 	}
 	get mode(){ return this._mode };
@@ -158,12 +143,12 @@ export class Stamp extends PIXI.Container{
 
 				
 
-			Transform.transform( sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			/*Transform.transform( sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 			sprite.anchor.set(0.5,  ( this.textureData.type === 'build' || this.textureData.type === 'fence') ? 1 : 0.5 );
 			sprite.texture = this.texture;
-			sprite.cutoff = this.textureData.cutoff;
+			sprite.cutoff = this.textureData.cutoff;*/
 
-			[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
+			/*[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
 				if( connector ){
 					connector.texture = sprite.texture;
 					connector.anchor.set( sprite.anchor.x, sprite.anchor.y );
@@ -171,23 +156,23 @@ export class Stamp extends PIXI.Container{
 					connector.skew.set( sprite.skew.x, -sprite.skew.y)
 				}
 			})
-
+*/
 
 			if( this.textureData.images.surface ){
 				
-				if( !this.surfaceSprite ){
+				/*if( !this.surfaceSprite ){
 					this.surfaceSprite = this.addChildAt( new PIXI.Sprite(), 0 );
 				}
 
 				this.surfaceSprite.texture = Texture(this.textureData, 'surface');
 				
 				Transform.transform( this.surfaceSprite, this.textureData.size, false, false );
-				this.surfaceSprite.anchor.set(0.5, 1 );
+				this.surfaceSprite.anchor.set(0.5, 1 );*/
 
 			}else if( this.surfaceSprite ){
 
-				this.surfaceSprite.destroy();
-				this.surfaceSprite = undefined;
+				/*this.surfaceSprite.destroy();
+				this.surfaceSprite = undefined;*/
 			}
 
 		});
@@ -200,23 +185,51 @@ export class Stamp extends PIXI.Container{
 		this.visible = !( !this.selection || this.selection.length === 0 || !this.textureData);
 		if( !this.visible ) return;
 
-		// SET POSITIONS
-		if( this.mode === 'road' || this.mode === 'fence'){
-			this.length = this.selection.length;
+		let multisprite = (this.mode === 'fence' || this.mode === 'road');
 
+		// SINGLE / MULTISPRITE MODE
+		if( multisprite ){
+			this.length = this.selection.length;
+		}else{
+			this.length = 1;
+		}
+
+
+		this.sprites.forEach( (sprite, i, a) => {
+			sprite[this.mode].textureDataId = this.textureData.id;
+			sprite[this.mode].tile = this.selection[i];
+			if( !multisprite ){
+				sprite[this.mode].limits = this.selection.limits;
+			}
+		});
+
+
+
+		return;
+
+
+
+
+		// SET POSITIONS
+		if( this.mode === 'fence'){
+			this.length = this.selection.length;
 			this.sprites.forEach( (sprite,i,a) => {
 				sprite.x = this.selection[i].x;
 				sprite.y = this.selection[i].y;
-
-				[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
+				/*[sprite.topConnector, sprite.bottomConnector].forEach((connector) => {
 					if( connector ){
 						connector.x = sprite.x;
 						connector.y = sprite.y;
 					}
-				})
-
+				})*/
 				sprite[this.mode].updateConnections(i, this.selection);
-
+			});
+		}else if( this.mode === 'road'){
+			this.length = this.selection.length;
+			this.sprites.forEach( (sprite,i,a) => {
+				sprite.x = this.selection[i].x;
+				sprite.y = this.selection[i].y;
+				sprite[this.mode].updateConnections(i, this.selection);
 			});
 		}else if( this.mode === 'surface' ){
 			this.length = 1;
@@ -228,11 +241,11 @@ export class Stamp extends PIXI.Container{
 			this.sprites[0].x = this.selection.limits.x;
 			this.sprites[0].y = this.selection.limits.y;
 
-			if( this.surfaceSprite ){
+			/*if( this.surfaceSprite ){
 				this.sprites[0].surfaceSprite = this.surfaceSprite;
 				this.surfaceSprite.x = this.selection.limits.x;
 				this.surfaceSprite.y = this.selection.limits.y;
-			}
+			}*/
 
 		}
 
