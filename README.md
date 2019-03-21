@@ -11,13 +11,13 @@
 5. ~~modify data storage to [left,top,w,h]~~
 6. ~~zIndexing of buildings' surfaceSprite~~
 7. ~~update surfacecaching on lazy-load~~
-8. fences and walls
+8. ~~fences and walls~~
 9. rain
 10. beaches
 11. waterways
 12. boats
 13. multiple kiwi-types
-14. wehrbäume
+14. ~~wehrbäume~~
 15. building entry tiles
 16. building free/occupied tiles
 

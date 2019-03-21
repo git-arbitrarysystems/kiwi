@@ -9,19 +9,16 @@ export class Road extends Generic{
 		super(sprite);
 
 		this.on('enable', ()=>{
-			console.log('Road.enable');
-			this.cc = {top:false,right:false,bottom:false,left:false};
+			this.cc = {top:undefined,right:undefined,bottom:undefined,left:undefined};
 			this.sprite.mask = this.sprite.addChild( new PIXI.Graphics() );
 		})
 
 		this.on('disable', ()=>{
-			console.log('Road.disable');
 			this.sprite.mask.destroy();
 			this.sprite.mask = null;
 		})
 
 		this.on('update', ()=>{
-			console.log('Road.update');
 			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 			this.sprite.anchor.set( 0.5, 0.5 );
 			this.updateConnections();
@@ -51,6 +48,7 @@ export class Road extends Generic{
 				connect.right 	= connect.right 	|| ( tile.cy === alt.cy && tile.cx === alt.cx-1)
 			}
 		});
+
 
 		this.mask(connect);
 

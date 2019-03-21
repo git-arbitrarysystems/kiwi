@@ -90,17 +90,17 @@ export class Fence extends Generic{
 			}
 		});
 
-		
+		if( Object.values(connect).includes(true) === false ){
+			connect.left = true;
+			connect.right = true;
+		}
 
 		var requiresUpdate = (	connect.top 	!== this.cc.top || 
 								connect.right 	!== this.cc.right || 
 								connect.bottom 	!== this.cc.bottom ||
 								connect.left	!== this.cc.left );
 
-		if( Object.values(connect).includes(true) === false ){
-			connect.left = true;
-			connect.right = true;
-		}
+		
 
 		if( requiresUpdate ){
 			

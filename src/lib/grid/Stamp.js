@@ -28,12 +28,15 @@ export class Stamp extends PIXI.Container{
 	// GET/SET THE TEXTUREDATA ELEMENT
 	get textureData(){ return this._textureData; }
 	set textureData(textureData){
+
 		if( textureData !== this.textureData ){
 			this._textureData = textureData;
 			if( this.textureData ){
 				this.mode = this.textureData.type;
+				this.visible = true;
 			}else{
 				this.mode = undefined;
+				this.visible = false;
 			}
 
 			this.multiSpriteMode = ( ['fence', 'road'].indexOf(this.mode) !== -1 );
