@@ -16,6 +16,9 @@ export class Face extends PIXI.Container{
 			this[type+'Sprite'].visible = false;
 		});
 
+		this.g = this.addChild( new PIXI.Graphics() );
+		this.g.zIndex = 10000000000;
+
 		this.sortableChildren = true;
 	}
 
@@ -24,25 +27,61 @@ export class Face extends PIXI.Container{
 	add( sprite, type, addedZIndex = 0){
 
 		//console.log('add', type);
+
+		if( !sprite.texture.valid ){
+			sprite.texture.on('update', (e) => { this.add(sprite, type, addedZIndex) })
+
+			return;
+		}
+
 		
 		// SET APPROPRIATE Z-INDEX
-		sprite.zIndex = 100000 + sprite.y + addedZIndex;
+		sprite.zIndex = 100000 + sprite.y + ((1-sprite.anchor.y) * sprite.texture.orig.height * sprite.scale.y ) + addedZIndex;
 		
 		if( sprite.cutoff ){
-			console.log('Face.add', sprite.texture.textureCacheIds[0],sprite.cutoff);
-			sprite.zIndex -= ( sprite.anchor.y * sprite.texture.height - sprite.cutoff ) * sprite.scale.y;
+			//console.log('Face.add', sprite.texture.textureCacheIds[0],sprite.cutoff, sprite.texture.height, sprite.texture.valid);
+			sprite.zIndex -= (sprite.texture.orig.height - sprite.cutoff ) * sprite.scale.y;
 			//console.log('Face.add(cutoff)', sprite.zIndex, sprite.cutoff);
 		}
 
+		/*if( !sprite.interactive  && type === 'build'){
+			sprite.interactive = true;
+			var self = this;
+			sprite.on('pointerover', function(e){
 
-		/*if( !sprite.anchorChild ){
-			sprite.anchorChild = sprite.addChild( new PIXI.Graphics() )
-			sprite.anchorChild.beginFill(0xff0000,0.5);
-			sprite.anchorChild.drawRect(sprite.texture.width * sprite.anchor.x * -1,sprite.texture.height * sprite.anchor.y * -1,sprite.texture.width,sprite.texture.height * (1-sprite.anchor.y))
-			sprite.anchorChild.endFill();
+
+	
+					var w = sprite.texture.trim.width * sprite.scale.x,
+						h = sprite.texture.trim.height * sprite.scale.y,
+						x = sprite.x + sprite.texture.trim.x * sprite.scale.x,
+						y = sprite.y + sprite.texture.trim.y * sprite.scale.y
+					self.g.lineStyle(3, Math.floor( 0xffffff * Math.random() ) );
+					//this.g.drawRect(x-w*0.5,y-h,w,h);
+					var a = {x:sprite.x, y:sprite.y},
+						b = {x:sprite.x, y:sprite.y - (sprite.texture.orig.height-sprite.cutoff) * sprite.scale.y },
+						d = 3;
+					self.g.moveTo(a.x-d, a.y+d)
+					self.g.lineTo(a.x+d, a.y-d)
+					self.g.moveTo(a.x-d, a.y-d)
+					self.g.lineTo(a.x+d, a.y+d)
+
+					self.g.lineStyle(3, 0xff0000);
+					self.g.moveTo(b.x-d, b.y+d)
+					self.g.lineTo(b.x+d, b.y-d)
+					self.g.moveTo(b.x-d, b.y-d)
+					self.g.lineTo(b.x+d, b.y+d)
+
+					self.g.lineStyle(1);
+					self.g.moveTo(a.x, a.y);
+					self.g.lineTo(b.x, b.y);
+
+
+
+			}, sprite);
+			sprite.on('pointerout' , (e) => {  self.g.clear();})
 		}*/
+		
 
-		//console.log('Face.add', sprite.texture.textureCacheIds[0], sprite.zIndex);
 
 		if( this[type] ){
 			this[type].addChild(sprite);
@@ -128,7 +167,7 @@ export class Face extends PIXI.Container{
 
 	renderTexture(type, delay = true){
 
-		
+		return;
 
 		if( delay ){
 			var self = this;

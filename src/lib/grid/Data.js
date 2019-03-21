@@ -47,7 +47,7 @@ export class Data{
 			});
 		});
 
-		// DETROY NODES
+		// DESTROY NODES
 		allNodes.forEach( (node) => {
 			this.remove(node.id, node.tiles);
 		});
@@ -108,9 +108,9 @@ export class Data{
 				tile.content.add(id, node );
 			});
 
-			if( id.indexOf('fence') !== -1 	) 		Fence.recursiveConnect( node.tiles[0] );
-			if( id.indexOf('road') !== -1 	) 		Road.recursiveConnect( node.tiles[0] );
-			if( id.indexOf('surface') !== -1	) 	Surface.neighboursConnect( node.tiles[0] );
+			if( id.indexOf('fence') 	!== -1 	) 	Fence.recursiveConnect( node.tiles[0] );
+			if( id.indexOf('road') 		!== -1 	) 	Road.recursiveConnect( node.tiles[0] );
+			if( id.indexOf('surface') 	!== -1	) 	Surface.neighboursConnect( node.tiles[0] );
 
 		}
 	}

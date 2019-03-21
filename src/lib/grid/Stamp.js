@@ -12,7 +12,7 @@ import * as Type from 'grid/types/Type';
 
 
 
-
+ 
 
 export class Stamp extends PIXI.Container{
 	constructor(interfaceSelection = false, selectedTiles = []){
@@ -53,7 +53,10 @@ export class Stamp extends PIXI.Container{
 			
 
 			// REMOVE SPRITES
-			while( this.sprites.length > int ){	this.sprites.splice(0,1)[0].destroy(); }
+			while( this.sprites.length > int ){
+				Type.Generic.destroy(this.sprites.splice(0,1)[0])
+
+			}
 			
 		}
 	}
@@ -189,7 +192,7 @@ export class Stamp extends PIXI.Container{
 
 		// SINGLE / MULTISPRITE MODE
 		if( multisprite ){
-			this.length = this.selection.length;
+			this.length = this.selection.length || 1;
 		}else{
 			this.length = 1;
 		}
@@ -198,6 +201,7 @@ export class Stamp extends PIXI.Container{
 		this.sprites.forEach( (sprite, i, a) => {
 			sprite[this.mode].textureDataId = this.textureData.id;
 			sprite[this.mode].tile = this.selection[i];
+			sprite[this.mode].selection = this.selection;
 			if( !multisprite ){
 				sprite[this.mode].limits = this.selection.limits;
 			}

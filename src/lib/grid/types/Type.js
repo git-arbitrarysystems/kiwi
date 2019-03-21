@@ -31,4 +31,14 @@ Generic.mixin = function(type, sprite, textureDataId){
 }
 
 
+Generic.destroy = function(sprite){
+	for( var s in types ){
+		if( sprite[s] ){
+			sprite[s].enabled = false;
+		} 
+	}
+	sprite.destroy({children:true})			
+}
+
+
 export {Generic, Surface, Road, Fence, Build};

@@ -38,11 +38,7 @@ const Transform = {
 	// UPDATE TRANSFORMATION
 	transform: function(sprite, span = [1,1], skewX = true, skewY = true, overflow = 1.01){
 
-		if( sprite.texture.width === 1 ){
-			// TEXTURE IS NOT LOADED YET
-			sprite.texture.on('update', (e)=>{ this.transform(sprite, span, skewX, skewY, overflow); })
-			return;
-		}
+	
 
 		var spanWidth = ( span[0] + span[1] ) * 0.5;
 			

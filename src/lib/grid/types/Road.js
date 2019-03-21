@@ -1,49 +1,59 @@
 import * as PIXI from 'pixi.js';
 import {App} from 'App';
+import {Generic} from 'grid/types/Generic'
+import {Transform} from 'grid/Transform';
 
-export class Road{
+export class Road extends Generic{
 	
 	constructor(sprite){
-		this.sprite = sprite;
-		this.enabled = true;
+		super(sprite);
+
+		this.on('update-position', (e) => {
+			if( this.selection ) this.updateConnections();
+		});
+
+
+		this.on('update-transform', (e) => {
+			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.sprite.anchor.set(0.5, 0.5 );
+			//if( this.selection ) this.updateConnections();
+		});
+
 	}
 
-	get enabled(){ return this._enabled }
-	set enabled(bool){
-		if( bool !== this.enabled ){
-			
-			this._enabled = bool;
-			this.cc = {top:false,right:false,bottom:false,left:false};
+	
 
-			if( !bool ){
-				// CLEAR ALL MASKING
-				this.clear();
-			}else{
-				// CONNECTION CACHE
-				if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
-				if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
-			}
-		}
+	enable(){
+		console.log('Road.enable');
+		this.cc = {top:false,right:false,bottom:false,left:false};
+		// CONNECTION CACHE
+		if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
+		if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
+	}
+
+	disable(){
+		console.log('Road.disable');
 	}
 	
-	clear(){
+	destroy(){
+		console.log('Road.destroy');
 		if( this.sprite.mask ){
 			this.sprite.mask.destroy();
 			this.sprite.mask = null;
 		}
 	}
 
-	updateConnections(index, selection){
 
-		let current = selection[index],
-			connect = {top:false,bottom:false,left:false,right:false};
+	updateConnections(tile = this.tile, selection = this.selection){
+
+		let connect = {top:false,bottom:false,left:false,right:false};
 
 		selection.forEach( (alt,i,a) => {
-			if( alt !== current ){
-				connect.top 	= connect.top 		|| ( current.cx === alt.cx && current.cy === alt.cy+1),
-				connect.bottom 	= connect.bottom 	|| ( current.cx === alt.cx && current.cy === alt.cy-1),
-				connect.left 	= connect.left 		|| ( current.cy === alt.cy && current.cx === alt.cx+1),
-				connect.right 	= connect.right 	|| ( current.cy === alt.cy && current.cx === alt.cx-1)
+			if( alt !== tile ){
+				connect.top 	= connect.top 		|| ( tile.cx === alt.cx && tile.cy === alt.cy+1),
+				connect.bottom 	= connect.bottom 	|| ( tile.cx === alt.cx && tile.cy === alt.cy-1),
+				connect.left 	= connect.left 		|| ( tile.cy === alt.cy && tile.cx === alt.cx+1),
+				connect.right 	= connect.right 	|| ( tile.cy === alt.cy && tile.cx === alt.cx-1)
 			}
 		});
 
@@ -63,7 +73,6 @@ export class Road{
 		if( requiresUpdate ){
 			// CACHE
 			this.cc = sides;
-
 			let radius = this.sprite.texture.width * 0.33;
 
 			// DRAW
@@ -80,10 +89,7 @@ export class Road{
 		}
 	}
 	
-	static mixin(sprite){
-		sprite.road = new Road(sprite);
-		return sprite;
-	}
+
 
 
 	static recursiveConnect(tile, array = []){
@@ -111,10 +117,13 @@ export class Road{
 		}
 
 		if( rootNode ){
+
+			//console.log('Road.recursiveConnect', tile, array);
+
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {
-					roadSprite.road.updateConnections(index, array)
+					roadSprite.road.updateConnections(tile, array)
 				});
 			});
 

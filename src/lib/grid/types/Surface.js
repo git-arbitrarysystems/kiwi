@@ -28,7 +28,7 @@ export class Surface extends Generic{
 
 	// OVERRIDE FUNCTIONS
 	enable(){
-		
+		console.log('Surface.enable');
 		// PEPARE VARS
 		this.cc = {top:false,right:false,bottom:false,left:false};
 		this.overlays = {};
@@ -47,12 +47,11 @@ export class Surface extends Generic{
 	}
 
 	disable(){
-		//console.log('Surface.disable');
-
+		console.log('Surface.disable');
 	}
-
+ 
 	destroy(){
-		//console.log('Surface.destroy', this.sprite.parent);
+		console.log('Surface.destroy');
 		for( var s in this.cc){
 			if( this.overlays[s] ){
 				this.overlays[s].destroy({children:true})
@@ -282,7 +281,7 @@ export class Surface extends Generic{
 	static neighboursConnect(tile){
 		var node = tile.content.getDataNodes('surface')[0],
 			sprite = tile.content.getSprites('surface')[0];
-		sprite.surface.updateConnections(true)
+		sprite.surface.updateConnections(true);
 	}
 
 	

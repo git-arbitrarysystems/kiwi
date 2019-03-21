@@ -10,11 +10,10 @@ export class Build extends Generic{
 		super(sprite)
 
 		this.on('update-transform', (e) => {
-
-			this.updateDerivates();
-
 			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 			this.sprite.anchor.set(0.5, 1 );
+
+			this.updateDerivates();
 
 		});
 
@@ -39,6 +38,11 @@ export class Build extends Generic{
 
 	destroy(){
 		console.log('Build.destroy');
+		if( this.surface ){
+			if( !this.surface._destroyed ) this.surface.destroy({children:true});
+			this.surface = null;
+		}
+		
 	}
 
 
