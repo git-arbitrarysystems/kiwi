@@ -12,18 +12,21 @@ const types = {
 	build:Build
 }
 
-Generic.mixin = function(type, sprite, textureDataId){
+Generic.mixin = function(type, sprite, textureDataId, selection, index = 0){
 
-	if( !sprite[type] && types[type] ){
-		sprite[type] = new types[type](sprite);
-		//console.log('Generic.mixin', type, sprite, '>>>', sprite[type]);
+	if( types[type] ){
+		if( !sprite[type] ){
+			sprite[type] = new types[type](sprite, textureDataId, selection);
+		}
 	}
-
+	
 	for( var s in types ){
 		if( sprite[s] ){
 			sprite[s].enabled = (s===type);
 			if( sprite[s].enabled ){
 				sprite[s].textureDataId = textureDataId;
+				sprite[s].selection = selection;
+				sprite[s].index = index;
 			}
 		} 
 	}

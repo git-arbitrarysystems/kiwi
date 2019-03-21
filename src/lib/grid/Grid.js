@@ -77,7 +77,7 @@ export class Grid extends PIXI.Container{
 		});
 
 		this.stamp = this.addChild( new Stamp() );
-		this.stamp.alpha = 0.5;
+		this.stamp.alpha = 1;
 
 		this.ghost = this.addChild( new Ghost() );
 		this.ghost.alpha = 0.5;
@@ -217,7 +217,7 @@ export class Grid extends PIXI.Container{
 				
 				selectTile = this.getTile({x:x,y:y}, true);
 				if( selectTile ){
-					if( interfaceSelection.type === 'build' && selectTile.content.contains('build') || selectTile.content.contains('water') ) return []
+					if( interfaceSelection.type === 'build' && (selectTile.content.contains('build') || selectTile.content.contains('water')) ) return []
 					a.push(selectTile);
 				}
 				

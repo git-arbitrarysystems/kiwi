@@ -8,46 +8,41 @@ export class Road extends Generic{
 	constructor(sprite){
 		super(sprite);
 
-		this.on('update-position', (e) => {
-			if( this.selection ) this.updateConnections();
-		});
+		this.on('enable', ()=>{
+			console.log('Road.enable');
+			this.cc = {top:false,right:false,bottom:false,left:false};
+			this.sprite.mask = this.sprite.addChild( new PIXI.Graphics() );
+		})
 
-
-		this.on('update-transform', (e) => {
-			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.sprite.anchor.set(0.5, 0.5 );
-			//if( this.selection ) this.updateConnections();
-		});
-
-	}
-
-	
-
-	enable(){
-		console.log('Road.enable');
-		this.cc = {top:false,right:false,bottom:false,left:false};
-		// CONNECTION CACHE
-		if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
-		if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
-	}
-
-	disable(){
-		console.log('Road.disable');
-	}
-	
-	destroy(){
-		console.log('Road.destroy');
-		if( this.sprite.mask ){
+		this.on('disable', ()=>{
+			console.log('Road.disable');
 			this.sprite.mask.destroy();
 			this.sprite.mask = null;
-		}
+		})
+
+		this.on('update', ()=>{
+			console.log('Road.update');
+			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.sprite.anchor.set( 0.5, 0.5 );
+			this.updateConnections();
+		})
+
+		this.on('update-position', ()=>{
+			this.updateConnections();
+		})
+
+
 	}
 
 
 	updateConnections(tile = this.tile, selection = this.selection){
+		
+		if( !tile ) return;
+
+		this.sprite.x = tile.x;
+		this.sprite.y = tile.y;
 
 		let connect = {top:false,bottom:false,left:false,right:false};
-
 		selection.forEach( (alt,i,a) => {
 			if( alt !== tile ){
 				connect.top 	= connect.top 		|| ( tile.cx === alt.cx && tile.cy === alt.cy+1),
@@ -61,8 +56,6 @@ export class Road extends Generic{
 
 	}
 	
-	
-
 
 	mask(sides){
 
@@ -71,6 +64,7 @@ export class Road extends Generic{
 								sides.bottom 	!== this.cc.bottom ||
 								sides.left		!== this.cc.left );
 		if( requiresUpdate ){
+			
 			// CACHE
 			this.cc = sides;
 			let radius = this.sprite.texture.width * 0.33;
@@ -84,7 +78,6 @@ export class Road extends Generic{
 			if( this.cc.bottom 	) this.sprite.mask.drawRect(-radius,0,radius*2,radius*2);
 			if( this.cc.left 	) this.sprite.mask.drawRect(-radius*2,-radius,radius*2,radius*2);
 			this.sprite.mask.endFill();
-
 
 		}
 	}
@@ -117,9 +110,6 @@ export class Road extends Generic{
 		}
 
 		if( rootNode ){
-
-			//console.log('Road.recursiveConnect', tile, array);
-
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {

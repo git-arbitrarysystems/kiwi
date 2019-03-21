@@ -9,86 +9,47 @@ export class Build extends Generic{
 	constructor(sprite){
 		super(sprite)
 
-		this.on('update-transform', (e) => {
+		//this.on('enable', ()=>{});
+		//this.on('disable', ()=>{});
+
+		this.on('update', ()=>{
+
+			// TRANSFORM SELF
 			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 			this.sprite.anchor.set(0.5, 1 );
 
-			this.updateDerivates();
+			if( this.textureData.images.surface ){
+				
+				this.addDerivate('surface');
+				
+				this.sprite.parent.addChildAt( this.derivates.surface, this.sprite.parent.getChildIndex(this.sprite) );
+				this.derivates.surface.type = 'surface';
+				this.derivates.surface.addedZIndex = 1000000;
+				this.derivates.surface.texture = Texture(this.textureData, 'surface' );
 
-		});
-
-		this.on('update-position', (e) => {
-			this.updateDerivates();
-		});
-
-	}
-
-	enable(){
-		console.log('Build.enable');
-		if( !this.surface ) this.surface = new PIXI.Sprite();
-		if( this.sprite.parent ){
-			this.sprite.parent.addChildAt( this.surface, this.sprite.parent.getChildIndex(this.sprite) );
-		}
-		
-	}
-
-	disable(){
-		console.log('Build.disable');
-	}
-
-	destroy(){
-		console.log('Build.destroy');
-		if( this.surface ){
-			if( !this.surface._destroyed ) this.surface.destroy({children:true});
-			this.surface = null;
-		}
-		
-	}
-
-
-	
-
-	updateDerivates(){
-
-		if( this.textureData.images.surface && this.surface ){
+				// TRANSFORM SURFACE
+				Transform.transform( this.derivates.surface, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+				this.derivates.surface.anchor.set( 0.5, 1 );
 			
-			// CREATE
-			var texture = Texture(this.textureData, 'surface');
-			if( this.surface.texture !== texture ){
-				this.surface.texture = texture;
-				if( !texture.valid ){
-					texture.on('update', (e) => {
-						this.transformSurface();
-					});
-				}else{
-					this.transformSurface();
-				}
+			}else{
+				this.destroyDerivate('surface');
 			}
 
-			this.surface.x = this.sprite.x;
-			this.surface.y = this.sprite.y;
 
 
-			// REGISTER
-			this.addDerivate('surface', {sprite:this.surface,type:'surface',addedZIndex:100000})
+		});
 
-		}else{
-			// DESTROY
-			this.destroyDerivates();
-		}
+		this.on('update-position', ()=>{
+			this.sprite.x = this.limits.x;
+			this.sprite.y = this.limits.bottom;
+			if( this.derivates.surface ){
+				this.derivates.surface.x = this.sprite.x;
+				this.derivates.surface.y = this.sprite.y;
+			}
 
-		
+		});
 
 	}
-
-	transformSurface(){
-		if( this.surface ){
-			Transform.transform( this.surface, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.surface.anchor.set(0.5, 1 );
-		}
-	}
-
-
 	
 }
 

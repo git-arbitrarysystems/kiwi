@@ -9,91 +9,75 @@ export class Fence extends Generic{
 	constructor(sprite){
 		super(sprite);
 
-		this.on('update-transform', (e) => {
-
-			[this.sprite, this.tc, this.bc].forEach((sprite)=>{
-				sprite.texture = this.sprite.texture;
-				Transform.transform( sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-				sprite.anchor.set(0.5, 1 );
-
-			})
-
-			this.tc.skew.set( this.sprite.skew.x, -this.sprite.skew.y)
-			this.bc.skew.set( this.sprite.skew.x, -this.sprite.skew.y)
-
-			if( this.tile && this.selection ) this.updateConnections();
-
+		this.on('enable', ()=>{
+			this.cc = {top:false,right:false,bottom:false,left:false};
+			this.sprite.mask = this.sprite.addChild( new PIXI.Graphics() );
 		});
 
-		this.on('update-position', (e) => {
-			
-
-			this.tc.x = this.sprite.x;
-			this.tc.y = this.sprite.y;
-			this.bc.x = this.sprite.x;
-			this.bc.y = this.sprite.y;
-
-			if( this.tile && this.selection ) this.updateConnections();
-
-		});
-
-	}
-
-	enable(){
-
-		console.log('Fence.enable');
-		this.cc = {top:false,right:false,bottom:false,left:false};
-
-		if( !this.sprite.mask )	this.sprite.mask = new PIXI.Graphics();
-		if( !this.sprite.mask.parent ) this.sprite.addChild( this.sprite.mask );
-
-		if( !this.bc ) this.bc = new PIXI.Sprite(this.sprite.texture);
-		if( !this.bc.parent ) this.sprite.parent.addChild( this.bc);
-		if( !this.bc.mask ) this.bc.mask = new PIXI.Graphics();
-		if( !this.bc.mask.parent ) this.bc.addChild( this.bc.mask );
-
-		this.sprite.parent.addChild( this.sprite );
-
-		if( !this.tc ) this.tc = new PIXI.Sprite(this.sprite.texture);
-		if( !this.tc.parent ) this.sprite.parent.addChild( this.tc );
-		if( !this.tc.mask ) this.tc.mask = new PIXI.Graphics();
-		if( !this.tc.mask.parent ) this.tc.addChild( this.tc.mask );
-	}
-
-	disable(){
-		console.log('Fence.disable');
-	}
-
-	destroy(){
-
-		console.log('Fence.destroy');
-		if( this.sprite.mask ){
-			this.sprite.mask.destroy();
+		this.on('disable', ()=>{
+			this.sprite.mask.destroy({children:true});
 			this.sprite.mask = null;
-		}
-		if( this.tc ){
-			if( !this.tc._destroyed ) this.tc.destroy({children:true})
-			this.tc = null;
-		}
-		
-		if( this.bc ){
-			if( !this.bc._destroyed ) this.bc.destroy({children:true})
-			this.bc = null;
-		}
+		});
+
+		this.on('update', ()=>{
+			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.sprite.anchor.set(0.5, 1 );
+			this.updateDerivates();
+			this.updateConnections();			
+		});
+
+		this.on('update-position', ()=>{
+			this.updateConnections();
+		});
+
 	}
 
+	
+
+	updateDerivates(){
+		['bottom', 'top'].forEach( (id)=>{
+			this.addDerivate(id);
+			if( !this.derivates[id].mask ) this.derivates[id].mask = this.derivates[id].addChild( new PIXI.Graphics() );
+
+			this.derivates[id].texture = this.sprite.texture;
+			this.derivates[id].type = 'fence';
+			this.derivates[id].addedZIndex = (id === 'top' ) ? -0.1 : 0.1;
+
+			Transform.transform( this.derivates[id], this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.derivates[id].skew.set( this.sprite.skew.x, -this.sprite.skew.y );
+			this.derivates[id].anchor.set(0.5, 1);
+
+		});
+
+
+		this.clear( this.sprite.mask );
+		this.clear( this.derivates.top.mask );
+		this.clear( this.derivates.bottom.mask );
+
+		// STACK
+		var parent = this.sprite.parent;
+		parent.addChild( this.derivates.top );
+		parent.addChild( this.sprite );
+		parent.addChild( this.derivates.bottom );
+	}
 
 
 
 	updateConnections(tile = this.tile, selection = this.selection){
 
-		/*if( !this.sprite.texture.valid ){
-			this.sprite.texture.on('update', ()=>{ this.updateConnections() });
-			return;
-		}*/
+		if( !tile ) return;
 
-		this.tc.visible = this.cc.top;
-		this.bc.visible = this.cc.bottom;
+		this.sprite.x = tile.x;
+		this.sprite.y = tile.y;
+
+		if( !this.derivates.top || !this.derivates.bottom ) this.updateDerivates();
+
+		this.derivates.top.x = tile.x;
+		this.derivates.top.y = tile.y;
+		this.derivates.bottom.x = tile.x;
+		this.derivates.bottom.y = tile.y;
+
+	
 
 		let connect = {top:false,bottom:false,left:false,right:false};
 
@@ -106,81 +90,58 @@ export class Fence extends Generic{
 			}
 		});
 
+		
+
 		var requiresUpdate = (	connect.top 	!== this.cc.top || 
 								connect.right 	!== this.cc.right || 
 								connect.bottom 	!== this.cc.bottom ||
 								connect.left	!== this.cc.left );
 
-
+		if( Object.values(connect).includes(true) === false ){
+			connect.left = true;
+			connect.right = true;
+		}
 
 		if( requiresUpdate ){
-			//console.log('Fence.mask', current.toString(), connect);
-
+			
 			// CACHE
 			this.cc = connect;
-			
-			if( this.sprite.mask && (connect.left || connect.right) ){
-				this.sprite.visible = true;
-				this.sprite.mask.clear();
+
+			let w = this.sprite.texture.orig.width,
+				h = this.sprite.texture.orig.height,
+				hw = w * 0.5,
+				hh = h*0.5;
+
+			this.clear( this.sprite.mask );
+			this.clear( this.derivates.top.mask );
+			this.clear( this.derivates.bottom.mask );
+
+			if( connect.left || connect.right ){			
 				this.sprite.mask.beginFill(0xff0000, 0.5);
-				if( connect.right ) this.sprite.mask.drawRect(
-					-this.sprite.texture.width*0.0,
-					-this.sprite.texture.height,
-					this.sprite.texture.width * 0.5,
-					this.sprite.texture.height
-				);
-
-				if( connect.left ) this.sprite.mask.drawRect(
-					-this.sprite.texture.width*0.5,
-					-this.sprite.texture.height,
-					this.sprite.texture.width * 0.5,
-					this.sprite.texture.height
-				);
+				if( connect.right ) this.sprite.mask.drawRect(0,-h,hw,h)
+				if( connect.left ) this.sprite.mask.drawRect(-hw,-h,hw,h)
 				this.sprite.mask.endFill();
-			}else{
-				this.sprite.visible = false;
 			}
-
-
 
 			if( connect.top ){
-
-
-				this.tc.visible = true;
-				this.tc.mask.clear();
-				this.tc.mask.beginFill(0xff00ff, 0.5);
-				this.tc.mask.drawRect(
-					-this.tc.texture.width*0.5,
-					-this.tc.texture.height,
-					this.tc.texture.width * 0.5,
-					this.tc.texture.height
-				);
-			}else{
-				this.tc.visible = false;
+				this.derivates.top.mask.beginFill(0xff0000, 0.5);
+				this.derivates.top.mask.drawRect(-hw,-h,hw,h)
+				this.derivates.top.mask.endFill();
 			}
 
-
 			if( connect.bottom ){
-
-
-				this.bc.visible = true;
-				this.bc.mask.clear();
-				this.bc.mask.beginFill(0x00ff00, 0.5);
-				this.bc.mask.drawRect(
-					-this.bc.texture.width*0.0,
-					-this.bc.texture.height,
-					this.bc.texture.width * 0.5,
-					this.bc.texture.height
-				);
-			}else{
-				this.bc.visible = false;
+				this.derivates.bottom.mask.beginFill(0xff0000, 0.5);
+				this.derivates.bottom.mask.drawRect(0,-h,hw,h)
+				this.derivates.bottom.mask.endFill();
 			}
 		}
 
+	}
 
-		this.addDerivate('tc', {sprite:this.tc, type:'fence', addedZIndex:-0.1})
-		this.addDerivate('bc', {sprite:this.bc, type:'fence', addedZIndex: 0.1})
-		
+	clear(graphics){
+		graphics.clear();
+		graphics.beginFill(0x000000);
+		graphics.drawRect(0,0,1,1)
 	}
 	
 
@@ -210,6 +171,7 @@ export class Fence extends Generic{
 		}
 
 		if( rootNode ){
+
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('fence').forEach( (fenceSprite) => {

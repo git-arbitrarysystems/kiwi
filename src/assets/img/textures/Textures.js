@@ -4,6 +4,7 @@ import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
 import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
+import fence_alt from './fence_alt.png'
 import fence_high_wood from './fence_high_wood.png'
 import build_palmtree_with_hut from './build_palmtree_with_hut.png'
 import build_palmtree_with_hut_surface from './build_palmtree_with_hut_surface.png'
@@ -245,6 +246,33 @@ const Textures  = {
         }
     },
     fence: {
+        alt: {
+            modulo: false,
+            skewX: false,
+            skewY: true,
+            size: [
+                1,
+                1
+            ],
+            images: {
+                main: {
+                    url: fence_alt,
+                    trim: {
+                        left: 0,
+                        top: 278,
+                        width: 256,
+                        height: 234
+                    }
+                }
+            },
+            type: 'fence',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 256,
+                height: 512
+            }
+        },
         high_wood: {
             modulo: false,
             skewX: false,
@@ -258,9 +286,9 @@ const Textures  = {
                     url: fence_high_wood,
                     trim: {
                         left: 0,
-                        top: 71,
-                        width: 256,
-                        height: 441
+                        top: 99,
+                        width: 255,
+                        height: 413
                     }
                 }
             },

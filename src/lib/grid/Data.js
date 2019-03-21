@@ -57,17 +57,12 @@ export class Data{
 			App.Grid.remove(tile.cx, tile.cy);
 		});
 
-
-		//console.log('Data.destroy', tiles, allNodes );
 	}
 
 	add(id, toTiles, testOnly = false){
 
 		var textureData = TextureData[id],
 			type = textureData.type;
-
-
-		//console.log('Data.add', id, textureData);
 
 		// CHECK IF IT CAN BE ADDED
 		var appendContent = true;
