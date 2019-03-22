@@ -41,6 +41,7 @@ export class Generic extends PIXI.utils.EventEmitter{
 
 	destroyDerivate(id){
 		if( this.derivates[id] ){
+			console.log('Generic.destroyDerivate', id);
 			this.derivates[id].destroy({children:true});
 			delete this.derivates[id];
 		}

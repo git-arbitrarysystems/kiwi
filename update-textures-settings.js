@@ -25,19 +25,27 @@ module.exports.Tiles = {
 	},
 	'road':{
 		_default:{
+			crop:true,
+			surface:"'!water'"
+		},
+		pier:{
+			crop:false,
+			surface:"'water'"
 		}
 	},
 	'fence':{
 		_default:{
 			skewX:false,
-			skewY:true
+			skewY:true,
+			surface:"'!water'"
 		}
 	},
 	'build':{
 		_default:{
 			skewX:false,
 			skewY:false,
-			cutoff:true
+			cutoff:true,
+			surface:"'!water'"
 		},
 		castle:{
 			size:[5,5],
@@ -169,7 +177,9 @@ module.exports.Tiles = {
 			cutoff:390
 		},
 		tiny_island:{
-			cutoff:512
+			cutoff:512,
+			size:[2,2],
+			surface:"'water'"
 		},
 		volcano:{
 			size:[5,5],

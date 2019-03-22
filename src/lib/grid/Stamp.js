@@ -39,10 +39,13 @@ export class Stamp extends PIXI.Container{
 				this.visible = false;
 			}
 
+			console.log('Stamp.mode:', this.mode);
+
 			this.multiSpriteMode = ( ['fence', 'road'].indexOf(this.mode) !== -1 );
 
 			this.sprites.forEach( (sprite, index, array) => {
 				Type.Generic.mixin(this.mode, sprite, this.textureData.id, this.selection, index);
+				sprite.visible = this.visible;
 			});
 
 		}
@@ -75,6 +78,8 @@ export class Stamp extends PIXI.Container{
 					sprite[this.mode].selection = this.selection;
 				});
 			}
+
+			this.visible = ( this._selection && this._selection.length > 0)
 			
 			
 		}

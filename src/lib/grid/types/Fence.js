@@ -158,13 +158,8 @@ export class Fence extends Generic{
 			}
 			
 			// CHECK MY NEIGHBOURS
-			[
-				App.Grid.getTile({x:tile.cx+1, 	y:tile.cy	}),
-				App.Grid.getTile({x:tile.cx-1, 	y:tile.cy	}),
-				App.Grid.getTile({x:tile.cx, 	y:tile.cy+1	}),
-				App.Grid.getTile({x:tile.cx, 	y:tile.cy-1	})
-			].forEach( (v,i,a) => {
-				if( v && v.content.contains('fence') ){
+			tile.neighbours.forEach( (v,i,a) => {
+				if( v.content.contains('fence') ){
 					Fence.recursiveConnect(v, array );
 				}
 			});

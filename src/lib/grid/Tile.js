@@ -5,21 +5,67 @@ import {App} from 'App';
 class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);
-
+		this._neighboursRequireUpdate = true;
 		this.content = new TileContent(this);
-
-		this.alpha = 0.2;
 		this.cx = cx;
 		this.cy = cy;
 	}
-	set hover(boolean){
-		this._hover = boolean;
-		if( !this._selected ) this.tint = boolean ? 0xff00ff : 0xffffff;
+
+	get neighbours(){
+		if( this._neighboursRequireUpdate ){
+			this._neighbours = [
+				App.Grid.getTile({x:this.cx+1, y:this.cy}),
+				App.Grid.getTile({x:this.cx-1, y:this.cy}),
+				App.Grid.getTile({x:this.cx, y:this.cy+1}),
+				App.Grid.getTile({x:this.cx, y:this.cy-1})
+			].filter( (tile) => { return tile ? true : false} );
+			this._neighboursRequireUpdate = false;
+		}
+		return this._neighbours;
 	}
-	set selected(boolean){
-		this._selected = boolean;
-		this.tint = boolean ? 0xff0000 : 0xffffff;
+
+	hover(color, alpha = 0.15){
+		this._hoverColor = color;
+		this._hoverAlpha = alpha;
+		this.updateTint()
 	}
+
+	get destroy(){ return this._selected }
+	set destroy(boolean){
+		this._destroy = boolean;
+		this.updateTint()
+	}
+
+	updateBooleans(updateNeighbours = false){
+		this.water = this.content.contains('water');
+		this.build = this.content.contains('build');
+		this.fence = this.content.contains('fence')
+		
+		this.beach = !this.water && this.neighbours.some( (tile) => { return tile.water; });
+
+		if( updateNeighbours ){
+			this.neighbours.forEach( (tile) => {
+				tile.updateBooleans();
+			})
+		}
+
+		this.updateTint();
+
+	}
+
+	updateTint(){
+		this.alpha = 0.15;
+		this.tint = 0xffffff;
+
+			 if( this.water 	){ this.tint = 0x0000ff;}
+		else if( this.beach 	){ this.tint = 0xffff00;}
+		else if( this.fence 	){ this.tint = 0x555555;}
+		else if( this.build 	){ this.tint = 0xff00ff;}
+
+ 		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha;}
+		
+	}
+
 	toString(){
 		return '[Tile '+this.cx+' '+this.cy+']';
 	}
@@ -43,9 +89,11 @@ class TileContent{
 	}
 	
 
-	updateTileBools(){
-		this.tile.water = this.contains('water');
-		this.tile.build = this.contains('build');
+	
+
+	testSurface(regExpString){
+		if( regExpString === 'water' ) return this.tile.water;
+		if( regExpString === '!water' ) return !this.tile.water;
 	}
 
 	add(id, node){
@@ -64,7 +112,7 @@ class TileContent{
 		}
 
 
-		this.updateTileBools();
+		this.tile.updateBooleans(true);
 
 	}
 
@@ -103,18 +151,15 @@ class TileContent{
 		}
 
 
-		this.updateTileBools();
+		this.tile.updateBooleans(true);
 
 	}
 
 
 	contains(wildcard){
 		let regex = new RegExp(wildcard,'i');
-
 		return this.keys.some( (v,i,a) => { return regex.test(v)});
 	}
-
-
 
 
 	select(wildcard){

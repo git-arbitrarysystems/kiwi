@@ -20,5 +20,7 @@
 14. ~~wehrbäume~~
 15. building entry tiles
 16. building free/occupied tiles
+17. random maps
+18. animated items
 
 

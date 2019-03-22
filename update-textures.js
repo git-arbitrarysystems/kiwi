@@ -75,7 +75,9 @@ function updateTextures(){
 			if( layer.name.indexOf('_') === 0 ){
 				// EXPORT
 				var name = group + layer.name + '.png',
-					id = layer.name.substr(1).replace('_surface', ''),
+					derivateTest = new RegExp('_(surface|build)'),
+					isDerivate = derivateTest.test(layer.name),
+					id = layer.name.substr(1).replace(derivateTest, ''),
 					callback = ( function(n){ return ()=>{ imageReady(n) } })(settings.target + name + '... ready');
 
 				if( !json[group][id] ){
@@ -97,11 +99,14 @@ function updateTextures(){
 				
 			
 				
-				if( layer.name.indexOf('_surface') !== -1 ){
-					json[group][id].images = Object.assign(json[group][id].images, {surface:{
+				if( isDerivate ){
+					var derivateName = layer.name.match(derivateTest)[1]
+					var object = {};
+					object[derivateName] = {
 						url:group + '_' + layer.name.substr(1),
 						trim:{left:layer.left, top:layer.top, width:layer.width, height:layer.height}
-					}});
+					}
+					json[group][id].images = Object.assign(json[group][id].images, object);
 				}else{
 					json[group][id].images = Object.assign(json[group][id].images, {main:{
 						url:group + '_' + layer.name.substr(1),

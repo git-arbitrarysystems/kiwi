@@ -30,11 +30,20 @@ export class Grid extends PIXI.Container{
 		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
 		this.background.tint = 0xffffff;
 		this.background.alpha = 0.01;
-	
-
 
 		// ADD THE FACE OOF THE GRID
 		this.face = this.addChild( new Face() );
+
+		this.stamp = this.addChild( new Stamp() );
+		this.stamp.alpha = 1;
+
+		this.ghost = this.addChild( new Ghost() );
+		this.ghost.alpha = 0.5;
+
+		// ADD THE CONTAINER FOR INTERACTIVE TILES
+		this.container = this.addChild( new PIXI.Container() );
+
+		this.tiles = {};
 
 		this.size = {
 			reset:function(){
@@ -65,7 +74,7 @@ export class Grid extends PIXI.Container{
 			}
 		}.reset();
 
-		this.tiles = {};
+		
 
 		// HOLDER CLASS FOR THE MAP-DATA
 		this.data = new Data();
@@ -76,12 +85,7 @@ export class Grid extends PIXI.Container{
 			 allowDiagonal: false
 		});
 
-		this.stamp = this.addChild( new Stamp() );
-		this.stamp.alpha = 1;
-
-		this.ghost = this.addChild( new Ghost() );
-		this.ghost.alpha = 0.5;
-
+		
 		// INTERACTION
 		this.interactive = true;
 		this.on('pointerdown', 	(e)=>{ this.pointer(e) } );
@@ -109,10 +113,14 @@ export class Grid extends PIXI.Container{
 	// ADD TILE
 	add(x,y){
 		if( !this.tiles[x] ) this.tiles[x] = {};
-		if( !this.tiles[x][y] ) this.tiles[x][y] = this.addChild( new Tile(x,y) );
+		if( !this.tiles[x][y] ) this.tiles[x][y] = this.container.addChild( new Tile(x,y) );
 
 		//console.log('Grid.add', x, y);
 		this.size.add(x,y);
+
+		this.tiles[x][y].neighbours.forEach( (tile)=>{
+			tile._neighboursRequireUpdate = true;
+		});
 
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
@@ -122,7 +130,11 @@ export class Grid extends PIXI.Container{
 		if( !this.tiles[x] ) return false;
 		if( !this.tiles[x][y] ) return false;
 
-		this.tiles[x][y].destroy();
+		this.tiles[x][y].neighbours.forEach( (tile)=>{
+			tile._neighboursRequireUpdate = true;
+		});
+
+		this.tiles[x][y].destroy({children:true});
 		delete this.tiles[x][y];
 
 		// UPDATE GRIDSIZE
@@ -217,7 +229,10 @@ export class Grid extends PIXI.Container{
 				
 				selectTile = this.getTile({x:x,y:y}, true);
 				if( selectTile ){
-					if( interfaceSelection.type === 'build' && (selectTile.content.contains('build') || selectTile.content.contains('water')) ) return []
+					/*if( !selectTile.content.testSurface(interfaceSelection.surface) ){
+						if( this.stamp.multiSpriteMode ) return [tile];
+						return []
+					}*/
 					a.push(selectTile);
 				}
 				
@@ -249,6 +264,10 @@ export class Grid extends PIXI.Container{
 
 			// APPLY TO GHOST TILES
 			this.ghost.textureDataId = interfaceSelection.id;
+
+			//
+			this.container.visible = true;//interfaceSelection ? true : false;
+
 				
 		}
 
@@ -317,12 +336,11 @@ export class Grid extends PIXI.Container{
 	hover(){
 		
 		// UNHOVER
-		if( this._hover ) this._hover.forEach( (tile)=>{ tile.hover = false;} );
-		if( this._hoverExtended ) this._hoverExtended.forEach( (tile)=>{ tile.hover = false;} );
-		
+		if( this._hover ) this._hover.forEach( (tile)=>{ tile.hover(false);} );
+	
 		// CLEAR
 		this._hover = [];
-		this._hoverExtended = [];
+
 
 		let interfaceSelection = Object.assign({
 			size:[1,1],
@@ -331,7 +349,9 @@ export class Grid extends PIXI.Container{
 
 		
 		// GET SELECTION
-		if( (this.mode === 'road' || this.mode === 'fence') && this.__ps ){
+		if( this.mode === 'drag'){
+			this._hover = [];
+		}else if( (this.mode === 'road' || this.mode === 'fence') && this.__ps ){
 			this._hover = this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
 		}else if( this.mode.indexOf('destroy') !== -1 ){
 			
@@ -342,16 +362,21 @@ export class Grid extends PIXI.Container{
 			if( tile && tile.content.contains(what) ){
 				this._hover = tile.content.select(what);
 
+				// SURFACE DESTROY DESTROY EVERYTHING ON ITS TILES
 				if( this.mode === 'destroy-surface'){
+					var _extendedHover = [];
 					this._hover.forEach( (tile) => {
 						tile.content.select('road|build|fence').forEach( (associatedTile) => {
-							if( this._hover.indexOf(associatedTile) === -1 && this._hoverExtended.indexOf(associatedTile) === -1 ){
-								this._hoverExtended.push( associatedTile );
+							if( this._hover.indexOf(associatedTile) === -1 && _extendedHover.indexOf(associatedTile) === -1 ){
+								_extendedHover.push( associatedTile );
 							}
 						})
 					});
+					this._hover = this._hover.concat(_extendedHover)
 				}
 
+			}else if(tile){
+				this._hover = [tile];
 			}
 
 		}else{
@@ -390,11 +415,9 @@ export class Grid extends PIXI.Container{
 
 		// SHOW HOVERING
 		this._hover.forEach( (tile)=>{ 
-			tile.hover = true;
+			tile.hover(0xff0000);
 		});
-		this._hoverExtended.forEach( (tile)=>{ 
-			tile.hover = true;
-		});
+		
 		
 
 		
@@ -423,22 +446,28 @@ export class Grid extends PIXI.Container{
 			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
 		}
 
-		if( this._selected ) this._selected.forEach( (tile)=>{ tile.selected = false;} );
 	}
 
 	path(from, to){
 
 		if( !from || !to ) return [];
+
+		if(!from.content.testSurface(this.stamp.textureData.surface) ) return [];
+		if(  !to.content.testSurface(this.stamp.textureData.surface) ) return [];
 				
 		// CREATE A PATHFINDER GRID
 		let m = new PF.Grid(this.size.width, this.size.height),
-			x,y, tile,bool;
+			x,y, tile, bool;
 
 		// ANALYSE SURFACE
 		for(y=0;y<m.height;y++){
 			for(x=0;x<m.width;x++){
 				tile = this.getTile({x:x+this.size.minx,y:y+this.size.miny}, true);
-				bool = tile ? !tile.water : false;
+				bool = to.content.testSurface(this.stamp.textureData.surface);
+
+
+
+				//bool = tile ? !tile.water : false;
 				//if( tile.content.contains('water') ) bool = false;
 				m.setWalkableAt(x,y,bool);
 			}
