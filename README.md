@@ -22,5 +22,6 @@
 16. building free/occupied tiles
 17. random maps
 18. animated items
+19. validate stamp
 
 

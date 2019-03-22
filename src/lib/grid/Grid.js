@@ -375,8 +375,6 @@ export class Grid extends PIXI.Container{
 					this._hover = this._hover.concat(_extendedHover)
 				}
 
-			}else if(tile){
-				this._hover = [tile];
 			}
 
 		}else{
@@ -414,8 +412,14 @@ export class Grid extends PIXI.Container{
 
 
 		// SHOW HOVERING
+		var color = 0xffffff;
+		if( this.mode.indexOf('destroy') !== -1 ){
+			color = 0xff0000;
+		}else if( this.mode.indexOf('build') !== -1 ){
+			color = 0x00ff00;
+		}
 		this._hover.forEach( (tile)=>{ 
-			tile.hover(0xff0000);
+			tile.hover(color, 0.3);
 		});
 		
 		
