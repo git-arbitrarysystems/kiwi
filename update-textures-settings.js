@@ -30,7 +30,7 @@ module.exports.Tiles = {
 		},
 		pier:{
 			crop:false,
-			surface:"'water'"
+			surface:"'water|beach'"
 		}
 	},
 	'fence':{

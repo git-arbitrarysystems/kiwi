@@ -116,11 +116,13 @@ class TileContent{
 
 	
 
-	testSurface(regExpString){
-		if( regExpString === 'water' ) return this.tile.water;
-		if( regExpString === '!water' ) return !this.tile.water;
-		if( regExpString === 'beach' ) return this.tile.beach;
-		if( regExpString === '!beach' ) return !this.tile.beach;
+	testSurface(expr){
+		if( expr === 'water' ) return this.tile.water;
+		if( expr === '!water' ) return !this.tile.water;
+		if( expr === 'beach' ) return this.tile.beach;
+		if( expr === '!beach' ) return !this.tile.beach;
+		if( expr === 'water|beach' ) return this.tile.water || this.tile.beach;
+		if( expr === '!water|beach' ) return !(this.tile.water || this.tile.beach);
 	}
 
 	add(id, node){

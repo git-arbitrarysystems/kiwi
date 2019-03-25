@@ -265,7 +265,7 @@ const Textures  = {
                 height: 128
             },
             crop: false,
-            surface: 'water'
+            surface: 'water|beach'
         },
         sand: {
             modulo: false,
