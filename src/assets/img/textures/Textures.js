@@ -3,6 +3,7 @@ import surface_water from './surface_water.png'
 import surface_sand from './surface_sand.png'
 import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
+import road_pier_start from './road_pier_start.png'
 import road_pier_build from './road_pier_build.png'
 import road_pier from './road_pier.png'
 import road_sand from './road_sand.png'
@@ -228,6 +229,15 @@ const Textures  = {
                 1
             ],
             images: {
+                start: {
+                    url: road_pier_start,
+                    trim: {
+                        left: 0,
+                        top: 37,
+                        width: 122,
+                        height: 81
+                    }
+                },
                 build: {
                     url: road_pier_build,
                     trim: {
