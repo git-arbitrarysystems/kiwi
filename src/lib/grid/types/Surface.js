@@ -1,6 +1,7 @@
 import * as PIXI from 'pixi.js';
 import {App} from 'App';
 import {Tile} from 'grid/Tile';
+import {Texture} from 'grid/Texture';
 import {TextureData} from 'interface/Interface';
 import {Generic} from 'grid/types/Generic';
 import {Transform} from 'grid/Transform';
@@ -87,6 +88,8 @@ export class Surface extends Generic{
 		}
 
 
+		
+
 		// UPDATE SELF
 		for( s in neighbours ){
 			if( neighbours[s]  ){
@@ -96,6 +99,9 @@ export class Surface extends Generic{
 					this.overflows( neighbourDataNode[0].id, this.textureDataId )					
 				){
 					neighbours[s] = neighbourDataNode[0];
+					/*if( neighbours[s].id === 'surface/water' && this.textureDataId === 'surface/dirt' && Math.random() < 0.25){
+						neighbours[s] = TextureData['surface/beach']
+					}*/
 					this.overlays[s].visible = true;
 				}else{
 					neighbours[s] = false;
@@ -104,31 +110,40 @@ export class Surface extends Generic{
 			}
 		}
 
+
+
 		
 		// CREATING MASKING
 		for( s in neighbours ){
 			if( neighbours[s] ){
 				var requiresUpdate = ( this.overlays[s].textureDataId !== neighbours[s].id );
 				if( requiresUpdate ){
+
 					let textureData = TextureData[ neighbours[s].id ]
 					// SET SPITE TEXTURE
-					this.overlays[s].textureDataId = textureData.id;
-					this.overlays[s].texture = PIXI.Texture.from( textureData.images.main.url )
-					this.drawMask(s, this.overlays[s].mask, this.overlays[s].texture.width, textureData.size[0] )
+					this.overlays[s].textureDataId = neighbours[s].id;
+					this.overlays[s].texture = Texture( textureData )
+					this.drawMask(s, this.overlays[s].mask, this.overlays[s].texture.orig.width, textureData.size[0]);
 				}
+
 			}
 		}
+
 	}
 
 
 	overflows( from, to ){
 		from = from.split('/')[1];
 		to = to.split('/')[1];
-		if( from === to ) return false;
-		if( from === 'water' ) return true;
-		if( from === 'grass' && to === 'dirt' ) return true;
-		if( to === 'stone' ) return true;
-		return false;
+
+		// EXCEPTIONS
+		if( from === 'water' && to === 'sand' ) return false;
+		if( from === 'sand' && to === 'water' ) return true;
+
+		// DEFAULT
+		var order = ['water','grass','dirt','sand','stone']
+		return order.indexOf(from) < order.indexOf(to);
+
 	}
 
 
@@ -136,10 +151,10 @@ export class Surface extends Generic{
 
 		var i,
 			offset = size * -0.5,
-			minimumIndent = size * 0.50 / span,
-			maximumIndent = size * 1.10 / span,
+			minimumIndent = size * 0.05 / span,
+			maximumIndent = size * 0.95 / span,
 			segments = Math.floor(3 + Math.random() * 5),
-			x = [offset,offset+minimumIndent], y = [offset,offset];
+			x = [offset,offset+0], y = [offset,offset];
 		
 		for(i=0;i<segments;i++){
 			x.push( minimumIndent + Math.random() * (maximumIndent-minimumIndent ) + offset )
@@ -147,7 +162,7 @@ export class Surface extends Generic{
 		}
 		
 		// CLOSING THE POINTS
-		x.push(minimumIndent+offset);
+		x.push(0+offset);
 		y.push(size+offset);
 		x.push(offset);
 		y.push(size+offset);

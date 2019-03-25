@@ -118,9 +118,10 @@ export class Grid extends PIXI.Container{
 		//console.log('Grid.add', x, y);
 		this.size.add(x,y);
 
-		this.tiles[x][y].neighbours.forEach( (tile)=>{
+		this.tiles[x][y].neighbours(true).forEach( (tile)=>{
 			tile._neighboursRequireUpdate = true;
 		});
+
 
 		Transform.position( Transform.transform( this.tiles[x][y] ) );
 		return this.tiles[x][y];
@@ -130,9 +131,10 @@ export class Grid extends PIXI.Container{
 		if( !this.tiles[x] ) return false;
 		if( !this.tiles[x][y] ) return false;
 
-		this.tiles[x][y].neighbours.forEach( (tile)=>{
+		this.tiles[x][y].neighbours(true).forEach( (tile)=>{
 			tile._neighboursRequireUpdate = true;
 		});
+
 
 		this.tiles[x][y].destroy({children:true});
 		delete this.tiles[x][y];
@@ -187,6 +189,7 @@ export class Grid extends PIXI.Container{
 			// AUTOCREATE
 			this.add(c.x, c.y);
 		}
+
 		if( !this.tiles[c.x] ) return undefined;
 		return this.tiles[c.x][c.y];
 	}
@@ -288,7 +291,9 @@ export class Grid extends PIXI.Container{
 
 				let tile = this.getTile(this.__ps, false) 
 				if( tile ){
-					console.log( tile.toString() );
+					console.log(
+						tile.toString(), tile.content.keys,
+					);
 				}
 
 

@@ -83,6 +83,7 @@ export class Face extends PIXI.Container{
 
 	renderTexture(type, delay = true){
 
+
 		if( delay ){
 			var self = this;
 			clearTimeout( this[type + 'RenderDelay'] );

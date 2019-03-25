@@ -1,5 +1,6 @@
 import surface_grass from './surface_grass.png'
 import surface_water from './surface_water.png'
+import surface_sand from './surface_sand.png'
 import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
 import road_pier_build from './road_pier_build.png'
@@ -15,7 +16,6 @@ import build_palmtree_3 from './build_palmtree_3.png'
 import build_palmtree_2 from './build_palmtree_2.png'
 import build_palmtree_1 from './build_palmtree_1.png'
 import build_small_forest from './build_small_forest.png'
-import build_small_forest_surface from './build_small_forest_surface.png'
 import build_catapult_2 from './build_catapult_2.png'
 import build_catapult_2_surface from './build_catapult_2_surface.png'
 import build_catapult_1 from './build_catapult_1.png'
@@ -27,8 +27,8 @@ import build_defense_tree_1 from './build_defense_tree_1.png'
 import build_defense_tree_2 from './build_defense_tree_2.png'
 import build_volcano from './build_volcano.png'
 import build_volcano_surface from './build_volcano_surface.png'
-import build_tiny_island_surface from './build_tiny_island_surface.png'
 import build_tiny_island from './build_tiny_island.png'
+import build_tiny_island_surface from './build_tiny_island_surface.png'
 import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
 import build_lake_2 from './build_lake_2.png'
@@ -120,6 +120,33 @@ const Textures  = {
             images: {
                 main: {
                     url: surface_water,
+                    trim: {
+                        left: 0,
+                        top: 0,
+                        width: 512,
+                        height: 512
+                    }
+                }
+            },
+            type: 'surface',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 512
+            }
+        },
+        sand: {
+            modulo: true,
+            skewX: true,
+            skewY: true,
+            size: [
+                3,
+                3
+            ],
+            images: {
+                main: {
+                    url: surface_sand,
                     trim: {
                         left: 0,
                         top: 0,
@@ -362,17 +389,17 @@ const Textures  = {
                     trim: {
                         left: 2,
                         top: 227,
-                        width: 518,
+                        width: 510,
                         height: 240
                     }
                 },
                 surface: {
                     url: build_palmtree_with_hut_surface,
                     trim: {
-                        left: -8,
+                        left: 6,
                         top: 175,
-                        width: 518,
-                        height: 380
+                        width: 494,
+                        height: 376
                     }
                 }
             },
@@ -427,9 +454,9 @@ const Textures  = {
                 main: {
                     url: build_palmtree_3,
                     trim: {
-                        left: -59,
+                        left: 0,
                         top: 0,
-                        width: 537,
+                        width: 478,
                         height: 528
                     }
                 }
@@ -487,7 +514,7 @@ const Textures  = {
                     trim: {
                         left: 57,
                         top: 119,
-                        width: 463,
+                        width: 455,
                         height: 462
                     }
                 }
@@ -514,19 +541,10 @@ const Textures  = {
                 main: {
                     url: build_small_forest,
                     trim: {
-                        left: -10,
-                        top: 300,
-                        width: 512,
-                        height: 328
-                    }
-                },
-                surface: {
-                    url: build_small_forest_surface,
-                    trim: {
-                        left: -10,
+                        left: 0,
                         top: 194,
-                        width: 512,
-                        height: 434
+                        width: 502,
+                        height: 409
                     }
                 }
             },
@@ -562,9 +580,9 @@ const Textures  = {
                     url: build_catapult_2_surface,
                     trim: {
                         left: 79,
-                        top: 130,
-                        width: 508,
-                        height: 447
+                        top: 254,
+                        width: 379,
+                        height: 323
                     }
                 }
             },
@@ -808,15 +826,6 @@ const Textures  = {
                 2
             ],
             images: {
-                surface: {
-                    url: build_tiny_island_surface,
-                    trim: {
-                        left: 84,
-                        top: 341,
-                        width: 324,
-                        height: 235
-                    }
-                },
                 main: {
                     url: build_tiny_island,
                     trim: {
@@ -824,6 +833,15 @@ const Textures  = {
                         top: 287,
                         width: 195,
                         height: 227
+                    }
+                },
+                surface: {
+                    url: build_tiny_island_surface,
+                    trim: {
+                        left: 84,
+                        top: 342,
+                        width: 324,
+                        height: 234
                     }
                 }
             },
@@ -880,17 +898,17 @@ const Textures  = {
             skewX: false,
             skewY: false,
             size: [
-                2,
+                4,
                 2
             ],
             images: {
                 main: {
                     url: build_lake_2,
                     trim: {
-                        left: 42,
-                        top: 284,
-                        width: 366,
-                        height: 273
+                        left: 0,
+                        top: 227,
+                        width: 434,
+                        height: 351
                     }
                 }
             },
@@ -901,7 +919,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 390,
+            cutoff: 420,
             surface: '!water'
         },
         lake_1: {
@@ -1331,16 +1349,16 @@ const Textures  = {
                     trim: {
                         left: 23,
                         top: 370,
-                        width: 502,
+                        width: 488,
                         height: 168
                     }
                 },
                 main: {
                     url: build_hut_with_garden_6,
                     trim: {
-                        left: -32,
+                        left: 0,
                         top: 68,
-                        width: 576,
+                        width: 512,
                         height: 487
                     }
                 }

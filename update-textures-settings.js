@@ -173,8 +173,8 @@ module.exports.Tiles = {
 			cutoff:360
 		},
 		lake_2:{
-			size:[2,2],
-			cutoff:390
+			size:[4,2],
+			cutoff:420
 		},
 		tiny_island:{
 			cutoff:512,

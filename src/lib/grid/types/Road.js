@@ -111,8 +111,10 @@ export class Road extends Generic{
 			
 			// CACHE
 			this.cc = sides;
+			
+			
 			let radius = this.sprite.texture.width * 0.33;
-
+			
 			// DRAW
 			this.sprite.mask.clear();
 			this.sprite.mask.beginFill(0xffff00,1);
@@ -129,7 +131,8 @@ export class Road extends Generic{
 
 		}
 	}
-	
+
+
 
 
 
@@ -145,7 +148,7 @@ export class Road extends Generic{
 			}
 			
 			// CHECK MY NEIGHBOURS
-			tile.neighbours.forEach( (v,i,a) => {
+			tile.neighbours().forEach( (v,i,a) => {
 				if( v && v.content.contains('road') ){
 					Road.recursiveConnect(v, array );
 				}

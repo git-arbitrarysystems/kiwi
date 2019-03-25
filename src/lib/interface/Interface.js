@@ -40,6 +40,12 @@ class Interface{
 			App.Grid.data.store();
 		})
 
+		// TOGGLE GRID
+		this.tg = this.ce({target:this.root, tag:'button', innerHTML:'toggle-grid'});
+		this.tg.addEventListener('click', (e) => {
+			App.Grid.container.visible = !App.Grid.container.visible;
+		})
+
 
 		// TEXTURES
 		for( var group in Textures ){

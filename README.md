@@ -13,7 +13,7 @@
 7. ~~update surfacecaching on lazy-load~~
 8. ~~fences and walls~~
 9. rain
-10. beaches
+10. ~~beaches~~
 11. waterways
 12. boats
 13. multiple kiwi-types
@@ -23,5 +23,6 @@
 17. random maps
 18. animated items
 19. validate stamp
+20. animate kiwi's
 
 

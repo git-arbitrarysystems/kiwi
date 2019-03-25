@@ -11,18 +11,41 @@ class Tile extends PIXI.Sprite{
 		this.cy = cy;
 	}
 
-	get neighbours(){
+	
+
+	neighbours(includeDiagonal = false, d = 1){
 		if( this._neighboursRequireUpdate ){
+			
 			this._neighbours = [
-				App.Grid.getTile({x:this.cx+1, y:this.cy}),
-				App.Grid.getTile({x:this.cx-1, y:this.cy}),
-				App.Grid.getTile({x:this.cx, y:this.cy+1}),
-				App.Grid.getTile({x:this.cx, y:this.cy-1})
+				App.Grid.getTile({x:this.cx+d, y:this.cy}),
+				App.Grid.getTile({x:this.cx-d, y:this.cy}),
+				App.Grid.getTile({x:this.cx, y:this.cy+d}),
+				App.Grid.getTile({x:this.cx, y:this.cy-d})
 			].filter( (tile) => { return tile ? true : false} );
+
+			this._diagonalNeighbours = [
+				App.Grid.getTile({x:this.cx+d, y:this.cy-d}),
+				App.Grid.getTile({x:this.cx+d, y:this.cy+d}),
+				App.Grid.getTile({x:this.cx-d, y:this.cy-d}),
+				App.Grid.getTile({x:this.cx-d, y:this.cy+d})
+			].filter( (tile) => { return tile ? true : false} );
+
 			this._neighboursRequireUpdate = false;
 		}
-		return this._neighbours;
+
+	
+
+		if( includeDiagonal ){
+			return this._diagonalNeighbours.concat( this._neighbours );
+		}else{
+			return this._neighbours;
+		}
+
 	}
+
+
+	
+
 
 	hover(color, alpha = 0.15){
 		this._hoverColor = color;
@@ -37,14 +60,15 @@ class Tile extends PIXI.Sprite{
 	}
 
 	updateBooleans(updateNeighbours = false){
-		this.water = this.content.contains('water');
+		this.water = this.content.contains('surface/water') || this.content.contains('build/lake');
 		this.build = this.content.contains('build');
 		this.fence = this.content.contains('fence')
 		
-		this.beach = !this.water && this.neighbours.some( (tile) => { return tile.water; });
+		this.beach =  ( !this.water && !this.content.contains('surface/sand') && this.neighbours().some( (tile) => { return tile.water; }) ) ||
+					  (  this.water && this.neighbours().some( (tile) => { return tile.content.contains('surface/sand'); }) );
 
 		if( updateNeighbours ){
-			this.neighbours.forEach( (tile) => {
+			this.neighbours(true).forEach( (tile) => {
 				tile.updateBooleans();
 			})
 		}
@@ -57,12 +81,13 @@ class Tile extends PIXI.Sprite{
 		this.alpha = 0.15;
 		this.tint = 0xffffff;
 
-			 if( this.water 	){ this.tint = 0x0000ff;}
-		else if( this.beach 	){ this.tint = 0xffff00;}
-		else if( this.fence 	){ this.tint = 0x555555;}
-		else if( this.build 	){ this.tint = 0xff00ff;}
+		if( this.water 	){ this.tint = 0x0000ff;}
+		if( this.beach 	){ this.tint = 0xffaa00;}
+		if( this.fence 	){ this.tint = 0x555555;}
+		if( this.build 	){ this.tint = 0xff00ff;}
+		
 
- 		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha;}
+ 		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha; }
 		
 	}
 
@@ -94,6 +119,8 @@ class TileContent{
 	testSurface(regExpString){
 		if( regExpString === 'water' ) return this.tile.water;
 		if( regExpString === '!water' ) return !this.tile.water;
+		if( regExpString === 'beach' ) return this.tile.beach;
+		if( regExpString === '!beach' ) return !this.tile.beach;
 	}
 
 	add(id, node){

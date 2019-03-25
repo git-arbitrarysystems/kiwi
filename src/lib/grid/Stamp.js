@@ -39,7 +39,7 @@ export class Stamp extends PIXI.Container{
 				this.visible = false;
 			}
 
-			console.log('Stamp.mode:', this.mode);
+			//console.log('Stamp.mode:', this.mode);
 
 			this.multiSpriteMode = ( ['fence', 'road'].indexOf(this.mode) !== -1 );
 

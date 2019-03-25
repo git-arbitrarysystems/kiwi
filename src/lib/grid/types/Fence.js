@@ -158,7 +158,7 @@ export class Fence extends Generic{
 			}
 			
 			// CHECK MY NEIGHBOURS
-			tile.neighbours.forEach( (v,i,a) => {
+			tile.neighbours().forEach( (v,i,a) => {
 				if( v.content.contains('fence') ){
 					Fence.recursiveConnect(v, array );
 				}
