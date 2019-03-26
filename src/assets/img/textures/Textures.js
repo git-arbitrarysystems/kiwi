@@ -3,7 +3,10 @@ import surface_water from './surface_water.png'
 import surface_sand from './surface_sand.png'
 import surface_stone from './surface_stone.png'
 import surface_dirt from './surface_dirt.png'
-import road_pier_start from './road_pier_start.png'
+import road_pier_start_top from './road_pier_start_top.png'
+import road_pier_start_right from './road_pier_start_right.png'
+import road_pier_start_bottom from './road_pier_start_bottom.png'
+import road_pier_start_left from './road_pier_start_left.png'
 import road_pier_build from './road_pier_build.png'
 import road_pier from './road_pier.png'
 import road_sand from './road_sand.png'
@@ -229,13 +232,40 @@ const Textures  = {
                 1
             ],
             images: {
-                start: {
-                    url: road_pier_start,
+                start_top: {
+                    url: road_pier_start_top,
                     trim: {
                         left: 0,
-                        top: 37,
-                        width: 122,
-                        height: 81
+                        top: 42,
+                        width: 128,
+                        height: 54
+                    }
+                },
+                start_right: {
+                    url: road_pier_start_right,
+                    trim: {
+                        left: 0,
+                        top: 41,
+                        width: 128,
+                        height: 55
+                    }
+                },
+                start_bottom: {
+                    url: road_pier_start_bottom,
+                    trim: {
+                        left: 0,
+                        top: 10,
+                        width: 128,
+                        height: 118
+                    }
+                },
+                start_left: {
+                    url: road_pier_start_left,
+                    trim: {
+                        left: 0,
+                        top: 11,
+                        width: 128,
+                        height: 117
                     }
                 },
                 build: {
@@ -265,7 +295,8 @@ const Textures  = {
                 height: 128
             },
             crop: false,
-            surface: 'water|beach'
+            surface: 'water|beach',
+            cutoff: 78
         },
         sand: {
             modulo: false,

@@ -292,7 +292,7 @@ export class Grid extends PIXI.Container{
 				let tile = this.getTile(this.__ps, false) 
 				if( tile ){
 					console.log(
-						tile.toString(), tile.content.keys,
+						tile.toString(), tile.content.keys
 					);
 				}
 

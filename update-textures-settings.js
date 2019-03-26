@@ -6,7 +6,7 @@ module.exports = {
 		modulo:false,
 		skewX:true,
 		skewY:true,
-		size:[1,1]
+		size:[1,1],
 	},
 	DefaultGhostTile:{
 		size:[3,3],
@@ -30,7 +30,8 @@ module.exports.Tiles = {
 		},
 		pier:{
 			crop:false,
-			surface:"'water|beach'"
+			surface:"'water|beach'",
+			cutoff:78
 		}
 	},
 	'fence':{

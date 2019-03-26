@@ -14,7 +14,7 @@
 8. ~~fences and walls~~
 9. rain
 10. ~~beaches~~
-11. waterways
+11. ~~waterways~~
 12. boats
 13. multiple kiwi-types
 14. ~~wehrbäume~~
@@ -24,5 +24,6 @@
 18. animated items
 19. validate stamp
 20. animate kiwi's
+21. big texture render chop
 
 

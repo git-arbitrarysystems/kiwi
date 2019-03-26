@@ -2,6 +2,7 @@ import * as PIXI from 'pixi.js';
 import {TextureData} from 'interface/Interface';
 import {App} from 'App';
 
+
 class Tile extends PIXI.Sprite{
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);
@@ -36,7 +37,7 @@ class Tile extends PIXI.Sprite{
 	
 
 		if( includeDiagonal ){
-			return this._diagonalNeighbours.concat( this._neighbours );
+			return this._diagonalNeighbours.slice(0).concat( this._neighbours );
 		}else{
 			return this._neighbours;
 		}
@@ -59,34 +60,40 @@ class Tile extends PIXI.Sprite{
 		this.updateTint()
 	}
 
-	updateBooleans(updateNeighbours = false){
+	updateVariables(updateNeighbours = false){
 		this.water = this.content.contains('surface/water') || this.content.contains('build/lake');
-		this.build = this.content.contains('build');
-		this.fence = this.content.contains('fence')
+		this.build = this.content.contains('build/');
+		this.fence = this.content.contains('fence/');
+		this.surface = this.content.contains('surface/')
+		this.road = this.content.contains('road/')
 		
 		this.beach =  ( !this.water && !this.content.contains('surface/sand') && this.neighbours().some( (tile) => { return tile.water; }) ) ||
 					  (  this.water && this.neighbours().some( (tile) => { return tile.content.contains('surface/sand'); }) );
 
+		this.updateTint(); 	
+
+
 		if( updateNeighbours ){
 			this.neighbours(true).forEach( (tile) => {
-				tile.updateBooleans();
+				tile.updateVariables();
 			})
 		}
 
-		this.updateTint();
+
+		
 
 	}
+
 
 	updateTint(){
 		this.alpha = 0.15;
 		this.tint = 0xffffff;
 
 		if( this.water 	){ this.tint = 0x0000ff;}
-		if( this.beach 	){ this.tint = 0xffaa00;}
 		if( this.fence 	){ this.tint = 0x555555;}
-		if( this.build 	){ this.tint = 0xff00ff;}
+		if( this.beach 	){ this.tint = 0xffaa00;}
 		
-
+		if( this.build 	){ this.tint = 0xff00ff;}
  		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha; }
 		
 	}
@@ -141,7 +148,7 @@ class TileContent{
 		}
 
 
-		this.tile.updateBooleans(true);
+		this.tile.updateVariables(true);
 
 	}
 
@@ -180,7 +187,7 @@ class TileContent{
 		}
 
 
-		this.tile.updateBooleans(true);
+		this.tile.updateVariables(true);
 
 	}
 

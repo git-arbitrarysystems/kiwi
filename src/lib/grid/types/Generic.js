@@ -67,6 +67,7 @@ export class Generic extends PIXI.utils.EventEmitter{
 			var texture = Texture(this.textureData);
 			this.sprite.texture = texture;
 			this.sprite.cutoff = this.textureData.cutoff;
+			this.sprite.surfaceOffset = this.textureData.surfaceOffset;
 			this.emit('update');
 		}
 	}

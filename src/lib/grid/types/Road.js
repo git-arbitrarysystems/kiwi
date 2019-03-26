@@ -51,6 +51,7 @@ export class Road extends Generic{
 
 		}else{
 			this.sprite.sortableChildren = true;
+			this.destroyAllDerivates();
 		}
 		this.updateConnections();
 	}
@@ -91,6 +92,34 @@ export class Road extends Generic{
 		}
 
 
+
+
+		// HANDLE ROAD SPECIALS
+		if( this.derivates.build ){
+
+			this.sprite.surfaceOffset = this.textureData.orig.height - this.textureData.cutoff;
+
+			var s, inverse, count = 0,
+				texture = Texture(this.textureData, 'build');
+			for(s in connect ){ if( connect[s] ) count++; }
+			if( count === 1 ){
+				for(s in connect ){
+					inverse = {top:'bottom',right:'left',bottom:'top',left:'right'}[s];
+					if( connect[s] && this.textureData.images['start_' + inverse] ){
+						texture = Texture(this.textureData, 'start_' + inverse);
+						this.sprite.surfaceOffset = (this.textureData.orig.height - this.textureData.cutoff) * 0.5;
+					}
+				}
+			}
+			this.derivates.build.texture = texture;
+			//console.log('Road.updateConnections', this.tile.toString(), this.sprite.surfaceOffset);
+
+
+			
+
+		}
+
+
 		
 
 	}
@@ -110,8 +139,7 @@ export class Road extends Generic{
 			}
 			
 			// CACHE
-			this.cc = sides;
-			
+			this.cc = sides;			
 			
 			let radius = this.sprite.texture.width * 0.33;
 			
@@ -156,6 +184,9 @@ export class Road extends Generic{
 		}
 
 		if( rootNode ){
+
+
+
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {

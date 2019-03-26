@@ -3,10 +3,7 @@ import {TextureData} from 'interface/Interface';
 import {Stamp} from 'grid/Stamp';
 import {App} from 'App';
 
-import {Road} from 'grid/types/Road';
-import {Fence} from 'grid/types/Fence';
-import {Surface} from 'grid/types/Surface';
-import {Build} from 'grid/types/Build';
+import {Road, Fence, Surface, Build} from 'grid/types/Type';
 
 
 import map from '../../assets/map.json';
