@@ -12,7 +12,7 @@ import {App} from 'App';
 import {Ghost} from 'grid/Ghost';
 
 import {Road} from 'grid/types/Road';
-import {Kiwi} from 'grid/types/Kiwi';
+import {Kiwi} from 'grid/Kiwi';
 
 
 
@@ -232,10 +232,6 @@ export class Grid extends PIXI.Container{
 				
 				selectTile = this.getTile({x:x,y:y}, true);
 				if( selectTile ){
-					/*if( !selectTile.content.testSurface(interfaceSelection.surface) ){
-						if( this.stamp.multiSpriteMode ) return [tile];
-						return []
-					}*/
 					a.push(selectTile);
 				}
 				
@@ -285,14 +281,15 @@ export class Grid extends PIXI.Container{
 		switch(e.type){
 
 			case  'pointerdown':
+				this.__pd_time = Date.now();
 				this.__pd = true;
 				this.__ps = e.data.getLocalPosition(this.parent, this.__ps);
 				this.__pp = this.__ps.clone();
 
-				let tile = this.getTile(this.__ps, false) 
-				if( tile ){
+				this.__tile = this.getTile(this.__ps, false) 
+				if( this.__tile ){
 					console.log(
-						tile.toString(), tile.content.keys
+						this.__tile.toString(), this.__tile.content.keys
 					);
 				}
 
@@ -326,7 +323,9 @@ export class Grid extends PIXI.Container{
 
 				break;
 			case 'pointertap':
-
+				if( Date.now() - this.__pd_time < 200 ){
+					App.Interface.tile = this.__tile;
+				}
 				break;
 
 		}
@@ -416,13 +415,24 @@ export class Grid extends PIXI.Container{
 		}
 
 
+
+		// GET STAMP VALIDITY
+		this.stamp.valid = this._hover.every( (tile) => {
+			return tile.content.testSurface(this.stamp.textureData.surface || '' );
+		});
+
 		// SHOW HOVERING
-		var color = 0xffffff;
-		if( this.mode.indexOf('destroy') !== -1 ){
+		var color = 0xffffff,
+			alpha = 0.3;
+		if( !this.stamp.valid ){
 			color = 0xff0000;
-		}else if( this.mode.indexOf('build') !== -1 ){
+			alpha = 1;
+		}else if( this.mode.indexOf('destroy') !== -1 ){
+			color = 0xff0000;
+		}else{
 			color = 0x00ff00;
 		}
+
 		this._hover.forEach( (tile)=>{ 
 			tile.hover(color, 0.3);
 		});
@@ -451,39 +461,37 @@ export class Grid extends PIXI.Container{
 				this.data.remove( this.mode.split('-')[1], this._hover );
 			}
 
-		}else if( this.stamp.textureData ){
+		}else if( this.stamp.textureData && this.stamp.valid ){
 			var _added = this.data.add( this.stamp.textureData.id, this.stamp.selection );
 		}
 
 	}
 
-	path(from, to){
+
+	path(from, to, testSurface = this.stamp.textureData.surface){
+
+		console.log('path');
 
 		if( !from || !to ) return [];
 
-		if(!from.content.testSurface(this.stamp.textureData.surface) ) return [];
-		if(  !to.content.testSurface(this.stamp.textureData.surface) ) return [];
-				
-		// CREATE A PATHFINDER GRID
-		let m = new PF.Grid(this.size.width, this.size.height),
-			x,y, tile, bool;
+		if(!from.content.testSurface(testSurface) ) return [];
+		if(  !to.content.testSurface(testSurface) ) return [];
+
+		// CREATE A NEW PATHFINDER GRID
+		let x,y, tile, bool,
+			grid = new PF.Grid(this.size.width, this.size.height );
 
 		// ANALYSE SURFACE
-		for(y=0;y<m.height;y++){
-			for(x=0;x<m.width;x++){
+		for(y=0;y<this.size.height;y++){
+			for(x=0;x<this.size.width;x++){
 				tile = this.getTile({x:x+this.size.minx,y:y+this.size.miny}, true);
-				bool = to.content.testSurface(this.stamp.textureData.surface);
-
-
-
-				//bool = tile ? !tile.water : false;
-				//if( tile.content.contains('water') ) bool = false;
-				m.setWalkableAt(x,y,bool);
+				bool = tile && tile.content.testSurface(testSurface);
+				grid.setWalkableAt(x,y,bool);
 			}
 		}
 
 		// GET RESULTS
-		let result = this.finder.findPath(from.cx-this.size.minx, from.cy-this.size.miny, to.cx-this.size.minx, to.cy-this.size.miny, m );
+		let result = this.finder.findPath(from.cx-this.size.minx, from.cy-this.size.miny, to.cx-this.size.minx, to.cy-this.size.miny, grid );
 
 		// CONVERT RESULTS TO TILE-ARRAY
 		let i, n=result.length;

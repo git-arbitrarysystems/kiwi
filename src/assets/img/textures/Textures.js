@@ -94,6 +94,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '',
             images: {
                 main: {
                     url: surface_grass,
@@ -121,6 +122,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '',
             images: {
                 main: {
                     url: surface_water,
@@ -148,6 +150,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '',
             images: {
                 main: {
                     url: surface_sand,
@@ -175,6 +178,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '',
             images: {
                 main: {
                     url: surface_stone,
@@ -202,6 +206,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '',
             images: {
                 main: {
                     url: surface_dirt,
@@ -231,14 +236,15 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: 'water|beach',
             images: {
                 start_top: {
                     url: road_pier_start_top,
                     trim: {
                         left: 0,
-                        top: 42,
-                        width: 128,
-                        height: 54
+                        top: 45,
+                        width: 126,
+                        height: 51
                     }
                 },
                 start_right: {
@@ -254,9 +260,9 @@ const Textures  = {
                     url: road_pier_start_bottom,
                     trim: {
                         left: 0,
-                        top: 10,
-                        width: 128,
-                        height: 118
+                        top: 11,
+                        width: 125,
+                        height: 117
                     }
                 },
                 start_left: {
@@ -295,7 +301,6 @@ const Textures  = {
                 height: 128
             },
             crop: false,
-            surface: 'water|beach',
             cutoff: 78
         },
         sand: {
@@ -306,6 +311,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water',
             images: {
                 main: {
                     url: road_sand,
@@ -324,8 +330,7 @@ const Textures  = {
                 width: 128,
                 height: 128
             },
-            crop: true,
-            surface: '!water'
+            crop: true
         },
         stone: {
             modulo: false,
@@ -335,6 +340,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water',
             images: {
                 main: {
                     url: road_stone,
@@ -353,8 +359,7 @@ const Textures  = {
                 width: 128,
                 height: 128
             },
-            crop: true,
-            surface: '!water'
+            crop: true
         }
     },
     fence: {
@@ -366,6 +371,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water',
             images: {
                 main: {
                     url: fence_low_wood,
@@ -383,8 +389,7 @@ const Textures  = {
                 top: 0,
                 width: 256,
                 height: 512
-            },
-            surface: '!water'
+            }
         },
         high_wood: {
             modulo: false,
@@ -394,6 +399,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water',
             images: {
                 main: {
                     url: fence_high_wood,
@@ -411,8 +417,7 @@ const Textures  = {
                 top: 0,
                 width: 256,
                 height: 512
-            },
-            surface: '!water'
+            }
         }
     },
     build: {
@@ -424,6 +429,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_palmtree_with_hut,
@@ -451,8 +457,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 450,
-            surface: '!water'
+            cutoff: 450
         },
         palmtree_4: {
             modulo: false,
@@ -462,6 +467,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_palmtree_4,
@@ -480,8 +486,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 500,
-            surface: '!water'
+            cutoff: 500
         },
         palmtree_3: {
             modulo: false,
@@ -491,6 +496,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_palmtree_3,
@@ -509,8 +515,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 500,
-            surface: '!water'
+            cutoff: 500
         },
         palmtree_2: {
             modulo: false,
@@ -520,6 +525,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_palmtree_2,
@@ -538,8 +544,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 500,
-            surface: '!water'
+            cutoff: 500
         },
         palmtree_1: {
             modulo: false,
@@ -549,6 +554,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_palmtree_1,
@@ -567,8 +573,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 500,
-            surface: '!water'
+            cutoff: 500
         },
         small_forest: {
             modulo: false,
@@ -578,6 +583,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_small_forest,
@@ -596,8 +602,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 565,
-            surface: '!water'
+            cutoff: 565
         },
         catapult_2: {
             modulo: false,
@@ -607,6 +612,7 @@ const Textures  = {
                 3,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_catapult_2,
@@ -634,8 +640,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 530,
-            surface: '!water'
+            cutoff: 530
         },
         catapult_1: {
             modulo: false,
@@ -645,6 +650,7 @@ const Textures  = {
                 2,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_catapult_1,
@@ -672,8 +678,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 565,
-            surface: '!water'
+            cutoff: 565
         },
         defense_tree_dark_3: {
             modulo: false,
@@ -683,6 +688,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_defense_tree_dark_3,
@@ -701,8 +707,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 475,
-            surface: '!water'
+            cutoff: 475
         },
         defense_tree_dark_2: {
             modulo: false,
@@ -712,6 +717,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_defense_tree_dark_2,
@@ -730,8 +736,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 475,
-            surface: '!water'
+            cutoff: 475
         },
         defense_tree_dark_1: {
             modulo: false,
@@ -741,6 +746,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_defense_tree_dark_1,
@@ -759,8 +765,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 475,
-            surface: '!water'
+            cutoff: 475
         },
         defense_tree_1: {
             modulo: false,
@@ -770,6 +775,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_defense_tree_1,
@@ -788,8 +794,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 525,
-            surface: '!water'
+            cutoff: 525
         },
         defense_tree_2: {
             modulo: false,
@@ -799,6 +804,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_defense_tree_2,
@@ -817,8 +823,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 507,
-            surface: '!water'
+            cutoff: 507
         },
         volcano: {
             modulo: false,
@@ -828,6 +833,7 @@ const Textures  = {
                 5,
                 5
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_volcano,
@@ -855,8 +861,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 440,
-            surface: '!water'
+            cutoff: 440
         },
         tiny_island: {
             modulo: false,
@@ -866,6 +871,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: 'water',
             images: {
                 main: {
                     url: build_tiny_island,
@@ -893,8 +899,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 512,
-            surface: 'water'
+            cutoff: 512
         },
         vinyard: {
             modulo: false,
@@ -904,6 +909,7 @@ const Textures  = {
                 6,
                 6
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_vinyard,
@@ -931,8 +937,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 495,
-            surface: '!water'
+            cutoff: 495
         },
         lake_2: {
             modulo: false,
@@ -942,6 +947,7 @@ const Textures  = {
                 4,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_lake_2,
@@ -960,8 +966,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 420,
-            surface: '!water'
+            cutoff: 420
         },
         lake_1: {
             modulo: false,
@@ -971,6 +976,7 @@ const Textures  = {
                 5,
                 5
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_lake_1,
@@ -989,8 +995,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 360,
-            surface: '!water'
+            cutoff: 360
         },
         red_tent: {
             modulo: false,
@@ -1000,6 +1005,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_red_tent,
@@ -1018,8 +1024,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 445,
-            surface: '!water'
+            cutoff: 445
         },
         dark_hut_1: {
             modulo: false,
@@ -1029,6 +1034,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_dark_hut_1,
@@ -1047,8 +1053,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 445,
-            surface: '!water'
+            cutoff: 445
         },
         dark_hut_2: {
             modulo: false,
@@ -1058,6 +1063,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_dark_hut_2,
@@ -1076,8 +1082,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 445,
-            surface: '!water'
+            cutoff: 445
         },
         dark_hut_3: {
             modulo: false,
@@ -1087,6 +1092,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_dark_hut_3,
@@ -1105,8 +1111,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 445,
-            surface: '!water'
+            cutoff: 445
         },
         temple: {
             modulo: false,
@@ -1116,6 +1121,7 @@ const Textures  = {
                 5,
                 5
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_temple,
@@ -1134,8 +1140,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 444,
-            surface: '!water'
+            cutoff: 444
         },
         berries_blue: {
             modulo: false,
@@ -1145,6 +1150,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_berries_blue,
@@ -1163,8 +1169,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 420,
-            surface: '!water'
+            cutoff: 420
         },
         berries_red: {
             modulo: false,
@@ -1174,6 +1179,7 @@ const Textures  = {
                 2,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_berries_red,
@@ -1192,8 +1198,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 450,
-            surface: '!water'
+            cutoff: 450
         },
         quarry: {
             modulo: false,
@@ -1203,6 +1208,7 @@ const Textures  = {
                 4,
                 4
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_quarry,
@@ -1221,8 +1227,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 465,
-            surface: '!water'
+            cutoff: 465
         },
         farm: {
             modulo: false,
@@ -1232,6 +1237,7 @@ const Textures  = {
                 4,
                 4
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_farm,
@@ -1259,8 +1265,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 425,
-            surface: '!water'
+            cutoff: 425
         },
         flowers_1: {
             modulo: false,
@@ -1270,6 +1275,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_flowers_1,
@@ -1297,8 +1303,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 440,
-            surface: '!water'
+            cutoff: 440
         },
         school: {
             modulo: false,
@@ -1308,6 +1313,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_school,
@@ -1335,8 +1341,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 313,
-            surface: '!water'
+            cutoff: 313
         },
         hut_with_garden_5: {
             modulo: false,
@@ -1346,6 +1351,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_with_garden_5,
@@ -1373,8 +1379,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 560,
-            surface: '!water'
+            cutoff: 560
         },
         hut_with_garden_6: {
             modulo: false,
@@ -1384,6 +1389,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 surface: {
                     url: build_hut_with_garden_6_surface,
@@ -1411,8 +1417,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 430,
-            surface: '!water'
+            cutoff: 430
         },
         hut_with_garden_4: {
             modulo: false,
@@ -1422,6 +1427,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_with_garden_4,
@@ -1440,8 +1446,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 500,
-            surface: '!water'
+            cutoff: 500
         },
         hut_with_garden_3: {
             modulo: false,
@@ -1451,6 +1456,7 @@ const Textures  = {
                 4,
                 4
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_with_garden_3,
@@ -1478,8 +1484,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 450,
-            surface: '!water'
+            cutoff: 450
         },
         hut_with_garden_2: {
             modulo: false,
@@ -1489,6 +1494,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_with_garden_2,
@@ -1516,8 +1522,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 440,
-            surface: '!water'
+            cutoff: 440
         },
         hut_with_garden_1: {
             modulo: false,
@@ -1527,6 +1532,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_with_garden_1,
@@ -1554,8 +1560,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 465,
-            surface: '!water'
+            cutoff: 465
         },
         fire_1: {
             modulo: false,
@@ -1565,6 +1570,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_fire_1,
@@ -1592,8 +1598,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 490,
-            surface: '!water'
+            cutoff: 490
         },
         hut_2: {
             modulo: false,
@@ -1603,6 +1608,7 @@ const Textures  = {
                 2,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_2,
@@ -1630,8 +1636,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 460,
-            surface: '!water'
+            cutoff: 460
         },
         hut_1: {
             modulo: false,
@@ -1641,6 +1646,7 @@ const Textures  = {
                 1,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_hut_1,
@@ -1668,8 +1674,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 460,
-            surface: '!water'
+            cutoff: 460
         },
         pine_2: {
             modulo: false,
@@ -1679,6 +1684,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_pine_2,
@@ -1697,8 +1703,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 514,
-            surface: '!water'
+            cutoff: 514
         },
         fruit_tree: {
             modulo: false,
@@ -1708,6 +1713,7 @@ const Textures  = {
                 2,
                 2
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_fruit_tree,
@@ -1726,8 +1732,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 440,
-            surface: '!water'
+            cutoff: 440
         },
         waterwell: {
             modulo: false,
@@ -1737,6 +1742,7 @@ const Textures  = {
                 1,
                 1
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_waterwell,
@@ -1755,8 +1761,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 470,
-            surface: '!water'
+            cutoff: 470
         },
         castle: {
             modulo: false,
@@ -1766,6 +1771,7 @@ const Textures  = {
                 5,
                 5
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_castle,
@@ -1793,8 +1799,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 465,
-            surface: '!water'
+            cutoff: 465
         },
         pine_1: {
             modulo: false,
@@ -1804,6 +1809,7 @@ const Textures  = {
                 3,
                 3
             ],
+            surface: '!water|build',
             images: {
                 main: {
                     url: build_pine_1,
@@ -1831,8 +1837,7 @@ const Textures  = {
                 width: 512,
                 height: 613
             },
-            cutoff: 475,
-            surface: '!water'
+            cutoff: 475
         }
     }
 };

@@ -95,6 +95,9 @@ class Tile extends PIXI.Sprite{
 		
 		if( this.build 	){ this.tint = 0xff00ff;}
  		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha; }
+
+ 		if( (this.cx + this.cy) % 2 === 0 ) this.alpha += 0.1;
+
 		
 	}
 
@@ -115,6 +118,7 @@ Tile.skewY = Math.atan2( -Tile.height, Tile.width);
 
 class TileContent{
 	constructor( tile){
+		this.surface_testcache = {};
 		this.keys = [];
 		this.nodes = [];
 		this.tile = tile;
@@ -124,12 +128,21 @@ class TileContent{
 	
 
 	testSurface(expr){
-		if( expr === 'water' ) return this.tile.water;
-		if( expr === '!water' ) return !this.tile.water;
-		if( expr === 'beach' ) return this.tile.beach;
-		if( expr === '!beach' ) return !this.tile.beach;
-		if( expr === 'water|beach' ) return this.tile.water || this.tile.beach;
-		if( expr === '!water|beach' ) return !(this.tile.water || this.tile.beach);
+
+
+
+		let negate = expr.charAt(0) === '!';
+		if( negate ) expr = expr.substr(1);
+		var regexp = new RegExp(expr, 'i');
+		var result = regexp.test(this.keys.join(', ') );
+		if( negate ) result = !result;
+
+		this.surface_testcache[expr] = result;
+
+		return result;
+
+
+		
 	}
 
 	add(id, node){
@@ -147,7 +160,7 @@ class TileContent{
 
 		}
 
-
+		this.surface_testcache = {};
 		this.tile.updateVariables(true);
 
 	}
@@ -186,7 +199,7 @@ class TileContent{
 			}
 		}
 
-
+		this.surface_testcache = {};
 		this.tile.updateVariables(true);
 
 	}

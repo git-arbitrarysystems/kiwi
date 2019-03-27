@@ -17,7 +17,7 @@ export class Face extends PIXI.Container{
 		});
 
 		this.g = this.addChild( new PIXI.Graphics() );
-		this.g.zIndex = 10000000000;
+		this.g.zIndex = 1000000;
 
 		this.sortableChildren = true;
 	}
@@ -25,6 +25,12 @@ export class Face extends PIXI.Container{
 	
 
 	add( sprite, type, addedZIndex = 0){
+
+		if( !sprite.texture.valid ){
+			sprite.texture.on('update', () => { this.add(sprite, type, addedZIndex) });
+			return;
+		}
+
 
 		// SET APPROPRIATE Z-INDEX
 		sprite.zIndex = 100000 + sprite.y + ((1-sprite.anchor.y) * sprite.texture.orig.height * sprite.scale.y ) + addedZIndex;

@@ -1,6 +1,8 @@
 
 
 import {App} from 'App';
+import {DataSheet} from 'interface/DataSheet';
+import {H} from 'interface/H';
 import './Interface.scss';
 
 import {Textures,GhostTile} from '../../assets/img/textures/Textures.js';
@@ -14,34 +16,39 @@ class Interface{
 
 		App.register(this);
 
+		// DATASHEET
+		this.dataSheet = new DataSheet();
+
+
+
 		// INTERFACE		
-		this.root = this.ce({class:'interface'});
+		this.root = H.ce({class:'interface'});
 		this.root.addEventListener('click', (e)=>{this.deselect(); } );
 
 		// GRID-INTERACTION-MODES
 		this.stampModes = ['road','surface','build', 'fence'];
 		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build', 'destroy-fence']);
 
-		this.gridModesSelector = this.ce({target:this.root, tag:'select', disabled:true});
-		this.gridModes.forEach( (value)=>{ this.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
+		this.gridModesSelector = H.ce({target:this.root, tag:'select', disabled:true});
+		this.gridModes.forEach( (value)=>{ H.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
 
 
 		// SCALE
 		this.scales = [0.25, 0.33, 0.5, 0.75, 1, 1.25, 1.5, 2, 3 ];
-		this.scalesSelector = this.ce({target:this.root, tag:'select'});
+		this.scalesSelector = H.ce({target:this.root, tag:'select'});
 		this.scalesSelector.addEventListener('change', (e) => {
 			App.Grid.updateScale( parseFloat(this.scalesSelector.value, 10) );
 		})
-		this.scales.forEach( (value)=>{ this.ce({target:this.scalesSelector, value:value, innerHTML:value,tag:'option',selected:(value===1)}); })
+		this.scales.forEach( (value)=>{ H.ce({target:this.scalesSelector, value:value, innerHTML:value,tag:'option',selected:(value===1)}); })
 
 		// TEMP STORE
-		this.store = this.ce({target:this.root, tag:'button', innerHTML:'store'});
+		this.store = H.ce({target:this.root, tag:'button', innerHTML:'store'});
 		this.store.addEventListener('click', (e) => {
 			App.Grid.data.store();
 		})
 
 		// TOGGLE GRID
-		this.tg = this.ce({target:this.root, tag:'button', innerHTML:'toggle-grid'});
+		this.tg = H.ce({target:this.root, tag:'button', innerHTML:'toggle-grid'});
 		this.tg.addEventListener('click', (e) => {
 			App.Grid.container.visible = !App.Grid.container.visible;
 		})
@@ -51,9 +58,9 @@ class Interface{
 		for( var group in Textures ){
 
 			// CREATE TEXTURE GROUP
-			var g = this.ce({class:'group', target:this.root});
-			var t = this.ce({tag:'h2', target:g, innerHTML:group});
-			var c = this.ce({class:'content', target:g});
+			var g = H.ce({class:'group', target:this.root});
+			var t = H.ce({tag:'h2', target:g, innerHTML:group});
+			var c = H.ce({class:'content', target:g});
 
 			for( var image in Textures[group] ){
 
@@ -67,7 +74,7 @@ class Interface{
 				TextureData[id].id = id;
 				
 				// CREATE TEXTURE BUTTON
-				var b = this.ce({target:c, class:'button', 
+				var b = H.ce({target:c, class:'button', 
 					id:id, 
 					title:title
 				});
@@ -79,7 +86,7 @@ class Interface{
 			}
 
 			// DESTROY
-			var d = this.ce({target:c, class:'button', 
+			var d = H.ce({target:c, class:'button', 
 				id:'destroy-' + group, 
 				title:'detroy ' + group
 			});
@@ -91,21 +98,7 @@ class Interface{
 		}
 	}
 
-	// CREATE ELEMENT
-	ce(props = {}){
-		var d = document.createElement( props.tag || 'div' );
-		for( var s in props ){
-			if( ['target','tag'].indexOf(s) !== 0 ){
-				if( typeof d[s] !== 'undefined' ){
-					d[s] = props[s]
-				}else{
-					d.setAttribute(s, props[s] );
-				}
-			}
-		}
-		(props.target ? props.target : document.body ).appendChild(d);
-		return d;
-	}
+	
 
 	// SELECT TEXTURE
 	selected(e){
@@ -167,8 +160,13 @@ class Interface{
 		}else{
 			return this.gridModesSelector.value;
 		}
-		
 	}
+
+	get tile(){ return this._tile }
+	set tile(tile){
+		this.dataSheet.tile = tile;
+	}
+
 
 
 }

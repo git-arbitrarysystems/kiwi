@@ -7,6 +7,7 @@ module.exports = {
 		skewX:true,
 		skewY:true,
 		size:[1,1],
+		surface:"''"
 	},
 	DefaultGhostTile:{
 		size:[3,3],
@@ -46,7 +47,7 @@ module.exports.Tiles = {
 			skewX:false,
 			skewY:false,
 			cutoff:true,
-			surface:"'!water'"
+			surface:"'!water|build'"
 		},
 		castle:{
 			size:[5,5],
