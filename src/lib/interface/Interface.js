@@ -2,6 +2,7 @@
 
 import {App} from 'App';
 import {DataSheet} from 'interface/DataSheet';
+import {KiwiActionPanel} from 'interface/KiwiActionPanel';
 import {H} from 'interface/H';
 import './Interface.scss';
 
@@ -19,6 +20,9 @@ class Interface{
 		// DATASHEET
 		this.dataSheet = new DataSheet();
 
+		// KIWI ACTION PANEL
+		this.kiwiActionPanel = new KiwiActionPanel();
+
 
 
 		// INTERFACE		
@@ -26,8 +30,8 @@ class Interface{
 		this.root.addEventListener('click', (e)=>{this.deselect(); } );
 
 		// GRID-INTERACTION-MODES
-		this.stampModes = ['road','surface','build', 'fence'];
-		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build', 'destroy-fence']);
+		this.stampModes = ['road','surface','build', 'fence', 'kiwi'];
+		this.gridModes = ['drag'].concat(this.stampModes).concat(['destroy-road','destroy-surface','destroy-build', 'destroy-fence', 'destroy-kiwi']);
 
 		this.gridModesSelector = H.ce({target:this.root, tag:'select', disabled:true});
 		this.gridModes.forEach( (value)=>{ H.ce({target:this.gridModesSelector, value:value, innerHTML:value,tag:'option'}); })
@@ -164,7 +168,16 @@ class Interface{
 
 	get tile(){ return this._tile }
 	set tile(tile){
-		this.dataSheet.tile = tile;
+
+		if( tile && tile.kiwi ){
+			this.kiwiActionPanel.kiwi = tile.kiwi;
+		}else{
+			this.kiwiActionPanel.kiwi = false;
+		}
+		
+		this.dataSheet.tile = tile;	
+		
+			
 	}
 
 
@@ -174,4 +187,4 @@ class Interface{
 import {HotModule} from '../../../HotModule.js'
 HotModule(module, Interface);
 
-export {Interface, TextureData, GhostTile, Images};
+export {Interface, TextureData, GhostTile, Images, Textures};

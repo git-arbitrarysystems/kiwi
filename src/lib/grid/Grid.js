@@ -6,13 +6,10 @@ import {Stamp} from 'grid/Stamp';
 import {Face} from 'grid/Face';
 import {Transform} from 'grid/Transform';
 import {Data} from 'grid/Data';
-
 import {App} from 'App';
-
 import {Ghost} from 'grid/Ghost';
-
 import {Road} from 'grid/types/Road';
-import {Kiwi} from 'grid/Kiwi';
+
 
 
 
@@ -96,12 +93,12 @@ export class Grid extends PIXI.Container{
 		this.on('pointerout',  	(e)=>{ this.pointer(e) } );
 
 		// RANDOM KIWI LAND!!!
-		for(var i=0; i<400;i++){
+		/*for(var i=0; i<400;i++){
 			var rand = this.rand();
 			if( rand && !rand.water ){
 				new Kiwi(rand);
 			}
-		}
+		}*/
 		
 
 			
@@ -323,7 +320,7 @@ export class Grid extends PIXI.Container{
 
 				break;
 			case 'pointertap':
-				if( Date.now() - this.__pd_time < 200 ){
+				if( this.mode === 'drag' &&  Date.now() - this.__pd_time < 200 ){
 					App.Interface.tile = this.__tile;
 				}
 				break;
@@ -354,7 +351,8 @@ export class Grid extends PIXI.Container{
 		
 		// GET SELECTION
 		if( this.mode === 'drag'){
-			this._hover = [];
+			let tile = this.getTile(this.__pc, false);
+			if( tile ) this._hover = [tile];
 		}else if( (this.mode === 'road' || this.mode === 'fence') && this.__ps ){
 			this._hover = this.path( this.getTile(this.__ps,false), this.getTile(this.__pc,false) );
 		}else if( this.mode.indexOf('destroy') !== -1 ){
@@ -403,6 +401,7 @@ export class Grid extends PIXI.Container{
 			(this.mode === 'destroy-surface') ||				// AUTO-CONFIRM SURFACE DESTRUCTION
 			(this.mode === 'destroy-road') ||					// AUTO-CONFIRM ROAD DESTRUCTION
 			(this.mode === 'destroy-fence') ||					// AUTO-CONFIRM FENCE DESTRUCTION
+			(this.mode === 'destroy-kiwi') ||					// AUTO-CONFIRM KIWI DESTRUCTION
 			(this.mode === 'surface' && this._hover.length ) ||	// AUTO-CONFIRM SURFACE PLACEMENT
 			(this.ghost.enabled)								// AUTO-CONFIRM TILE-CREATION
 		)){
@@ -426,15 +425,16 @@ export class Grid extends PIXI.Container{
 			alpha = 0.3;
 		if( !this.stamp.valid ){
 			color = 0xff0000;
-			alpha = 1;
 		}else if( this.mode.indexOf('destroy') !== -1 ){
 			color = 0xff0000;
+		}else if(this.mode === 'drag'){
+			color = 0x000000;
 		}else{
 			color = 0x00ff00;
 		}
 
 		this._hover.forEach( (tile)=>{ 
-			tile.hover(color, 0.3);
+			tile.hover(color, alpha);
 		});
 		
 		

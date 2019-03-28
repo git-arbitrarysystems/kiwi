@@ -27,8 +27,8 @@ export class Data{
 		console.log('Data.remove', wildcard, fromTiles );
 		for( var i=fromTiles.length-1; i>=0; i--){
 			fromTiles[i].content.remove(wildcard);
-			if( fromTiles[i] ) Road.recursiveConnect( fromTiles[i] );
-			if( fromTiles[i] ) Fence.recursiveConnect( fromTiles[i] );
+			if( fromTiles[i].road  ) Road.recursiveConnect( fromTiles[i] );
+			if( fromTiles[i].fence ) Fence.recursiveConnect( fromTiles[i] );
 		}
 		
 	}
@@ -74,7 +74,7 @@ export class Data{
 			}else if( type === 'surface' && tile.content.contains('surface') 	){
 				// NEW SURFACE
 				if( !testOnly ) tile.content.remove(type);
-			}else if( tile.content.contains(id) || (type === 'build' && tile.content.contains('build')) ){
+			}else if( tile.content.contains(id) ){
 				// DONT ADD DUPLICATES / DONT OVERLAP BUILDINGS;
 				appendContent = false; break;
 			}

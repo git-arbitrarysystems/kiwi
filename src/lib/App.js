@@ -3,7 +3,10 @@ import * as PIXI from 'pixi.js';
 import {ResizeHandler} from 'static/ResizeHandler';
 import {Grid} from 'grid/Grid';
 import {Interface} from 'interface/Interface';
+
 import './App.scss';
+import '../assets/fonts/fonts.scss';
+
 
 export class App extends PIXI.Application{
 	constructor(settings){

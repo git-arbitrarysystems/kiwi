@@ -1,8 +1,11 @@
 export const H = {
+
+	name:'H',
 	
 	// CREATE ELEMENT
 	ce: function(props = {}){
 		var d = document.createElement( props.tag || 'div' );
+		if( props.tag ) delete props.tag;
 		for( var s in props ){
 			if( ['target','tag'].indexOf(s) !== 0 ){
 				if( typeof d[s] !== 'undefined' ){

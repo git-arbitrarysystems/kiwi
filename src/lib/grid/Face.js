@@ -61,7 +61,14 @@ export class Face extends PIXI.Container{
 		}
  		
 		
+		if( !sprite.FIRST_TIME_ADDED ){
+			if( type && sprite[type] ) sprite[type].confirm();
 
+			//console.log(type, sprite[type]);
+
+			//sprite[type].confirm();
+			sprite.FIRST_TIME_ADDED = true;
+		}
 
 		
 

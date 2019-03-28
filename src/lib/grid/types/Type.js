@@ -3,13 +3,15 @@ import {Surface} from 'grid/types/Surface';
 import {Road} from 'grid/types/Road';
 import {Fence} from 'grid/types/Fence';
 import {Build} from 'grid/types/Build';
+import {Kiwi} from 'grid/types/Kiwi';
 
 
 const types = {
 	surface:Surface,
 	road:Road,
 	fence:Fence,
-	build:Build
+	build:Build,
+	kiwi:Kiwi
 }
 
 Generic.mixin = function(type, sprite, textureDataId, selection, index = 0){
@@ -44,4 +46,4 @@ Generic.destroy = function(sprite){
 }
 
 
-export {Generic, Surface, Road, Fence, Build};
+export {Generic, Surface, Road, Fence, Build, Kiwi};

@@ -13,6 +13,7 @@ import road_sand from './road_sand.png'
 import road_stone from './road_stone.png'
 import fence_low_wood from './fence_low_wood.png'
 import fence_high_wood from './fence_high_wood.png'
+import kiwi_default from './kiwi_default.png'
 import build_palmtree_with_hut from './build_palmtree_with_hut.png'
 import build_palmtree_with_hut_surface from './build_palmtree_with_hut_surface.png'
 import build_palmtree_4 from './build_palmtree_4.png'
@@ -95,6 +96,7 @@ const Textures  = {
                 3
             ],
             surface: '',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: surface_grass,
@@ -123,6 +125,7 @@ const Textures  = {
                 3
             ],
             surface: '',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: surface_water,
@@ -151,6 +154,7 @@ const Textures  = {
                 3
             ],
             surface: '',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: surface_sand,
@@ -179,6 +183,7 @@ const Textures  = {
                 3
             ],
             surface: '',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: surface_stone,
@@ -207,6 +212,7 @@ const Textures  = {
                 3
             ],
             surface: '',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: surface_dirt,
@@ -236,7 +242,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: 'water|beach',
+            surface: 'water|beach|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 start_top: {
                     url: road_pier_start_top,
@@ -311,7 +318,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water',
+            surface: '!water|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: road_sand,
@@ -340,7 +348,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water',
+            surface: '!water|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: road_stone,
@@ -371,7 +380,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water',
+            surface: '!water|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: fence_low_wood,
@@ -399,7 +409,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water',
+            surface: '!water|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: fence_high_wood,
@@ -420,6 +431,38 @@ const Textures  = {
             }
         }
     },
+    kiwi: {
+        default: {
+            modulo: false,
+            skewX: false,
+            skewY: false,
+            size: [
+                1,
+                1
+            ],
+            surface: '!kiwi',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
+            images: {
+                main: {
+                    url: kiwi_default,
+                    trim: {
+                        left: 115,
+                        top: 73,
+                        width: 371,
+                        height: 339
+                    }
+                }
+            },
+            type: 'kiwi',
+            orig: {
+                left: 0,
+                top: 0,
+                width: 512,
+                height: 512
+            },
+            cutoff: 375
+        }
+    },
     build: {
         palmtree_with_hut: {
             modulo: false,
@@ -429,7 +472,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_palmtree_with_hut,
@@ -467,7 +511,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_palmtree_4,
@@ -496,7 +541,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_palmtree_3,
@@ -525,7 +571,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_palmtree_2,
@@ -554,7 +601,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_palmtree_1,
@@ -583,7 +631,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_small_forest,
@@ -612,7 +661,8 @@ const Textures  = {
                 3,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_catapult_2,
@@ -650,7 +700,8 @@ const Textures  = {
                 2,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_catapult_1,
@@ -688,7 +739,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_defense_tree_dark_3,
@@ -717,7 +769,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_defense_tree_dark_2,
@@ -746,7 +799,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_defense_tree_dark_1,
@@ -775,7 +829,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_defense_tree_1,
@@ -804,7 +859,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_defense_tree_2,
@@ -833,7 +889,8 @@ const Textures  = {
                 5,
                 5
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_volcano,
@@ -871,7 +928,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: 'water',
+            surface: 'water|lake',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_tiny_island,
@@ -909,7 +967,8 @@ const Textures  = {
                 6,
                 6
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_vinyard,
@@ -947,7 +1006,8 @@ const Textures  = {
                 4,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_lake_2,
@@ -976,7 +1036,8 @@ const Textures  = {
                 5,
                 5
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_lake_1,
@@ -1005,7 +1066,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_red_tent,
@@ -1034,7 +1096,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_dark_hut_1,
@@ -1063,7 +1126,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_dark_hut_2,
@@ -1092,7 +1156,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_dark_hut_3,
@@ -1121,7 +1186,8 @@ const Textures  = {
                 5,
                 5
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_temple,
@@ -1150,7 +1216,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_berries_blue,
@@ -1179,7 +1246,8 @@ const Textures  = {
                 2,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_berries_red,
@@ -1208,7 +1276,8 @@ const Textures  = {
                 4,
                 4
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_quarry,
@@ -1237,7 +1306,8 @@ const Textures  = {
                 4,
                 4
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_farm,
@@ -1275,7 +1345,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_flowers_1,
@@ -1313,7 +1384,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_school,
@@ -1351,7 +1423,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_with_garden_5,
@@ -1389,7 +1462,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 surface: {
                     url: build_hut_with_garden_6_surface,
@@ -1427,7 +1501,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_with_garden_4,
@@ -1456,7 +1531,8 @@ const Textures  = {
                 4,
                 4
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_with_garden_3,
@@ -1494,7 +1570,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_with_garden_2,
@@ -1532,7 +1609,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_with_garden_1,
@@ -1570,7 +1648,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_fire_1,
@@ -1608,7 +1687,8 @@ const Textures  = {
                 2,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_2,
@@ -1646,7 +1726,8 @@ const Textures  = {
                 1,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_hut_1,
@@ -1684,7 +1765,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_pine_2,
@@ -1713,7 +1795,8 @@ const Textures  = {
                 2,
                 2
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_fruit_tree,
@@ -1742,7 +1825,8 @@ const Textures  = {
                 1,
                 1
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_waterwell,
@@ -1771,7 +1855,8 @@ const Textures  = {
                 5,
                 5
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_castle,
@@ -1809,7 +1894,8 @@ const Textures  = {
                 3,
                 3
             ],
-            surface: '!water|build',
+            surface: '!water|lake|build',
+            description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.',
             images: {
                 main: {
                     url: build_pine_1,
@@ -1848,6 +1934,5 @@ if( module.hot ){
 		window.location.reload();
 	});
 	module.hot.accept();
-	
 }
 

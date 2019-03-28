@@ -7,7 +7,8 @@ module.exports = {
 		skewX:true,
 		skewY:true,
 		size:[1,1],
-		surface:"''"
+		surface:"''",
+		description:"'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.'"
 	},
 	DefaultGhostTile:{
 		size:[3,3],
@@ -27,11 +28,11 @@ module.exports.Tiles = {
 	'road':{
 		_default:{
 			crop:true,
-			surface:"'!water'"
+			surface:"'!water|lake'"
 		},
 		pier:{
 			crop:false,
-			surface:"'water|beach'",
+			surface:"'water|beach|lake'",
 			cutoff:78
 		}
 	},
@@ -39,7 +40,15 @@ module.exports.Tiles = {
 		_default:{
 			skewX:false,
 			skewY:true,
-			surface:"'!water'"
+			surface:"'!water|lake'"
+		}
+	},
+	'kiwi':{
+		_default:{
+			skewX:false,
+			skewY:false,
+			cutoff:375,
+			surface:"'!kiwi'"
 		}
 	},
 	'build':{
@@ -47,7 +56,7 @@ module.exports.Tiles = {
 			skewX:false,
 			skewY:false,
 			cutoff:true,
-			surface:"'!water|build'"
+			surface:"'!water|lake|build'"
 		},
 		castle:{
 			size:[5,5],
@@ -181,7 +190,7 @@ module.exports.Tiles = {
 		tiny_island:{
 			cutoff:512,
 			size:[2,2],
-			surface:"'water'"
+			surface:"'water|lake'"
 		},
 		volcano:{
 			size:[5,5],

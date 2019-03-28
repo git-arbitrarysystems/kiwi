@@ -4,6 +4,8 @@ import {App} from 'App';
 
 
 class Tile extends PIXI.Sprite{
+	
+
 	constructor(cx,cy){
 		super(PIXI.Texture.WHITE);
 		this._neighboursRequireUpdate = true;
@@ -65,7 +67,8 @@ class Tile extends PIXI.Sprite{
 		this.build = this.content.contains('build/');
 		this.fence = this.content.contains('fence/');
 		this.surface = this.content.contains('surface/')
-		this.road = this.content.contains('road/')
+		this.road = this.content.contains('road/');
+		this.kiwi = this.content.contains('kiwi/') ? this.content.getSprites('kiwi/')[0].kiwi : false;
 		
 		this.beach =  ( !this.water && !this.content.contains('surface/sand') && this.neighbours().some( (tile) => { return tile.water; }) ) ||
 					  (  this.water && this.neighbours().some( (tile) => { return tile.content.contains('surface/sand'); }) );
@@ -94,7 +97,7 @@ class Tile extends PIXI.Sprite{
 		if( this.beach 	){ this.tint = 0xffaa00;}
 		
 		if( this.build 	){ this.tint = 0xff00ff;}
- 		if( this._hoverColor ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha; }
+ 		if( typeof this._hoverColor === 'number' ){ this.tint = this._hoverColor; this.alpha = this._hoverAlpha; }
 
  		if( (this.cx + this.cy) % 2 === 0 ) this.alpha += 0.1;
 
@@ -118,7 +121,6 @@ Tile.skewY = Math.atan2( -Tile.height, Tile.width);
 
 class TileContent{
 	constructor( tile){
-		this.surface_testcache = {};
 		this.keys = [];
 		this.nodes = [];
 		this.tile = tile;
@@ -128,21 +130,16 @@ class TileContent{
 	
 
 	testSurface(expr){
-
-
-
 		let negate = expr.charAt(0) === '!';
 		if( negate ) expr = expr.substr(1);
-		var regexp = new RegExp(expr, 'i');
-		var result = regexp.test(this.keys.join(', ') );
+		let regexp = new RegExp(expr, 'i'),
+			keyString = this.keys.join(', '),
+			result = regexp.test(keyString);
+
+		if( expr.indexOf('beach') !== -1 ) result = result || this.tile.beach;
+
 		if( negate ) result = !result;
-
-		this.surface_testcache[expr] = result;
-
 		return result;
-
-
-		
 	}
 
 	add(id, node){
@@ -158,15 +155,15 @@ class TileContent{
 				App.Grid.face.add(sprite, TextureData[node.id].type );
 			});
 
+			this.tile.updateVariables(true);
+
+			return true;
+
+		}else{
+			return false;
 		}
-
-		this.surface_testcache = {};
-		this.tile.updateVariables(true);
-
+		
 	}
-
-	
-
 
 	// REMOVE CONTENT FROM TILE
 	remove(wildcard){
@@ -199,8 +196,53 @@ class TileContent{
 			}
 		}
 
-		this.surface_testcache = {};
 		this.tile.updateVariables(true);
+
+	}
+
+
+	move(sprite, to ){
+			
+		var index = -1,
+			exists = this.nodes.some( (n,i,a) => {
+			return n.sprites.some( (s) => {
+				if( s === sprite ){
+					index = i;
+					return true;
+				}else{
+					return false;
+				}
+			})
+		});
+
+		console.log('Tile.content.move', this.tile.toString(), '>', to.toString() , exists, this.nodes[index]);
+
+		if( exists ){
+
+			var node = this.nodes[index],
+				added = to.content.add(node.id, node);
+
+			if( added ){
+				// UPDATE REGISTERED TILE
+				node.tiles = [to];
+
+				// REMOVE NODE
+				this.keys.splice(index, 1);
+				this.nodes.splice(index, 1)[0];
+				this.tile.updateVariables();
+
+				return to;
+
+			}else{
+				// FAILED
+				console.warn('could not move content',sprite, 'from', this.tile.toString(), '>', to.toString() )
+				return this.tile;
+			}
+			
+		}else{
+			console.warn('could not move content',sprite, 'from', this.tile.toString(), '>', to.toString())
+			return this.tile;
+		}
 
 	}
 

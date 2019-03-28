@@ -1,7 +1,28 @@
-@font-face {
+/*@font-face {
   font-family: 'flashlight';
-  src:  url('.flashlight.otf') format('opentype'),
-        url('.flashlight.ttf') format('truetype');
+  src:  url('./flashlight.otf') format('opentype'),
+        url('./flashlight.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+
+}
+
+
+@font-face {
+  font-family: 'pencil-1';
+  src:  url('./Thin Pencil Handwriting.otf') format('opentype'),
+        url('./Thin Pencil Handwriting.ttf') format('truetype');
   font-weight: 600;
   font-style: normal;
 }
+
+@font-face {
+  font-family: 'pencil-2';
+  src:  url('./PPETRIAL.otf') format('opentype'),
+        url('./PPETRIAL.ttf') format('truetype');
+  font-weight: 600;
+  font-style: normal;
+}
+
+
+@import url('https://fonts.googleapis.com/css?family=Schoolbell');*/

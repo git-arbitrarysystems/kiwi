@@ -35,7 +35,6 @@ if( module.hot ){
 		window.location.reload();
 	});
 	module.hot.accept();
-	
 }
 
 `;

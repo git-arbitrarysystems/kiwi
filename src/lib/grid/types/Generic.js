@@ -12,6 +12,7 @@ export class Generic extends PIXI.utils.EventEmitter{
 		this.derivates = {};
 		this.sprite.derivates = this.derivates;
 
+
 	}
 
 	get enabled(){ return this._enabled }
@@ -51,6 +52,10 @@ export class Generic extends PIXI.utils.EventEmitter{
 		for( var s in this.derivates ){
 			this.destroyDerivate(s);
 		}
+	}
+
+	confirm(){
+		this.emit('confirm');
 	}
 
 
