@@ -14,6 +14,7 @@ import road_stone from './road_stone.png'
 import fence_low_wood from './fence_low_wood.png'
 import fence_high_wood from './fence_high_wood.png'
 import kiwi_default from './kiwi_default.png'
+import kiwi_default_surface from './kiwi_default_surface.png'
 import build_palmtree_with_hut from './build_palmtree_with_hut.png'
 import build_palmtree_with_hut_surface from './build_palmtree_with_hut_surface.png'
 import build_palmtree_4 from './build_palmtree_4.png'
@@ -38,6 +39,7 @@ import build_vinyard from './build_vinyard.png'
 import build_vinyard_surface from './build_vinyard_surface.png'
 import build_lake_2 from './build_lake_2.png'
 import build_lake_1 from './build_lake_1.png'
+import build_lake_1_surface from './build_lake_1_surface.png'
 import build_red_tent from './build_red_tent.png'
 import build_dark_hut_1 from './build_dark_hut_1.png'
 import build_dark_hut_2 from './build_dark_hut_2.png'
@@ -446,10 +448,19 @@ const Textures  = {
                 main: {
                     url: kiwi_default,
                     trim: {
-                        left: 115,
-                        top: 73,
+                        left: 121,
+                        top: 43,
                         width: 371,
                         height: 339
+                    }
+                },
+                surface: {
+                    url: kiwi_default_surface,
+                    trim: {
+                        left: 139,
+                        top: 246,
+                        width: 234,
+                        height: 190
                     }
                 }
             },
@@ -1041,6 +1052,15 @@ const Textures  = {
             images: {
                 main: {
                     url: build_lake_1,
+                    trim: {
+                        left: 50,
+                        top: 249,
+                        width: 390,
+                        height: 100
+                    }
+                },
+                surface: {
+                    url: build_lake_1_surface,
                     trim: {
                         left: 0,
                         top: 249,

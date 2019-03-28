@@ -28,13 +28,33 @@ export class Kiwi extends Generic{
 	__onUpdate(){
 		// TRANSFORM SELF
 		Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-		this.sprite.anchor.set(0.5, 1 );		
+		this.sprite.anchor.set(0.5, 1 );
+		if( this.textureData.images.surface ){
+			
+			this.addDerivate('surface');
+			
+			this.sprite.parent.addChildAt( this.derivates.surface, this.sprite.parent.getChildIndex(this.sprite) );
+			this.derivates.surface.type = 'surface';
+			this.derivates.surface.addedZIndex = 1000000;
+			this.derivates.surface.texture = Texture(this.textureData, 'surface' );
+
+			// TRANSFORM SURFACE
+			Transform.transform( this.derivates.surface, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.derivates.surface.anchor.set( 0.5, 1 );
+		
+		}else{
+			this.destroyDerivate('surface');
+		}	
 	}
 
 	__onUpdatePosition(){
 		//console.log('Kiwi.__onUpdatePosition', this, this.selection);
 		this.sprite.x = this.limits.x;
 		this.sprite.y = this.limits.bottom;
+		if( this.derivates.surface ){
+			this.derivates.surface.x = this.sprite.x;
+			this.derivates.surface.y = this.sprite.y;
+		}
 	}
 
 	__onConfirm(){
@@ -112,6 +132,10 @@ export class Kiwi extends Generic{
 
 			this.sprite.x = position.x;
 			this.sprite.y = position.y + Tile.halfHeight - surfaceOffset * offsetSurfaceScale;
+			if( this.derivates.surface ){
+				this.derivates.surface.x = this.sprite.x;
+				this.derivates.surface.y = this.sprite.y;
+			}
 
 			// UPDATE Z-INDEXING
 			App.Grid.face.add(this.sprite, this.sprite.type, surfaceOffset);

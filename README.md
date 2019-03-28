@@ -25,5 +25,6 @@
 19. ~~validate stamp~~
 20. animate kiwi's
 21. big texture render chop
+22. drag cancel popup
 
 
