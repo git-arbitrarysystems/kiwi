@@ -14,34 +14,36 @@ const types = {
 	kiwi:Kiwi
 }
 
-Generic.mixin = function(type, sprite, textureDataId, selection, index = 0){
+
+Generic.create = function(type, textureDataId, selection, index = 0){
+
+	var sprite;
+
+	//console.log('Generic.create', type, '(',textureDataId, selection, index,')');
 
 	if( types[type] ){
-		if( !sprite[type] ){
-			sprite[type] = new types[type](sprite, textureDataId, selection);
-		}
+		sprite = new types[type]();
+	}else{
+		sprite = new Generic();
 	}
+
+	sprite.on('added', ()=>{
+		sprite.enabled = true;
+		sprite.textureDataId = textureDataId;
+		sprite.selection = selection;
+		sprite.index = index;
+		sprite.off('added');
+	})
+
 	
-	for( var s in types ){
-		if( sprite[s] ){
-			sprite[s].enabled = (s===type);
-			if( sprite[s].enabled ){
-				sprite[s].textureDataId = textureDataId;
-				sprite[s].selection = selection;
-				sprite[s].index = index;
-			}
-		} 
-	}
+	
+	return sprite;
 
 }
 
 
 Generic.destroy = function(sprite){
-	for( var s in types ){
-		if( sprite[s] ){
-			sprite[s].enabled = false;
-		} 
-	}
+	sprite.enabled = false;
 	sprite.destroy({children:true})			
 }
 

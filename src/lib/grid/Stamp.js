@@ -39,14 +39,18 @@ export class Stamp extends PIXI.Container{
 				this.visible = false;
 			}
 
-			//console.log('Stamp.mode:', this.mode);
+			//console.log('Stamp.mode:', this.mode, this.sprites.length);
 
 			this.multiSpriteMode = ( ['fence', 'road'].indexOf(this.mode) !== -1 );
-
 			this.sprites.forEach( (sprite, index, array) => {
-				Type.Generic.mixin(this.mode, sprite, this.textureData.id, this.selection, index);
-				sprite.visible = this.visible;
+				if( sprite.type !== this.mode ){
+					Type.Generic.destroy(sprite);
+					array[index] = this.addChild( Type.Generic.create(this.mode, this.textureData.id, this.selection, index) );
+					array[index].visible = this.visible;
+				}
 			});
+			
+			
 
 		}
 	}
@@ -74,8 +78,8 @@ export class Stamp extends PIXI.Container{
 				}
 
 				this.sprites.forEach( (sprite, index) => {
-					sprite[this.mode].index = index;
-					sprite[this.mode].selection = this.selection;
+					sprite.index = index;
+					sprite.selection = this.selection;
 				});
 			}
 
@@ -91,18 +95,17 @@ export class Stamp extends PIXI.Container{
 	get length(){ return this.sprites.length;}
 	set length(int){
 		int = Math.max(1,int);
-		if( int !== this.length ){
+		if( int !== this.length){
 
 			// ADD SPRITES
 			while( this.sprites.length < int ){
-				var sprite = this.addChild( new PIXI.Sprite() );
-				Type.Generic.mixin(this.mode, sprite, this.textureData.id, this.selection, this.sprites.length );
+				var sprite = this.addChild( Type.Generic.create(this.mode, this.textureData.id, this.selection, this.sprites.length ) );
 				this.sprites.push( sprite );
 			}
 
 			// REMOVE SPRITES
 			while( this.sprites.length > int ){
-				Type.Generic.destroy(this.sprites.splice(0,1)[0])
+				Type.Generic.destroy( this.sprites.splice(0,1)[0] )
 			}
 			
 		}

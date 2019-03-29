@@ -11,17 +11,17 @@ export class Fence extends Generic{
 
 		this.on('enable', ()=>{
 			this.cc = {top:false,right:false,bottom:false,left:false};
-			this.sprite.mask = this.sprite.addChild( new PIXI.Graphics() );
+			this.mask = this.addChild( new PIXI.Graphics() );
 		});
 
 		this.on('disable', ()=>{
-			this.sprite.mask.destroy({children:true});
-			this.sprite.mask = null;
+			this.mask.destroy({children:true});
+			this.mask = null;
 		});
 
 		this.on('update', ()=>{
-			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.sprite.anchor.set(0.5, 1 );
+			Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.anchor.set(0.5, 1 );
 			this.updateDerivates();
 			this.updateConnections();			
 		});
@@ -39,26 +39,27 @@ export class Fence extends Generic{
 			this.addDerivate(id);
 			if( !this.derivates[id].mask ) this.derivates[id].mask = this.derivates[id].addChild( new PIXI.Graphics() );
 
-			this.derivates[id].texture = this.sprite.texture;
+			this.derivates[id].texture = this.texture;
 			this.derivates[id].type = 'fence';
 			this.derivates[id].addedZIndex = (id === 'top' ) ? -0.1 : 0.1;
 
 			Transform.transform( this.derivates[id], this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.derivates[id].skew.set( this.sprite.skew.x, -this.sprite.skew.y );
+			this.derivates[id].skew.set( this.skew.x, -this.skew.y );
 			this.derivates[id].anchor.set(0.5, 1);
 
 		});
 
 
-		this.clear( this.sprite.mask );
+		this.clear( this.mask );
 		this.clear( this.derivates.top.mask );
 		this.clear( this.derivates.bottom.mask );
 
 		// STACK
-		var parent = this.sprite.parent;
+		var parent = this.parent;
 		parent.addChild( this.derivates.top );
-		parent.addChild( this.sprite );
+		parent.addChild( this );
 		parent.addChild( this.derivates.bottom );
+		
 	}
 
 
@@ -67,8 +68,8 @@ export class Fence extends Generic{
 
 		if( !tile ) return;
 
-		this.sprite.x = tile.x;
-		this.sprite.y = tile.y;
+		this.x = tile.x;
+		this.y = tile.y;
 
 		if( !this.derivates.top || !this.derivates.bottom ) this.updateDerivates();
 
@@ -107,20 +108,20 @@ export class Fence extends Generic{
 			// CACHE
 			this.cc = connect;
 
-			let w = this.sprite.texture.orig.width,
-				h = this.sprite.texture.orig.height,
+			let w = this.texture.orig.width,
+				h = this.texture.orig.height,
 				hw = w * 0.5,
 				hh = h*0.5;
 
-			this.clear( this.sprite.mask );
+			this.clear( this.mask );
 			this.clear( this.derivates.top.mask );
 			this.clear( this.derivates.bottom.mask );
 
 			if( connect.left || connect.right ){			
-				this.sprite.mask.beginFill(0xff0000, 0.5);
-				if( connect.right ) this.sprite.mask.drawRect(0,-h,hw,h)
-				if( connect.left ) this.sprite.mask.drawRect(-hw,-h,hw,h)
-				this.sprite.mask.endFill();
+				this.mask.beginFill(0xff0000, 0.5);
+				if( connect.right ) this.mask.drawRect(0,-h,hw,h)
+				if( connect.left ) this.mask.drawRect(-hw,-h,hw,h)
+				this.mask.endFill();
 			}
 
 			if( connect.top ){
@@ -169,8 +170,8 @@ export class Fence extends Generic{
 
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
-				tile.content.getSprites('fence').forEach( (fenceSprite) => {
-					fenceSprite.fence.updateConnections(tile, array)
+				tile.content.getSprites('fence').forEach( (fence) => {
+					fence.updateConnections(tile, array)
 				});
 			});
 

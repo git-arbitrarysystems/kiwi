@@ -21,36 +21,36 @@ export class Road extends Generic{
 	__onEnable(){}
 
 	__onDisable(){
-		if( this.sprite.mask ){
-			this.sprite.mask.destroy();
-			this.sprite.mask = null;
+		if( this.mask ){
+			this.mask.destroy();
+			this.mask = null;
 		}
-		this.sprite.parent.sortableChildren = false;
+		if( this.parent ) this.parent.sortableChildren = false;
 	}
 
 	__onUpdate(){
 		this.cc = {top:undefined,right:undefined,bottom:undefined,left:undefined};
 		if( this.textureData.crop ){
-			this.sprite.mask = this.sprite.addChild( new PIXI.Graphics() );
+			this.mask = this.addChild( new PIXI.Graphics() );
 		}
-		Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-		this.sprite.anchor.set( 0.5, 0.5 );
+		Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+		this.anchor.set( 0.5, 0.5 );
 
 		if( this.textureData.images.build ){
 
-			this.sprite.parent.sortableChildren = true;
+			this.parent.sortableChildren = true;
 			this.addDerivate('build');
 
 			this.derivates.build.texture = Texture(this.textureData, 'build');
 			this.derivates.build.type = 'build';
 			this.derivates.build.zIndex = 1;
-			this.sprite.parent.addChild( this.derivates.build );
+			this.parent.addChild( this.derivates.build );
 
 			Transform.transform( this.derivates.build, this.textureData.size, false, false);
 			this.derivates.build.anchor.set( .5, 1 );
 
 		}else{
-			this.sprite.sortableChildren = true;
+			this.sortableChildren = true;
 			this.destroyAllDerivates();
 		}
 		this.updateConnections();
@@ -67,8 +67,8 @@ export class Road extends Generic{
 		
 		if( !tile ) return;
 
-		this.sprite.x = tile.x;
-		this.sprite.y = tile.y;
+		this.x = tile.x;
+		this.y = tile.y;
 
 		
 
@@ -88,7 +88,7 @@ export class Road extends Generic{
 		});
 
 		if( this.textureData.crop ){
-			this.mask(connect);
+			this.draw_mask(connect);
 		}
 
 
@@ -97,7 +97,7 @@ export class Road extends Generic{
 		// HANDLE ROAD SPECIALS
 		if( this.derivates.build ){
 
-			this.sprite.surfaceOffset = this.textureData.orig.height - this.textureData.cutoff;
+			this.surfaceOffset = this.textureData.orig.height - this.textureData.cutoff;
 
 			var s, inverse, count = 0,
 				texture = Texture(this.textureData, 'build');
@@ -107,12 +107,12 @@ export class Road extends Generic{
 					inverse = {top:'bottom',right:'left',bottom:'top',left:'right'}[s];
 					if( connect[s] && this.textureData.images['start_' + inverse] ){
 						texture = Texture(this.textureData, 'start_' + inverse);
-						this.sprite.surfaceOffset = (this.textureData.orig.height - this.textureData.cutoff) * 0.5;
+						this.surfaceOffset = (this.textureData.orig.height - this.textureData.cutoff) * 0.5;
 					}
 				}
 			}
 			this.derivates.build.texture = texture;
-			//console.log('Road.updateConnections', this.tile.toString(), this.sprite.surfaceOffset);
+			//console.log('Road.updateConnections', this.tile.toString(), this.surfaceOffset);
 
 
 			
@@ -125,7 +125,7 @@ export class Road extends Generic{
 	}
 	
 
-	mask(sides){
+	draw_mask(sides){
 
 		var requiresUpdate = (	sides.top 		!== this.cc.top || 
 								sides.right 	!== this.cc.right || 
@@ -141,17 +141,17 @@ export class Road extends Generic{
 			// CACHE
 			this.cc = sides;			
 			
-			let radius = this.sprite.texture.width * 0.33;
+			let radius = this.texture.width * 0.33;
 			
 			// DRAW
-			this.sprite.mask.clear();
-			this.sprite.mask.beginFill(0xffff00,1);
-			this.sprite.mask.drawCircle(0,0, radius);
-			if( this.cc.top 	) this.sprite.mask.drawRect(-radius,-radius*2,radius*2,radius*2);
-			if( this.cc.right 	) this.sprite.mask.drawRect(0,-radius,radius*2,radius*2);
-			if( this.cc.bottom 	) this.sprite.mask.drawRect(-radius,0,radius*2,radius*2);
-			if( this.cc.left 	) this.sprite.mask.drawRect(-radius*2,-radius,radius*2,radius*2);
-			this.sprite.mask.endFill();
+			this.mask.clear();
+			this.mask.beginFill(0xffff00,1);
+			this.mask.drawCircle(0,0, radius);
+			if( this.cc.top 	) this.mask.drawRect(-radius,-radius*2,radius*2,radius*2);
+			if( this.cc.right 	) this.mask.drawRect(0,-radius,radius*2,radius*2);
+			if( this.cc.bottom 	) this.mask.drawRect(-radius,0,radius*2,radius*2);
+			if( this.cc.left 	) this.mask.drawRect(-radius*2,-radius,radius*2,radius*2);
+			this.mask.endFill();
 
 
 
@@ -190,7 +190,7 @@ export class Road extends Generic{
 			// CREATE ALL CONNECTIONS
 			array.forEach( (tile,index) => {
 				tile.content.getSprites('road').forEach( (roadSprite) => {
-					roadSprite.road.updateConnections(tile, array)
+					roadSprite.updateConnections(tile, array)
 				});
 			});
 

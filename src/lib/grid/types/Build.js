@@ -6,8 +6,8 @@ import {Texture} from 'grid/Texture';
 
 export class Build extends Generic{
 	
-	constructor(sprite){
-		super(sprite)
+	constructor(texture){
+		super(texture)
 
 		//this.on('enable', ()=>{});
 		//this.on('disable', ()=>{});
@@ -15,14 +15,14 @@ export class Build extends Generic{
 		this.on('update', ()=>{
 
 			// TRANSFORM SELF
-			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.sprite.anchor.set(0.5, 1 );
+			Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.anchor.set(0.5, 1 );
 
 			if( this.textureData.images.surface ){
 				
 				this.addDerivate('surface');
 				
-				this.sprite.parent.addChildAt( this.derivates.surface, this.sprite.parent.getChildIndex(this.sprite) );
+				this.parent.addChildAt( this.derivates.surface, this.parent.getChildIndex(this) );
 				this.derivates.surface.type = 'surface';
 				this.derivates.surface.addedZIndex = 1000000;
 				this.derivates.surface.texture = Texture(this.textureData, 'surface' );
@@ -40,11 +40,11 @@ export class Build extends Generic{
 		});
 
 		this.on('update-position', ()=>{
-			this.sprite.x = this.limits.x;
-			this.sprite.y = this.limits.bottom;
+			this.x = this.limits.x;
+			this.y = this.limits.bottom;
 			if( this.derivates.surface ){
-				this.derivates.surface.x = this.sprite.x;
-				this.derivates.surface.y = this.sprite.y;
+				this.derivates.surface.x = this.x;
+				this.derivates.surface.y = this.y;
 			}
 
 		});

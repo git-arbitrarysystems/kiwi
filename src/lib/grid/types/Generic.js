@@ -4,16 +4,14 @@ import {Texture} from 'grid/Texture';
 import {Stamp} from 'grid/Stamp';
 import {Tile} from 'grid/Tile';
 
-export class Generic extends PIXI.utils.EventEmitter{
-	constructor(sprite){
-		super();
-
-		this.sprite = sprite;
+export class Generic extends PIXI.Sprite{
+	constructor(texture){
+		super(texture);
 		this.derivates = {};
-		this.sprite.derivates = this.derivates;
-
-
 	}
+
+
+	get type(){ return this.constructor.name.toLowerCase() }
 
 	get enabled(){ return this._enabled }
 	set enabled(bool){
@@ -21,7 +19,7 @@ export class Generic extends PIXI.utils.EventEmitter{
 			this._enabled = bool;
 			if( !bool ){
 				this.emit('disable');
-				if( this.sprite.parent instanceof Stamp ){
+				if( this.parent instanceof Stamp ){
 					this.destroyAllDerivates();
 				}
 			}else{
@@ -70,9 +68,9 @@ export class Generic extends PIXI.utils.EventEmitter{
 			this._textureDataId = id;
 
 			var texture = Texture(this.textureData);
-			this.sprite.texture = texture;
-			this.sprite.cutoff = this.textureData.cutoff;
-			this.sprite.surfaceOffset = this.textureData.surfaceOffset;
+			this.texture = texture;
+			this.cutoff = this.textureData.cutoff;
+			this.surfaceOffset = this.textureData.surfaceOffset;
 			this.emit('update');
 		}
 	}

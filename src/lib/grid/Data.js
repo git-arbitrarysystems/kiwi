@@ -27,8 +27,8 @@ export class Data{
 		console.log('Data.remove', wildcard, fromTiles );
 		for( var i=fromTiles.length-1; i>=0; i--){
 			fromTiles[i].content.remove(wildcard);
-			if( fromTiles[i].road  ) Road.recursiveConnect( fromTiles[i] );
-			if( fromTiles[i].fence ) Fence.recursiveConnect( fromTiles[i] );
+			Road.recursiveConnect( fromTiles[i] );
+			Fence.recursiveConnect( fromTiles[i] );
 		}
 		
 	}

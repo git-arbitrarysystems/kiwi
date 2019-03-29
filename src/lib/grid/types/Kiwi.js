@@ -27,13 +27,13 @@ export class Kiwi extends Generic{
 
 	__onUpdate(){
 		// TRANSFORM SELF
-		Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-		this.sprite.anchor.set(0.5, 1 );
+		Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+		this.anchor.set(0.5, 1 );
 		if( this.textureData.images.surface ){
 			
 			this.addDerivate('surface');
 			
-			this.sprite.parent.addChildAt( this.derivates.surface, this.sprite.parent.getChildIndex(this.sprite) );
+			this.parent.addChildAt( this.derivates.surface, this.parent.getChildIndex(this) );
 			this.derivates.surface.type = 'surface';
 			this.derivates.surface.addedZIndex = 1000000;
 			this.derivates.surface.texture = Texture(this.textureData, 'surface' );
@@ -49,11 +49,11 @@ export class Kiwi extends Generic{
 
 	__onUpdatePosition(){
 		//console.log('Kiwi.__onUpdatePosition', this, this.selection);
-		this.sprite.x = this.limits.x;
-		this.sprite.y = this.limits.bottom;
+		this.x = this.limits.x;
+		this.y = this.limits.bottom;
 		if( this.derivates.surface ){
-			this.derivates.surface.x = this.sprite.x;
-			this.derivates.surface.y = this.sprite.y;
+			this.derivates.surface.x = this.x;
+			this.derivates.surface.y = this.y;
 		}
 	}
 
@@ -78,7 +78,7 @@ export class Kiwi extends Generic{
 	get selected(){ return this._selected }
 	set selected(bool){
 		this._selected = bool;
-		this.sprite.tint = this._selected ? 0x00ffff : 0xffffff;
+		this.tint = this._selected ? 0x00ffff : 0xffffff;
 	}
 
 
@@ -106,8 +106,8 @@ export class Kiwi extends Generic{
 			console.log('Kiwi.move', dx, dy, '>>>' , tile.toString());
 
 			// FACING DIRECTION
-			var sx = Math.abs(this.sprite.scale.x) * ( (dx<0||dy<0) ? -1 : 1 );
-			this.sprite.scale.set(sx, Math.abs(sx) );
+			var sx = Math.abs(this.scale.x) * ( (dx<0||dy<0) ? -1 : 1 );
+			this.scale.set(sx, Math.abs(sx) );
 
 			// GET NEW POSITION
 			var position = Transform.c2p(tile.cx, tile.cy);
@@ -130,15 +130,15 @@ export class Kiwi extends Generic{
 			if( tile !== this.tile ) this._selection = [this.tile.content.move(this.sprite, tile )];
 			tile.hover(0x006699, 0.4)
 
-			this.sprite.x = position.x;
-			this.sprite.y = position.y + Tile.halfHeight - surfaceOffset * offsetSurfaceScale;
+			this.x = position.x;
+			this.y = position.y + Tile.halfHeight - surfaceOffset * offsetSurfaceScale;
 			if( this.derivates.surface ){
-				this.derivates.surface.x = this.sprite.x;
-				this.derivates.surface.y = this.sprite.y;
+				this.derivates.surface.x = this.x;
+				this.derivates.surface.y = this.y;
 			}
 
 			// UPDATE Z-INDEXING
-			App.Grid.face.add(this.sprite, this.sprite.type, surfaceOffset);
+			App.Grid.face.add(this.sprite, this.type, surfaceOffset);
 
 		}
 

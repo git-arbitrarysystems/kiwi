@@ -21,8 +21,8 @@ export class Surface extends Generic{
 			
 			// PREPARE SPRITES & MASKS
 			for( var s in this.cc){
-				this.overlays[s] = this.sprite.addChild( new PIXI.Sprite() );
-				this.overlays[s].mask = this.sprite.addChild( new PIXI.Graphics() );
+				this.overlays[s] = this.addChild( new PIXI.Sprite() );
+				this.overlays[s].mask = this.addChild( new PIXI.Graphics() );
 				this.overlays[s].anchor.set( 0.5, 0.5 );
 			}
 		});
@@ -37,8 +37,8 @@ export class Surface extends Generic{
 		})
 
 		this.on('update', (e) => {
-			Transform.transform( this.sprite, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.sprite.anchor.set(0.5, 0.5 );
+			Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.anchor.set(0.5, 0.5 );
 			for( var s in this.overlays ){
 				this.overlays[s].textureDataId = null;
 			}
@@ -46,8 +46,8 @@ export class Surface extends Generic{
 
 		
 		this.on('update-position', (e) => {
-			this.sprite.x = this.limits.x;
-			this.sprite.y = this.limits.y;
+			this.x = this.limits.x;
+			this.y = this.limits.y;
 			this.updateConnections();
 		});
 
@@ -79,7 +79,7 @@ export class Surface extends Generic{
 				if( neighbours[s] ){
 					neighbourDataNode = neighbours[s].content.getDataNodes('surface');
 					if( neighbourDataNode.length === 1 ){
-						neighbours[s].content.getSprites('surface')[0].surface.updateConnections();
+						neighbours[s].content.getSprites('surface')[0].updateConnections();
 					}
 				}
 			}
@@ -279,7 +279,10 @@ export class Surface extends Generic{
 	static neighboursConnect(tile){
 		var node = tile.content.getDataNodes('surface')[0],
 			sprite = tile.content.getSprites('surface')[0];
-		sprite.surface.updateConnections(true);
+
+		//console.log(tile, node, sprite);
+
+		sprite.updateConnections(true);
 	}
 	
 }
