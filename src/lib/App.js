@@ -23,6 +23,7 @@ export class App extends PIXI.Application{
 
 		// MAIN GRID
 		this.grid = this.stage.addChild( new Grid() );
+		
 
 		// SETUP RESIZE-HANDLER
 		ResizeHandler.source = this.screen;

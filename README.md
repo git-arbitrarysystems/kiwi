@@ -26,5 +26,9 @@
 20. animate kiwi's
 21. big texture render chop
 22. drag cancel popup
+23. tile visibility handler
+24. move surfaceOffset to tile
+25. ~~grid focus point~~
+26. UI design
 
 

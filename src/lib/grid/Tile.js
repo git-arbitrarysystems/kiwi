@@ -68,7 +68,7 @@ class Tile extends PIXI.Sprite{
 		this.fence = this.content.contains('fence/');
 		this.surface = this.content.contains('surface/')
 		this.road = this.content.contains('road/');
-		this.kiwi = this.content.contains('kiwi/') ? this.content.getSprites('kiwi/')[0].kiwi : false;
+		this.kiwi = this.content.contains('kiwi/') ? this.content.getSprites('kiwi/')[0] : false;
 		
 		this.beach =  ( !this.water && !this.content.contains('surface/sand') && this.neighbours().some( (tile) => { return tile.water; }) ) ||
 					  (  this.water && this.neighbours().some( (tile) => { return tile.content.contains('surface/sand'); }) );
@@ -215,7 +215,7 @@ class TileContent{
 			})
 		});
 
-		console.log('Tile.content.move', this.tile.toString(), '>', to.toString() , exists, this.nodes[index]);
+		//console.log('Tile.content.move', this.tile.toString(), '>', to.toString() , exists, this.nodes[index]);
 
 		if( exists ){
 

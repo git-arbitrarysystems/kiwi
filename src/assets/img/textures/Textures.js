@@ -14,7 +14,7 @@ import road_stone from './road_stone.png'
 import fence_low_wood from './fence_low_wood.png'
 import fence_high_wood from './fence_high_wood.png'
 import kiwi_default from './kiwi_default.png'
-import kiwi_default_surface from './kiwi_default_surface.png'
+import kiwi_default_shadow from './kiwi_default_shadow.png'
 import build_palmtree_with_hut from './build_palmtree_with_hut.png'
 import build_palmtree_with_hut_surface from './build_palmtree_with_hut_surface.png'
 import build_palmtree_4 from './build_palmtree_4.png'
@@ -454,8 +454,8 @@ const Textures  = {
                         height: 339
                     }
                 },
-                surface: {
-                    url: kiwi_default_surface,
+                shadow: {
+                    url: kiwi_default_shadow,
                     trim: {
                         left: 139,
                         top: 246,

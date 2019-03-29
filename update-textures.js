@@ -74,7 +74,7 @@ function updateTextures(){
 			if( layer.name.indexOf('_') === 0 ){
 				// EXPORT
 				var name = group + layer.name + '.png',
-					derivateTest = new RegExp('_(surface|build|start_left|start_right|start_top|start_bottom)'),
+					derivateTest = new RegExp('_(surface|build|start_left|start_right|start_top|start_bottom|shadow)'),
 					isDerivate = derivateTest.test(layer.name),
 					id = layer.name.substr(1).replace(derivateTest, ''),
 					callback = ( function(n){ return ()=>{ imageReady(n) } })(settings.target + name + '... ready');

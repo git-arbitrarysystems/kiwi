@@ -16,6 +16,9 @@ export class Face extends PIXI.Container{
 			this[type+'Sprite'].visible = false;
 		});
 
+
+
+
 		this.g = this.addChild( new PIXI.Graphics() );
 		this.g.zIndex = 1000000;
 
@@ -37,6 +40,8 @@ export class Face extends PIXI.Container{
 		if( sprite.cutoff ){
 			sprite.zIndex -= (sprite.texture.orig.height - sprite.cutoff ) * sprite.scale.y;
 		}
+
+		//if( sprite.type === 'kiwi' ) console.trace('Face.add', sprite.type, sprite.cutoff, addedZIndex);
 
 		if( this[type] ){
 			this[type].addChild(sprite);
@@ -60,14 +65,11 @@ export class Face extends PIXI.Container{
 			this.add( derivate, derivate.type || '', derivate.addedZIndex || 0 );
 		}
  		
-		
+
 		if( !sprite.FIRST_TIME_ADDED ){
-			if( type && sprite[type] ) sprite[type].confirm();
-
-			//console.log(type, sprite[type]);
-
-			//sprite[type].confirm();
 			sprite.FIRST_TIME_ADDED = true;
+			if( sprite.confirm !== undefined) sprite.confirm();
+			
 		}
 
 		

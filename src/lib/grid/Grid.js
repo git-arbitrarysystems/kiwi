@@ -25,8 +25,8 @@ export class Grid extends PIXI.Container{
 
 		// BG
 		this.background = this.addChild( new PIXI.Sprite(PIXI.Texture.WHITE) );
-		this.background.tint = 0xffffff;
-		this.background.alpha = 0.01;
+		this.background.tint = 0xff0000;
+		this.background.alpha = 0.001;
 
 		// ADD THE FACE OOF THE GRID
 		this.face = this.addChild( new Face() );
@@ -159,24 +159,39 @@ export class Grid extends PIXI.Container{
 
 	get screen(){ return this._screen };
 	set screen(rect){
-		this._screen = rect;
-		this.x = this.screen.width * 0.5;
-		this.y = this.screen.height * 0.5;
+		let cx = 0, cy = 0;
+		if( !this._screen ){
+			this.x = rect.width * 0.5;
+			this.y = rect.height * 0.5;
+		}else{
+			cx = ( rect.width - this._screen.width ) * 0.5;
+			cy = ( rect.height - this._screen.height ) * 0.5;
+			this.drag(cx, cy);
+		}
+		this._screen = rect.clone();
 		this.updateScale();
 	}
 
 	updateScale(scale = this.scale.x){
-
+		let orig = this.toLocal({x:this.screen.width*0.5, y:this.screen.height*0.5});
+	
 		this.scale.set(scale);
-
 		this.background.padding = 0;//10 / scale;
 		this.background.width = (this.screen.width / this.scale.x) - this.background.padding * 2;
 		this.background.height = (this.screen.height / this.scale.y) - this.background.padding * 2;
-		this.drag(0,0);
-
+		
+		let next = this.toLocal({x:this.screen.width*0.5, y:this.screen.height*0.5});
+		this.drag((next.x-orig.x) * this.scale.x,(next.y-orig.y) * this.scale.y);
 
 	}
 
+
+	drag(dx, dy){
+		this.x += dx;
+		this.y += dy;
+		this.background.x = -(this.x / this.scale.x) + this.background.padding;
+		this.background.y = -(this.y / this.scale.y) + this.background.padding;
+	}
 	
 	// GET TILE
 	getTile(c,isCoordinate=true, create = false){
@@ -328,12 +343,7 @@ export class Grid extends PIXI.Container{
 		}
 	}
 
-	drag(dx, dy){
-		this.x += dx;
-		this.y += dy;
-		this.background.x = -(this.x / this.scale.x) + this.background.padding;
-		this.background.y = -(this.y / this.scale.y) + this.background.padding;
-	}
+	
 	hover(){
 		
 		// UNHOVER

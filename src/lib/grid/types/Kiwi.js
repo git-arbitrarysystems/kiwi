@@ -7,11 +7,8 @@ import {Tile} from 'grid/Tile';
 
 export class Kiwi extends Generic{
 	
-	constructor(sprite){
-
-		
-
-		super(sprite)
+	constructor(texture){
+		super(texture)
 
 		if( !Kiwi.COUNT ) Kiwi.COUNT = 1;
 		this.nr = Kiwi.COUNT;
@@ -29,21 +26,21 @@ export class Kiwi extends Generic{
 		// TRANSFORM SELF
 		Transform.transform( this, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
 		this.anchor.set(0.5, 1 );
-		if( this.textureData.images.surface ){
+		if( this.textureData.images.shadow ){
 			
-			this.addDerivate('surface');
+			this.addDerivate('shadow');
 			
-			this.parent.addChildAt( this.derivates.surface, this.parent.getChildIndex(this) );
-			this.derivates.surface.type = 'surface';
-			this.derivates.surface.addedZIndex = 1000000;
-			this.derivates.surface.texture = Texture(this.textureData, 'surface' );
+			this.parent.addChildAt( this.derivates.shadow, this.parent.getChildIndex(this) );
+			this.derivates.shadow.type = 'shadow';
+			this.derivates.shadow.addedZIndex = -1000;
+			this.derivates.shadow.texture = Texture(this.textureData, 'shadow' );
 
 			// TRANSFORM SURFACE
-			Transform.transform( this.derivates.surface, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
-			this.derivates.surface.anchor.set( 0.5, 1 );
+			Transform.transform( this.derivates.shadow, this.textureData.size, this.textureData.skewX, this.textureData.skewY);
+			this.derivates.shadow.anchor.set( 0.5, 1 );
 		
 		}else{
-			this.destroyDerivate('surface');
+			this.destroyDerivate('shadow');
 		}	
 	}
 
@@ -51,9 +48,9 @@ export class Kiwi extends Generic{
 		//console.log('Kiwi.__onUpdatePosition', this, this.selection);
 		this.x = this.limits.x;
 		this.y = this.limits.bottom;
-		if( this.derivates.surface ){
-			this.derivates.surface.x = this.x;
-			this.derivates.surface.y = this.y;
+		if( this.derivates.shadow ){
+			this.derivates.shadow.x = this.x;
+			this.derivates.shadow.y = this.y;
 		}
 	}
 
@@ -99,16 +96,20 @@ export class Kiwi extends Generic{
 		if( tile &&
 			// WALKABLE TESTS
 			((!tile.water && !tile.fence) || tile.road ) &&
-			!(tile.kiwi && (dx !== 0 ||dy !== 0) )
+			!(tile.kiwi && (dx !== 0 || dy !== 0) )
 		){
 			
 
-			console.log('Kiwi.move', dx, dy, '>>>' , tile.toString());
+			/*console.log('Kiwi.move', dx, dy, '>>>', this, tile.toString(), this.tile.toString() );
+		 	debugger*/
+
+			// UNHOVER
+			this.tile.hover(false);
 
 			// FACING DIRECTION
 			var sx = Math.abs(this.scale.x) * ( (dx<0||dy<0) ? -1 : 1 );
 			this.scale.set(sx, Math.abs(sx) );
-
+			
 			// GET NEW POSITION
 			var position = Transform.c2p(tile.cx, tile.cy);
  
@@ -117,28 +118,39 @@ export class Kiwi extends Generic{
 				offsetSurfaceScale = 1
 			
 			if( tile.road ){	
-				tile.content.getSprites('road/').forEach( (sprite) => {
-					if( sprite.surfaceOffset && sprite.surfaceOffset > surfaceOffset ){
-						surfaceOffset = sprite.surfaceOffset;
-						offsetSurfaceScale = sprite.scale.y;
+				tile.content.getSprites('road/').forEach( (road) => {
+					if( road.surfaceOffset && road.surfaceOffset > surfaceOffset ){
+						surfaceOffset = road.surfaceOffset;
+						offsetSurfaceScale = road.scale.y;
 					}
 				})
 			}
-	
-			
-			this.tile.hover(false);
-			if( tile !== this.tile ) this._selection = [this.tile.content.move(this.sprite, tile )];
-			tile.hover(0x006699, 0.4)
 
 			this.x = position.x;
 			this.y = position.y + Tile.halfHeight - surfaceOffset * offsetSurfaceScale;
-			if( this.derivates.surface ){
-				this.derivates.surface.x = this.x;
-				this.derivates.surface.y = this.y;
+			if( this.derivates.shadow ){
+				this.derivates.shadow.x = this.x;
+				this.derivates.shadow.y = this.y;
 			}
 
+
+		
+	
+			
+			
+			if( tile !== this.tile ){
+				this._selection = [this.tile.content.move(this, tile )];
+			} 
+
 			// UPDATE Z-INDEXING
-			App.Grid.face.add(this.sprite, this.type, surfaceOffset);
+			//console.log('Kiwi.move', this.type, surfaceOffset);
+			App.Grid.face.add(this, this.type, surfaceOffset);
+
+			this.tile.hover(0x006699, 0.05)
+
+			
+
+			
 
 		}
 

@@ -36,6 +36,7 @@ export class Generic extends PIXI.Sprite{
 		if( !this.derivates[id] ){
 			this.derivates[id] = new PIXI.Sprite();
 		}
+		return this.derivates[id];
 	}
 
 	destroyDerivate(id){
